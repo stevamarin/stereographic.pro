@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="49" height="49" viewBox="0 0 49 49">
+  <defs>
+    <clipPath id="clip-Figma">
+      <rect width="49" height="49"/>
+    </clipPath>
+  </defs>
+  <g id="Figma" clip-path="url(#clip-Figma)">
+    <g id="Group_7343" data-name="Group 7343" transform="translate(-5040.445 -2077.693)">
+      <g id="Group_7317" data-name="Group 7317" transform="translate(45.131 136.131)">
+        <rect id="Rectangle_5873" data-name="Rectangle 5873" width="32" height="32" transform="translate(5004.869 1950.869)" fill="none"/>
+        <path id="Ellipse_131" data-name="Ellipse 131" d="M-1.008-6A5,5,0,0,1,3.984-1.008,5,5,0,0,1-1.008,3.984,5,5,0,0,1-6-1.008,5,5,0,0,1-1.008-6Zm0,8.487A3.5,3.5,0,0,0,2.487-1.008,3.5,3.5,0,0,0-1.008-4.5,3.5,3.5,0,0,0-4.5-1.008,3.5,3.5,0,0,0-1.008,2.487Z" transform="translate(5026.121 1967.877)" fill="#b98fc9"/>
+        <path id="Path_8501" data-name="Path 8501" d="M58.992,29.985h0a4.992,4.992,0,0,1,0-9.984h4.243a.749.749,0,0,1,.749.749v8.487a.749.749,0,0,1-.749.749Zm0-8.487a3.495,3.495,0,0,0,0,6.989h3.495V21.5Z" transform="translate(4957.634 1933.39)" fill="#b98fc9"/>
+        <path id="Path_8502" data-name="Path 8502" d="M58.992,38.472h0a4.992,4.992,0,0,1,0-9.984h3.495V20.75A.749.749,0,0,1,63.236,20h4.243a4.992,4.992,0,1,1,0,9.984H63.984v7.738a.749.749,0,0,1-.749.749Zm0-8.487a3.495,3.495,0,0,0,0,6.989h3.495V29.985Zm4.992-1.5h3.495a3.495,3.495,0,0,0,0-6.989H63.984Z" transform="translate(4957.634 1933.39)" fill="#b98fc9"/>
+        <path id="Path_8503" data-name="Path 8503" d="M63.236,156a.749.749,0,0,1,.749.749v4.243A4.992,4.992,0,1,1,58.992,156Zm-4.243,8.487a3.5,3.5,0,0,0,3.495-3.495V157.5H58.992a3.495,3.495,0,1,0,0,6.989Z" transform="translate(4957.634 1814.365)" fill="#b98fc9"/>
+      </g>
+      <g id="Group_7318" data-name="Group 7318" transform="translate(60)">
+        <g id="Group_7313" data-name="Group 7313" transform="translate(4981.445 2078.87)">
+          <path id="Rectangle_861" data-name="Rectangle 861" d="M4.962.662a4.3,4.3,0,0,0-4.3,4.3V41.683a4.3,4.3,0,0,0,4.3,4.3H42.014a4.3,4.3,0,0,0,4.3-4.3V4.962a4.3,4.3,0,0,0-4.3-4.3H4.962m0-.662H42.014a4.962,4.962,0,0,1,4.962,4.962V41.683a4.962,4.962,0,0,1-4.962,4.962H4.962A4.962,4.962,0,0,1,0,41.683V4.962A4.962,4.962,0,0,1,4.962,0Z" transform="translate(0)" fill="#b98fc9"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
