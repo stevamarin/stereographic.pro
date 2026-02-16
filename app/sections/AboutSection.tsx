@@ -34,6 +34,8 @@ export function AboutSection() {
                     alt="Stevan Marinković"
                     width={600}
                     height={750}
+                    loading="lazy"
+                    sizes="(max-width: 1024px) 100vw, 50vw"
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -259,6 +261,8 @@ export function AboutSection() {
                     alt="Nikola Mijailović"
                     width={600}
                     height={750}
+                    loading="lazy"
+                    sizes="(max-width: 1024px) 100vw, 50vw"
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -276,6 +280,8 @@ export function AboutSection() {
                               alt="Client logo"
                               width={200}
                               height={100}
+                              loading="lazy"
+                              sizes="200px"
                               className="h-16 sm:h-20 w-auto opacity-70 hover:opacity-100 transition-opacity grayscale hover:grayscale-0 filter brightness-200"
                             />
                           </div>

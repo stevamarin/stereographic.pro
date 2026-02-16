@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { X, Play } from "lucide-react"
 import { Dialog, DialogContent } from "@/components/ui/dialog"
+import Image from "next/image"
 
 interface VideoPlayerProps {
   videoUrl: string
@@ -43,9 +44,12 @@ export function VideoPlayer({
         className="group relative block w-full overflow-hidden rounded-2xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-black"
       >
         <div className="relative aspect-video w-full overflow-hidden">
-          <img
+          <Image
             src={thumbnailUrl}
             alt={title}
+            fill
+            loading="lazy"
+            sizes="(max-width: 1280px) 100vw, 1200px"
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
           
@@ -132,9 +136,12 @@ export function SimpleVideoLink({
       className="group relative block w-full overflow-hidden rounded-2xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-black"
     >
       <div className="relative aspect-video w-full overflow-hidden">
-        <img
+        <Image
           src={thumbnailUrl}
           alt={title}
+          fill
+          loading="lazy"
+          sizes="(max-width: 1280px) 100vw, 1200px"
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
         

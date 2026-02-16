@@ -44,6 +44,14 @@ const audioProjects: Project[] = [
     director: "Krizia Vega",
   },
   {
+    title: "The CarBlip Way",
+    category: "Commercial",
+    thumbnail: "/work-thumbnails/CarBlip.jpg",
+    videoUrl: "https://www.youtube.com/embed/dFs0u1-vZi4",
+    client: "CarBlip",
+    director: "Avi Richards",
+  },
+  {
     title: "7 Days - Make a Difference | Tomchei LA",
     category: "Commercial",
     thumbnail: "/work-thumbnails/7_Days.jpg",
@@ -177,42 +185,42 @@ const designProjects: Project[] = [
   {
     title: "Radnjeica Brand Identity",
     category: "Branding",
-    thumbnail: "/design-thumbnails/design1.png",
+    thumbnail: "/design-thumbnails/design1.jpg",
     description: "Brand identity and visual design",
     type: "design",
   },
   {
     title: "Responsive Web Design",
     category: "Web Design",
-    thumbnail: "/design-thumbnails/design2.png",
+    thumbnail: "/design-thumbnails/design2.jpg",
     description: "Modern responsive website design",
     type: "design",
   },
   {
     title: "Amazing Zing Website",
     category: "Web Design",
-    thumbnail: "/design-thumbnails/design3.png",
+    thumbnail: "/design-thumbnails/design3.jpg",
     description: "Full website design and development",
     type: "design",
   },
   {
     title: "EXON Gaming Theme",
     category: "UI Design",
-    thumbnail: "/design-thumbnails/design4.png",
+    thumbnail: "/design-thumbnails/design4.jpg",
     description: "Gaming platform UI/UX design",
     type: "design",
   },
   {
     title: "NLE Logistics Theme",
     category: "Web Design",
-    thumbnail: "/design-thumbnails/design5.png",
+    thumbnail: "/design-thumbnails/design5.jpg",
     description: "Logistics company website design",
     type: "design",
   },
   {
     title: "Frequent Typography",
     category: "Typography",
-    thumbnail: "/design-thumbnails/design6.png",
+    thumbnail: "/design-thumbnails/design6.jpg",
     description: "Typography and lettering design",
     type: "design",
   },
@@ -363,6 +371,7 @@ export function WorkSection() {
                       alt="Featured Project"
                       width={1200}
                       height={600}
+                      sizes="(max-width: 1280px) 100vw, 1200px"
                       className="w-full h-[300px] lg:h-[400px] object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                     <div className="absolute bottom-6 left-6 right-6">
@@ -398,6 +407,8 @@ export function WorkSection() {
                           alt={project.title}
                           width={600}
                           height={400}
+                          loading="lazy"
+                          sizes="(max-width: 640px) 100vw, 50vw"
                           className="w-full h-[200px] lg:h-[250px] object-cover group-hover:scale-105 transition-transform duration-500"
                         />
                         <div className="absolute bottom-4 left-4 right-4">

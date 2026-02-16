@@ -1,13 +1,15 @@
 "use client"
 
 import { useEffect, useState, useRef } from "react"
+import dynamic from "next/dynamic"
 import { HomeSection } from "./sections/HomeSection"
-import { WorkSection } from "./sections/WorkSection"
-import { AboutSection } from "./sections/AboutSection"
-import { FooterSection } from "./sections/FooterSection"
 import { Navbar } from "@/components/navbar"
 import { BackToTop } from "@/components/back-to-top"
 import { DialogProvider } from "@/contexts/dialog-context"
+
+const WorkSection = dynamic(() => import("./sections/WorkSection").then(mod => ({ default: mod.WorkSection })), { ssr: false })
+const AboutSection = dynamic(() => import("./sections/AboutSection").then(mod => ({ default: mod.AboutSection })), { ssr: false })
+const FooterSection = dynamic(() => import("./sections/FooterSection").then(mod => ({ default: mod.FooterSection })), { ssr: false })
 
 export default function HomePage() {
   const [shouldBounce, setShouldBounce] = useState(false)
