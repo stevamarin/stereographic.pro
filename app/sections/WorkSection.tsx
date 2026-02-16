@@ -30,7 +30,7 @@ const audioProjects: Project[] = [
   {
     title: 'Chelsea Collins | "Hotel Bed" (feat. Swae Lee)',
     category: "Music Video",
-    thumbnail: "/work-thumbnails/Swae_Lee.png",
+    thumbnail: "/work-thumbnails/Swae_Lee.jpg",
     videoUrl: "https://www.youtube.com/embed/yzwsXIwwq-k",
     client: "Hitco Entertainment",
     director: "Krizia Vega",
@@ -38,7 +38,7 @@ const audioProjects: Project[] = [
   {
     title: "POPSocial life | Lala Kent",
     category: "Commercial",
-    thumbnail: "/work-thumbnails/POPSocial_3.png",
+    thumbnail: "/work-thumbnails/POPSocial_3.jpg",
     videoUrl: "https://www.youtube.com/embed/hNXkcCQy2jg",
     client: "POPSocial",
     director: "Krizia Vega",
@@ -46,7 +46,7 @@ const audioProjects: Project[] = [
   {
     title: "7 Days - Make a Difference | Tomchei LA",
     category: "Commercial",
-    thumbnail: "/work-thumbnails/7_Days.png",
+    thumbnail: "/work-thumbnails/7_Days.jpg",
     videoUrl: "https://www.youtube.com/embed/AO5FGAkh5vk",
     client: "Tomchei LA",
     director: "Mo Weiss (Director) | Avi Richards (Producer)",
@@ -54,7 +54,7 @@ const audioProjects: Project[] = [
   {
     title: 'Alejandro Aranda | Home',
     category: "Music Video",
-    thumbnail: "/work-thumbnails/Home.png",
+    thumbnail: "/work-thumbnails/Home.jpg",
     videoUrl: "https://www.youtube.com/embed/HW1g8qRM6HE",
     client: "Hollywood Records, Inc",
     director: "Krizia Vega",
@@ -62,7 +62,7 @@ const audioProjects: Project[] = [
   {
     title: "JETS | We're Never Really Ready",
     category: "Commercial",
-    thumbnail: "/work-thumbnails/JETS.png",
+    thumbnail: "/work-thumbnails/JETS.jpg",
     videoUrl: "https://www.youtube.com/embed/xx2vQoyhzzw",
     client: "JETS",
     director: "Krizia Vega",
@@ -70,7 +70,7 @@ const audioProjects: Project[] = [
   {
     title: "Subaru | Forester",
     category: "Commercial",
-    thumbnail: "/work-thumbnails/Subaru.png",
+    thumbnail: "/work-thumbnails/Subaru.jpg",
     videoUrl: "https://www.youtube.com/embed/fCR4DxRjUTs",
     client: "Subaru",
     director: "Krizia Vega",
@@ -78,7 +78,7 @@ const audioProjects: Project[] = [
   {
     title: "Step x Bugha",
     category: "Commercial",
-    thumbnail: "/work-thumbnails/Step_X_Bugha.png",
+    thumbnail: "/work-thumbnails/Step_X_Bugha.jpg",
     videoUrl: "https://www.youtube.com/embed/ZIsiMDOULLU",
     client: "Step Mobile",
     director: "Krizia Vega",
@@ -86,7 +86,7 @@ const audioProjects: Project[] = [
   {
     title: "Tomchei LA's End of the Year Campaign",
     category: "Commercial",
-    thumbnail: "/work-thumbnails/Tomchei_LA_Year_2.png",
+    thumbnail: "/work-thumbnails/Tomchei_LA_Year_2.jpg",
     videoUrl: "https://www.youtube.com/embed/ZA8jj7I4FOw",
     client: "Tomchei LA",
     director: "Avi Richards",
@@ -94,7 +94,7 @@ const audioProjects: Project[] = [
   {
     title: "The Shape Of Shadows | Experimental",
     category: "Film",
-    thumbnail: "/work-thumbnails/The_Shape_Of_Shadows.png",
+    thumbnail: "/work-thumbnails/The_Shape_Of_Shadows.jpg",
     videoUrl: "https://www.youtube.com/embed/xk4wrzzHMLU",
     client: "Upside Down LA",
     director: "Julia Elihu (Director) Aaron Lemle (Producer)",
@@ -102,7 +102,7 @@ const audioProjects: Project[] = [
   {
     title: "Bilo jednom u Srbiji | Feature",
     category: "Film",
-    thumbnail: "/work-thumbnails/Bilo_jednom_Srbiji_2.png",
+    thumbnail: "/work-thumbnails/Bilo_jednom_Srbiji_2.jpg",
     videoUrl: "https://www.youtube.com/embed/5t6OKnULAUI",
     client: "Le Film",
     director: "Petar Ristovski",
@@ -110,7 +110,7 @@ const audioProjects: Project[] = [
   {
     title: "Nebesko | Feature",
     category: "Film",
-    thumbnail: "/work-thumbnails/Nebesko.png",
+    thumbnail: "/work-thumbnails/Nebesko.jpg",
     videoUrl: "https://www.youtube.com/embed/g_p4kd_ebt0",
     client: "Svetlobor",
     director: "Mario Glamazić",
@@ -118,7 +118,7 @@ const audioProjects: Project[] = [
   {
     title: "Rum Kasato | Tek mi je 30!",
     category: "Commercial",
-    thumbnail: "/work-thumbnails/Rum_Kasato_2.png",
+    thumbnail: "/work-thumbnails/Rum_Kasato_2.jpg",
     videoUrl: "https://www.youtube.com/embed/7B601zgAMKM",
     client: "DME Video",
     director: "DME Video Team",
@@ -126,7 +126,7 @@ const audioProjects: Project[] = [
   {
     title: "Polovni Automobili | 01",
     category: "Commercial",
-    thumbnail: "/work-thumbnails/Polovni_1.png",
+    thumbnail: "/work-thumbnails/Polovni_1.jpg",
     videoUrl: "https://www.youtube.com/embed/NUhfSsD9vVA",
     client: "DME Video",
     director: "DME Video Team",
@@ -134,7 +134,7 @@ const audioProjects: Project[] = [
   {
     title: "Polovni Automobili | 02",
     category: "Commercial",
-    thumbnail: "/work-thumbnails/Polovni_2.png",
+    thumbnail: "/work-thumbnails/Polovni_2.jpg",
     videoUrl: "https://www.youtube.com/embed/vQmK0mhaRO4",
     client: "DME Video",
     director: "DME Video Team",
@@ -142,7 +142,7 @@ const audioProjects: Project[] = [
   {
     title: "Polovni Automobili | 03",
     category: "Commercial",
-    thumbnail: "/work-thumbnails/Polovni_3.png",
+    thumbnail: "/work-thumbnails/Polovni_3.jpg",
     videoUrl: "https://www.youtube.com/embed/f0lY4DoMuyQ",
     client: "DME Video",
     director: "DME Video Team",
@@ -150,7 +150,7 @@ const audioProjects: Project[] = [
   {
     title: "BRAVO | Strawberry",
     category: "Commercial",
-    thumbnail: "/work-thumbnails/Bravo_Strawberry.png",
+    thumbnail: "/work-thumbnails/Bravo_Strawberry.jpg",
     videoUrl: "https://www.youtube.com/embed/LMgbe9vOaus",
     client: "Rauch",
     director: "DME Video Team",
@@ -158,7 +158,7 @@ const audioProjects: Project[] = [
   {
     title: "BRAVO | Sunny Orange",
     category: "Commercial",
-    thumbnail: "/work-thumbnails/Bravo_Sunny.png",
+    thumbnail: "/work-thumbnails/Bravo_Sunny.jpg",
     videoUrl: "https://www.youtube.com/embed/Ja7RgGkSCqY",
     client: "Rauch",
     director: "DME Video Team",
@@ -166,7 +166,7 @@ const audioProjects: Project[] = [
   {
     title: "BRAVO | Green Apple",
     category: "Commercial",
-    thumbnail: "/work-thumbnails/Bravo_GreenApple.png",
+    thumbnail: "/work-thumbnails/Bravo_GreenApple.jpg",
     videoUrl: "https://www.youtube.com/embed/JMsZ2_y7-sQ",
     client: "Rauch",
     director: "DME Video Team",
