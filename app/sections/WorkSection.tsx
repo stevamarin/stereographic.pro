@@ -3,7 +3,7 @@
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { LoadingWrapper } from "@/components/loading-wrapper"
-import { useState } from "react"
+import { useState, useEffect, useCallback } from "react"
 import {
   Dialog,
   DialogContent,
@@ -229,7 +229,7 @@ const designProjects: Project[] = [
 // Project Modal Component
 function ProjectModal({ project }: { project: Project }) {
   return (
-    <DialogContent className="max-w-4xl bg-black/60 backdrop-blur-3xl border-white/10 text-white p-5">
+    <DialogContent className="max-w-4xl bg-black/60 backdrop-blur-3xl border-white/10 text-white p-5 [&>button[data-slot=dialog-close]]:hidden [&>button[data-slot=dialog-close]]:md:flex">
       <DialogHeader>
         <DialogTitle className="text-xl font-inter-tight">{project.title}</DialogTitle>
         <DialogDescription className="text-gray-400 font-sora">
@@ -311,10 +311,53 @@ export function WorkSection() {
   const visibleProjects = currentProjects.slice(1, visibleCount + 1)
   const hasMore = visibleCount + 1 < currentProjects.length
 
-  const handleDialogChange = (open: boolean, dialogId: string) => {
+  const handleDialogChange = useCallback((open: boolean, dialogId: string) => {
     setDialogOpen(open)
     setOpenDialogId(open ? dialogId : null)
-  }
+  }, [setDialogOpen])
+
+  // Close dialog on scroll (wheel or touch move) and forward scroll to page
+  useEffect(() => {
+    if (!openDialogId) return
+
+    const closeAndScroll = (deltaY: number) => {
+      setDialogOpen(false)
+      setOpenDialogId(null)
+      requestAnimationFrame(() => {
+        const mainEl = document.querySelector("main")
+        if (mainEl) {
+          mainEl.scrollBy({ top: deltaY, behavior: "smooth" })
+        }
+      })
+    }
+
+    const handleWheel = (e: WheelEvent) => {
+      if (Math.abs(e.deltaY) > 5) {
+        closeAndScroll(e.deltaY * 3)
+      }
+    }
+
+    let touchStartY = 0
+    const handleTouchStart = (e: TouchEvent) => {
+      touchStartY = e.touches[0].clientY
+    }
+    const handleTouchMove = (e: TouchEvent) => {
+      const deltaY = e.touches[0].clientY - touchStartY
+      if (Math.abs(deltaY) > 10) {
+        closeAndScroll(-deltaY * 3)
+      }
+    }
+
+    window.addEventListener("wheel", handleWheel, { passive: true })
+    window.addEventListener("touchstart", handleTouchStart, { passive: true })
+    window.addEventListener("touchmove", handleTouchMove, { passive: true })
+
+    return () => {
+      window.removeEventListener("wheel", handleWheel)
+      window.removeEventListener("touchstart", handleTouchStart)
+      window.removeEventListener("touchmove", handleTouchMove)
+    }
+  }, [openDialogId, setDialogOpen])
 
   const loadMore = () => {
     setVisibleCount(prev => Math.min(prev + 6, currentProjects.length))
@@ -336,10 +379,10 @@ export function WorkSection() {
                 onClick={() => switchProjectType("audio")}
                 className={`rounded-full px-4 py-2.5 sm:px-6 sm:py-3 md:px-8 md:py-4 lg:px-10 lg:py-5 text-sm sm:text-base md:text-lg font-medium font-sora transition-all duration-300 ${
                   activeProjectType === "audio"
-                    ? "text-white hover:bg-purple-500/20 hover:border-purple-400"
+                    ? "text-white border border-purple-400 hover:bg-purple-500/20"
                     : "text-white border border-white bg-transparent hover:bg-purple-500/20 hover:border-purple-400 hover:text-white"
                 }`}
-                style={{ backgroundColor: activeProjectType === "audio" ? "#B98FC9" : "transparent" }}
+                style={{ backgroundColor: activeProjectType === "audio" ? "#200F33" : "transparent" }}
               >
                 Audio Projects
               </Button>
@@ -347,10 +390,10 @@ export function WorkSection() {
                 onClick={() => switchProjectType("design")}
                 className={`rounded-full px-4 py-2.5 sm:px-6 sm:py-3 md:px-8 md:py-4 lg:px-10 lg:py-5 text-sm sm:text-base md:text-lg font-medium font-sora transition-all duration-300 ${
                   activeProjectType === "design"
-                    ? "text-white hover:bg-purple-500/20 hover:border-purple-400"
+                    ? "text-white border border-purple-400 hover:bg-purple-500/20"
                     : "text-white border border-white bg-transparent hover:bg-purple-500/20 hover:border-purple-400 hover:text-white"
                 }`}
-                style={{ backgroundColor: activeProjectType === "design" ? "#B98FC9" : "transparent" }}
+                style={{ backgroundColor: activeProjectType === "design" ? "#200F33" : "transparent" }}
               >
                 Design Projects
               </Button>
@@ -379,7 +422,7 @@ export function WorkSection() {
                         <h2 className="text-xl sm:text-2xl font-semibold font-inter-tight text-white">
                           {currentProjects[0].title}
                         </h2>
-                        <span className="text-sm text-white border border-white rounded-full px-6 py-1 font-sora shrink-0 bg-black/20 backdrop-blur-md">
+                        <span className="text-base text-white border border-white rounded-full px-6 py-1.5 font-sora shrink-0 bg-black/20 backdrop-blur-md">
                           {currentProjects[0].category}
                         </span>
                       </div>
@@ -416,7 +459,7 @@ export function WorkSection() {
                             <h3 className="text-base sm:text-lg font-semibold font-inter-tight text-white line-clamp-1">
                               {project.title}
                             </h3>
-                            <span className="text-xs text-white border border-white rounded-full px-4 py-1 font-sora shrink-0 bg-black/20 backdrop-blur-md">
+                            <span className="text-base text-white border border-white rounded-full px-8 py-2 font-sora shrink-0 bg-black/20 backdrop-blur-md">
                               {project.category}
                             </span>
                           </div>
@@ -437,9 +480,8 @@ export function WorkSection() {
                 <Button
                   onClick={loadMore}
                   variant="outline"
-                  className="border-white bg-transparent text-white hover:bg-purple-500/20 hover:border-purple-400 hover:text-white rounded-full px-8 py-3 group font-sora font-medium text-sm flex items-center gap-3 mx-auto transition-all duration-300"
+                  className="border-white bg-transparent text-white hover:bg-purple-500/20 hover:border-purple-400 hover:text-white rounded-full px-8 py-3 group font-sora font-medium text-sm flex items-center justify-center mx-auto transition-all duration-300"
                 >
-                  <div className="w-2 h-2 rounded-full" style={{ backgroundColor: "#B98FC9" }}></div>
                   VIEW MORE
                 </Button>
               </div>
