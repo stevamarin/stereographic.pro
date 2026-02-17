@@ -7,118 +7,112 @@ import { socialLinks } from "@/lib/config/social-links"
 
 export function FooterSection() {
   return (
-    <section id="contact" className="min-h-screen snap-start scroll-mt-[45px] bg-black flex items-center justify-center py-16">
-      <div className="max-w-4xl mx-auto px-6 text-center">
-        <LoadingWrapper delay={100}>
-          {/* Logo */}
-          <Image
-            src="/logo.svg"
-            alt="Stereographic Production"
-            width={300}
-            height={90}
-            className="mx-auto mb-12 h-20 sm:h-24 w-auto hover:scale-105 transition-transform duration-300"
-          />
-
-          {/* Title */}
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold mb-8 text-white font-inter-tight">
-            Let's Talk
-          </h2>
-
-          {/* Contact Info */}
-          <div className="space-y-4 mb-12">
-            <a
-              href="mailto:stev.marinkovic@gmail.com"
-              className="block text-lg sm:text-xl text-gray-300 hover:text-purple-400 transition-colors font-sora"
-            >
-              stev.marinkovic@gmail.com
+    <section id="contact" className="h-[calc(100vh-45px)] snap-start scroll-mt-[45px] bg-black relative overflow-hidden">
+      {/* Main content - true center of screen */}
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="flex flex-col items-center text-center px-6">
+          <LoadingWrapper delay={100}>
+            {/* Logo */}
+            <a href="#home" className="block">
+              <Image
+                src="/logo.svg"
+                alt="Stereographic Production"
+                width={400}
+                height={120}
+                className="h-28 sm:h-32 w-auto mx-auto hover:scale-105 transition-transform duration-300"
+              />
             </a>
-            <a
-              href="tel:+381621576924"
-              className="block text-lg sm:text-xl text-gray-300 hover:text-purple-400 transition-colors font-sora"
-            >
-              +381 62 1576924
-            </a>
-          </div>
 
-          {/* Team Social Links */}
-          <div className="grid sm:grid-cols-2 gap-8 mb-12 max-w-2xl mx-auto">
-            {/* Stevan's Links */}
-            <div>
-              <p className="text-gray-500 text-sm mb-4 font-sora">Stevan Marinković</p>
-              <div className="flex justify-center gap-6">
-                <Link
-                  href={socialLinks.stevan.instagram}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group"
-                >
-                  <Image
-                    src="/icons/instagram.svg"
-                    alt="Instagram"
-                    width={24}
-                    height={24}
-                    className="w-6 h-6 opacity-70 hover:opacity-100 transition-all duration-300 group-hover:scale-110"
-                  />
-                </Link>
-                <Link
-                  href={socialLinks.stevan.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group"
-                >
-                  <Image
-                    src="/icons/linkedin.svg"
-                    alt="LinkedIn"
-                    width={24}
-                    height={24}
-                    className="w-6 h-6 opacity-70 hover:opacity-100 transition-all duration-300 group-hover:scale-110"
-                  />
-                </Link>
-              </div>
+            {/* Title */}
+            <a href="mailto:stev.marinkovic@gmail.com" className="block mt-10">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-white hover:text-purple-400 transition-colors duration-300 font-inter-tight">
+                Let's Talk
+              </h2>
+            </a>
+
+            {/* Contact Info */}
+            <div className="flex flex-col items-center gap-3 mt-8">
+              <a
+                href="mailto:stev.marinkovic@gmail.com"
+                className="text-lg sm:text-xl text-gray-300 hover:text-purple-400 transition-colors font-sora"
+              >
+                stev.marinkovic@gmail.com
+              </a>
+              <a
+                href="tel:+381621576924"
+                className="text-lg sm:text-xl text-gray-300 hover:text-purple-400 transition-colors font-sora"
+              >
+                +381 62 1576924
+              </a>
             </div>
 
-            {/* Nikola's Links */}
-            <div>
-              <p className="text-gray-500 text-sm mb-4 font-sora">Nikola Mijailović</p>
-              <div className="flex justify-center gap-6">
-                <Link
-                  href={socialLinks.nikola.instagram}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group"
-                >
-                  <Image
-                    src="/icons/instagram.svg"
-                    alt="Instagram"
-                    width={24}
-                    height={24}
-                    className="w-6 h-6 opacity-70 hover:opacity-100 transition-all duration-300 group-hover:scale-110"
-                  />
-                </Link>
-                <Link
-                  href={socialLinks.nikola.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group"
-                >
-                  <Image
-                    src="/icons/linkedin.svg"
-                    alt="LinkedIn"
-                    width={24}
-                    height={24}
-                    className="w-6 h-6 opacity-70 hover:opacity-100 transition-all duration-300 group-hover:scale-110"
-                  />
-                </Link>
-              </div>
+            {/* Social Links */}
+            <div className="flex items-center justify-center gap-6 mt-10">
+              <Link
+                href={socialLinks.stevan.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group"
+              >
+                <Image
+                  src="/icons/instagram.svg"
+                  alt="Instagram"
+                  width={24}
+                  height={24}
+                  className="w-6 h-6 opacity-70 hover:opacity-100 transition-all duration-300 group-hover:scale-110"
+                />
+              </Link>
+              <Link
+                href={socialLinks.stevan.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group"
+              >
+                <Image
+                  src="/icons/linkedin.svg"
+                  alt="LinkedIn"
+                  width={24}
+                  height={24}
+                  className="w-6 h-6 opacity-70 hover:opacity-100 transition-all duration-300 group-hover:scale-110"
+                />
+              </Link>
+              <Link
+                href={socialLinks.nikola.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group"
+              >
+                <Image
+                  src="/icons/instagram.svg"
+                  alt="Instagram"
+                  width={24}
+                  height={24}
+                  className="w-6 h-6 opacity-70 hover:opacity-100 transition-all duration-300 group-hover:scale-110"
+                />
+              </Link>
+              <Link
+                href={socialLinks.nikola.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group"
+              >
+                <Image
+                  src="/icons/linkedin.svg"
+                  alt="LinkedIn"
+                  width={24}
+                  height={24}
+                  className="w-6 h-6 opacity-70 hover:opacity-100 transition-all duration-300 group-hover:scale-110"
+                />
+              </Link>
             </div>
-          </div>
-
-          {/* Copyright */}
-          <p className="text-gray-600 text-sm font-sora">
-            © 2026 Stereographic Production. All rights reserved.
-          </p>
-        </LoadingWrapper>
+          </LoadingWrapper>
+        </div>
       </div>
+
+      {/* Copyright - pinned to absolute bottom */}
+      <p className="absolute bottom-6 left-0 right-0 text-gray-600 text-[10px] sm:text-sm font-sora text-center">
+        © 2026 Stereographic Production. All rights reserved.
+      </p>
     </section>
   )
 }

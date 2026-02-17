@@ -327,8 +327,8 @@ export function WorkSection() {
 
   return (
     <section id="work" className="min-h-screen snap-start scroll-mt-[45px] bg-black overflow-y-auto pt-[calc(3rem+15px)] pb-12">
-      <div className="px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
-        <div className="max-w-6xl mx-auto">
+      <div className="px-4 sm:px-6 lg:px-8 xl:px-16 2xl:px-24">
+        <div className="max-w-[1800px] mx-auto">
           {/* Project Type Buttons */}
           <LoadingWrapper delay={100}>
             <div className="flex items-center justify-center gap-3 sm:gap-4 mb-8">
@@ -372,7 +372,7 @@ export function WorkSection() {
                       width={1200}
                       height={600}
                       sizes="(max-width: 1280px) 100vw, 1200px"
-                      className="w-full h-[300px] lg:h-[400px] object-cover group-hover:scale-105 transition-transform duration-500"
+                      className="w-full h-[300px] lg:h-[500px] xl:h-[600px] object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                     <div className="absolute bottom-6 left-6 right-6">
                       <div className="flex items-center justify-between gap-3">
@@ -409,7 +409,7 @@ export function WorkSection() {
                           height={400}
                           loading="lazy"
                           sizes="(max-width: 640px) 100vw, 50vw"
-                          className="w-full h-[200px] lg:h-[250px] object-cover group-hover:scale-105 transition-transform duration-500"
+                          className="w-full h-[200px] lg:h-[350px] xl:h-[420px] object-cover group-hover:scale-105 transition-transform duration-500"
                         />
                         <div className="absolute bottom-4 left-4 right-4">
                           <div className="flex items-center justify-between gap-2">
