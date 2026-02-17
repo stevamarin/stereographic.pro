@@ -24,15 +24,17 @@ export function AboutSection() {
   const [mustacheVisible, setMustacheVisible] = useState(false)
 
   useEffect(() => {
-    const isMobile = window.matchMedia("(max-width: 1024px)").matches
+    const isMobile = window.matchMedia("(hover: none) or (pointer: coarse)").matches
     if (!isMobile || !photoRef.current) return
+
+    let timer: ReturnType<typeof setTimeout> | null = null
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          const timer = setTimeout(() => setMustacheVisible(true), 1500)
-          return () => clearTimeout(timer)
+          timer = setTimeout(() => setMustacheVisible(true), 1500)
         } else {
+          if (timer) clearTimeout(timer)
           setMustacheVisible(false)
         }
       },
@@ -40,7 +42,10 @@ export function AboutSection() {
     )
 
     observer.observe(photoRef.current)
-    return () => observer.disconnect()
+    return () => {
+      observer.disconnect()
+      if (timer) clearTimeout(timer)
+    }
   }, [])
 
   return (

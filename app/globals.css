@@ -393,17 +393,19 @@
     }
   }
 
-  /* On scroll into view (mobile): draw the mustache */
-  .mustache-active .mustache-draw-left {
-    animation: drawMustache 1.2s ease-out forwards;
-  }
+  /* On scroll into view (mobile only): draw the mustache */
+  @media (hover: none), (pointer: coarse) {
+    .mustache-active .mustache-draw-left {
+      animation: drawMustache 1.2s ease-out forwards;
+    }
 
-  .mustache-active .mustache-draw-right {
-    animation: drawMustache 1.2s ease-out 0.4s forwards;
-  }
+    .mustache-active .mustache-draw-right {
+      animation: drawMustache 1.2s ease-out 0.4s forwards;
+    }
 
-  .mustache-active .mustache-draw-detail-left {
-    animation: drawMustache 0.8s ease-out 0.9s forwards;
+    .mustache-active .mustache-draw-detail-left {
+      animation: drawMustache 0.8s ease-out 0.9s forwards;
+    }
   }
 
   /* Mobile responsiveness */
