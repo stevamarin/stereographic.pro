@@ -322,6 +322,75 @@
     animation: subtle-bounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
+  /* Doodle mustache draw animation */
+  @keyframes drawMustache {
+    0% {
+      stroke-dashoffset: var(--path-length);
+      opacity: 0;
+    }
+    1% {
+      opacity: 1;
+    }
+    100% {
+      stroke-dashoffset: 0;
+      opacity: 1;
+    }
+  }
+
+  @keyframes undrawMustache {
+    0% {
+      stroke-dashoffset: 0;
+      opacity: 1;
+    }
+    99% {
+      opacity: 1;
+    }
+    100% {
+      stroke-dashoffset: var(--path-length);
+      opacity: 0;
+    }
+  }
+
+  .mustache-draw-left,
+  .mustache-draw-right,
+  .mustache-draw-detail-left {
+    opacity: 0;
+  }
+
+  .mustache-draw-left {
+    --path-length: 200;
+    stroke-dasharray: 200;
+    stroke-dashoffset: 200;
+    animation: undrawMustache 0.4s ease-in forwards;
+  }
+
+  .mustache-draw-right {
+    --path-length: 180;
+    stroke-dasharray: 180;
+    stroke-dashoffset: 180;
+    animation: undrawMustache 0.4s ease-in forwards;
+  }
+
+  .mustache-draw-detail-left {
+    --path-length: 100;
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    animation: undrawMustache 0.3s ease-in forwards;
+  }
+
+  /* On hover: draw the mustache */
+  .group\/photo:hover .mustache-draw-left {
+    animation: drawMustache 1.2s ease-out forwards;
+  }
+
+  .group\/photo:hover .mustache-draw-right {
+    animation: drawMustache 1.2s ease-out 0.4s forwards;
+  }
+
+  .group\/photo:hover .mustache-draw-detail-left {
+    animation: drawMustache 0.8s ease-out 0.9s forwards;
+  }
+
   /* Mobile responsiveness */
   @media (max-width: 768px) {
     .animate-marquee-faster {

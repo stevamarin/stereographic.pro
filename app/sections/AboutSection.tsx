@@ -27,8 +27,8 @@ export function AboutSection() {
           <LoadingWrapper delay={100}>
             <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start mb-24 lg:mb-32">
               {/* Stevan Photo */}
-              <div className="relative">
-                <div className="aspect-square overflow-hidden rounded-2xl bg-gray-200">
+              <div className="relative group/photo">
+                <div className="aspect-square overflow-hidden rounded-2xl bg-gray-200 relative">
                   <Image
                     src="/stevan.jpg"
                     alt="Stevan Marinković"
@@ -36,8 +36,54 @@ export function AboutSection() {
                     height={750}
                     loading="lazy"
                     sizes="(max-width: 1024px) 100vw, 50vw"
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover relative z-0"
                   />
+                  {/* Doodle mustache overlay */}
+                  <div
+                    className="absolute inset-0 z-10 pointer-events-none"
+                    style={{ overflow: 'visible' }}
+                  >
+                    <svg
+                      viewBox="290 422 140 88"
+                      className="absolute"
+                      style={{
+                        top: '53.3%',
+                        left: '51.5%',
+                        width: '28%',
+                        transform: 'translate(-50%, -50%) rotate(4deg)',
+                      }}
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      {/* Left mustache curl */}
+                      <path
+                        d="M364.53,441.774c-1.98,1.942-4.321,3.514-6.868,4.612,1.043-1.925,2.613-9.07,2.613-9.07-4.587,4.022-10.52,6.482-16.608,6.886,3.307-2.001,6.332-4.467,8.959-7.301-1.536-.035-2.973.701-4.316,1.446-6.816,3.779-13.314,8.336-20.758,10.647s-16.342,1.928-22.06-3.368c-2.002-1.854-3.56-4.388-3.55-7.116.014-3.637,2.777-6.732,5.891-8.611,3.783-2.282,8.905-3.193,12.49-.611"
+                        stroke="#000"
+                        strokeWidth="2.3"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="mustache-draw-left"
+                      />
+                      {/* Right mustache curl */}
+                      <path
+                        d="M370.2,441.774c1.512,1.942,3.3,3.514,5.244,4.612-.796-1.925-1.995-9.07-1.995-9.07,3.503,4.022,8.033,6.482,12.681,6.886-2.525-2.001-4.835-4.467-6.841-7.301,1.173-.035,2.27.701,3.296,1.446,5.205,3.779,10.167,8.336,15.851,10.647s12.478,1.928,16.845-3.368c1.529-1.854,2.718-4.388,2.711-7.116-.011-3.637-2.121-6.732-4.498-8.611-2.889-2.282-6.8-3.193-9.537-.611"
+                        stroke="#000"
+                        strokeWidth="2.3"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="mustache-draw-right"
+                      />
+                      {/* Bottom goatee detail */}
+                      <path
+                        d="M358.042,489.811c-2.164,2.889-3.75,6.208-4.638,9.707,3.325-3.286,6.649-6.571,9.974-9.857.26,2.307.52,4.614.78,6.921,1.429-1.928,2.858-3.856,4.287-5.784.663,2.173,1.325,4.346,1.988,6.518,2.193-1.54,3.879-3.79,4.74-6.328,1.648,2.505,3.296,5.01,4.945,7.515"
+                        stroke="#000"
+                        strokeWidth="2.3"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="mustache-draw-detail-left"
+                      />
+                    </svg>
+                  </div>
                 </div>
               </div>
 
