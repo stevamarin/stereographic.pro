@@ -378,16 +378,31 @@
     animation: undrawMustache 0.3s ease-in forwards;
   }
 
-  /* On hover: draw the mustache */
-  .group\/photo:hover .mustache-draw-left {
+  /* On hover (desktop only): draw the mustache */
+  @media (hover: hover) and (pointer: fine) {
+    .group\/photo:hover .mustache-draw-left {
+      animation: drawMustache 1.2s ease-out forwards;
+    }
+
+    .group\/photo:hover .mustache-draw-right {
+      animation: drawMustache 1.2s ease-out 0.4s forwards;
+    }
+
+    .group\/photo:hover .mustache-draw-detail-left {
+      animation: drawMustache 0.8s ease-out 0.9s forwards;
+    }
+  }
+
+  /* On scroll into view (mobile): draw the mustache */
+  .mustache-active .mustache-draw-left {
     animation: drawMustache 1.2s ease-out forwards;
   }
 
-  .group\/photo:hover .mustache-draw-right {
+  .mustache-active .mustache-draw-right {
     animation: drawMustache 1.2s ease-out 0.4s forwards;
   }
 
-  .group\/photo:hover .mustache-draw-detail-left {
+  .mustache-active .mustache-draw-detail-left {
     animation: drawMustache 0.8s ease-out 0.9s forwards;
   }
 

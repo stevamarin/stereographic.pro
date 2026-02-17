@@ -2,6 +2,7 @@
 
 import Image from "next/image"
 import Link from "next/link"
+import { useEffect, useRef, useState } from "react"
 import { LoadingWrapper } from "@/components/loading-wrapper"
 import { socialLinks } from "@/lib/config/social-links"
 
@@ -19,6 +20,29 @@ const clientLogos = [
 ]
 
 export function AboutSection() {
+  const photoRef = useRef<HTMLDivElement>(null)
+  const [mustacheVisible, setMustacheVisible] = useState(false)
+
+  useEffect(() => {
+    const isMobile = window.matchMedia("(max-width: 1024px)").matches
+    if (!isMobile || !photoRef.current) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          const timer = setTimeout(() => setMustacheVisible(true), 1500)
+          return () => clearTimeout(timer)
+        } else {
+          setMustacheVisible(false)
+        }
+      },
+      { threshold: 0.5 }
+    )
+
+    observer.observe(photoRef.current)
+    return () => observer.disconnect()
+  }, [])
+
   return (
     <section id="about" className="min-h-screen snap-start scroll-mt-[45px] bg-black overflow-y-auto pt-[calc(4rem+15px)] pb-16">
       <div className="px-4 sm:px-6 lg:px-8 xl:px-16 2xl:px-24">
@@ -27,7 +51,7 @@ export function AboutSection() {
           <LoadingWrapper delay={100}>
             <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start mb-24 lg:mb-32">
               {/* Stevan Photo */}
-              <div className="relative group/photo">
+              <div ref={photoRef} className={`relative group/photo${mustacheVisible ? ' mustache-active' : ''}`}>
                 <div className="aspect-square overflow-hidden rounded-2xl bg-gray-200 relative">
                   <Image
                     src="/stevan.jpg"
