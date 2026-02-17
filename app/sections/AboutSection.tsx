@@ -30,7 +30,7 @@ export function AboutSection() {
               <div className="relative">
                 <div className="aspect-[4/5] overflow-hidden rounded-2xl bg-gray-200">
                   <Image
-                    src="/stevan.png"
+                    src="/stevan.jpg"
                     alt="Stevan Marinković"
                     width={600}
                     height={750}
@@ -257,7 +257,7 @@ export function AboutSection() {
               <div className="relative order-1 lg:order-2">
                 <div className="aspect-[4/5] overflow-hidden rounded-2xl bg-gray-200">
                   <Image
-                    src="/nikola.png"
+                    src="/nikola.jpg"
                     alt="Nikola Mijailović"
                     width={600}
                     height={750}
