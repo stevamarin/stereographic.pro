@@ -32,7 +32,7 @@ export function AboutSection() {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          timer = setTimeout(() => setMustacheVisible(true), 1500)
+          timer = setTimeout(() => setMustacheVisible(true), 1000)
         } else {
           if (timer) clearTimeout(timer)
           setMustacheVisible(false)
