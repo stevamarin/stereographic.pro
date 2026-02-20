@@ -302,6 +302,7 @@ export function WorkSection() {
   const [openDialogId, setOpenDialogId] = useState<string | null>(null)
   const [activeProjectType, setActiveProjectType] = useState<"audio" | "design">("audio")
   const [visibleCount, setVisibleCount] = useState(6)
+  const [batchStartIndex, setBatchStartIndex] = useState(0)
 
   const currentProjects = activeProjectType === "audio" ? audioProjects : designProjects
   const visibleProjects = currentProjects.slice(1, visibleCount + 1)
@@ -356,16 +357,18 @@ export function WorkSection() {
   }, [openDialogId, setDialogOpen])
 
   const loadMore = () => {
+    setBatchStartIndex(visibleCount)
     setVisibleCount(prev => Math.min(prev + 6, currentProjects.length))
   }
 
   const switchProjectType = (type: "audio" | "design") => {
     setActiveProjectType(type)
     setVisibleCount(6)
+    setBatchStartIndex(0)
   }
 
   return (
-    <section id="work" className="min-h-screen snap-start scroll-mt-[45px] bg-black overflow-y-auto pt-[calc(3rem+15px)] pb-12">
+    <section id="work" className="min-h-screen snap-start scroll-mt-[45px] bg-black overflow-y-auto pt-[calc(3rem+40px)] pb-32">
       <div className="px-4 sm:px-6 lg:px-8 xl:px-16 2xl:px-24">
         <div className="max-w-[1800px] mx-auto">
           {/* Project Type Buttons */}
@@ -433,7 +436,7 @@ export function WorkSection() {
           {/* Projects Grid */}
           <div className="grid sm:grid-cols-2 gap-6 lg:gap-8 mb-8">
             {visibleProjects.map((project, index) => (
-              <LoadingWrapper key={`${activeProjectType}-${index}`} delay={300 + index * 100}>
+              <LoadingWrapper key={`${activeProjectType}-${index}`} delay={Math.max(0, index - batchStartIndex) * 150}>
                 <Dialog
                   open={openDialogId === `${activeProjectType}-${index}`}
                   onOpenChange={(open) => handleDialogChange(open, `${activeProjectType}-${index}`)}
