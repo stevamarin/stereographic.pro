@@ -57,7 +57,7 @@ const audioProjects: Project[] = [
     thumbnail: "/work-thumbnails/7_Days.jpg",
     videoUrl: "https://www.youtube.com/embed/AO5FGAkh5vk",
     client: "Tomchei LA",
-    director: "Mo Weiss (Director) | Avi Richards (Producer)",
+    director: "Mo Weiss",
   },
   {
     title: 'Alejandro Aranda | Home',
@@ -105,7 +105,7 @@ const audioProjects: Project[] = [
     thumbnail: "/work-thumbnails/The_Shape_Of_Shadows.jpg",
     videoUrl: "https://www.youtube.com/embed/xk4wrzzHMLU",
     client: "Upside Down LA",
-    director: "Julia Elihu (Director) Aaron Lemle (Producer)",
+    director: "Julia Elihu",
   },
   {
     title: "Bilo jednom u Srbiji | Feature",
@@ -229,7 +229,7 @@ const designProjects: Project[] = [
 // Project Modal Component
 function ProjectModal({ project }: { project: Project }) {
   return (
-    <DialogContent className="max-w-4xl bg-black/60 backdrop-blur-3xl border-white/10 text-white p-5 [&>button[data-slot=dialog-close]]:hidden [&>button[data-slot=dialog-close]]:md:flex">
+    <DialogContent className="max-w-6xl bg-black/60 backdrop-blur-3xl border-white/10 text-white p-5 rounded-3xl [&>button[data-slot=dialog-close]]:hidden [&>button[data-slot=dialog-close]]:md:flex">
       <DialogHeader>
         <DialogTitle className="text-xl font-inter-tight">{project.title}</DialogTitle>
         <DialogDescription className="text-gray-400 font-sora">
@@ -264,10 +264,6 @@ function ProjectModal({ project }: { project: Project }) {
         <div className="space-y-3">
           <div>
             <dl className="space-y-2 font-sora">
-              <div className="flex justify-between border-b border-gray-800 py-1.5">
-                <dt className="text-gray-400">Name</dt>
-                <dd className="text-white">{project.title}</dd>
-              </div>
               {project.client && (
                 <div className="flex justify-between border-b border-gray-800 py-1.5">
                   <dt className="text-gray-400">Client</dt>
@@ -276,7 +272,7 @@ function ProjectModal({ project }: { project: Project }) {
               )}
               {project.director && (
                 <div className="flex justify-between border-b border-gray-800 py-1.5">
-                  <dt className="text-gray-400">Director & Producer</dt>
+                  <dt className="text-gray-400">Directed by</dt>
                   <dd className="text-white">{project.director}</dd>
                 </div>
               )}
@@ -422,7 +418,7 @@ export function WorkSection() {
                         <h2 className="text-xl sm:text-2xl font-semibold font-inter-tight text-white">
                           {currentProjects[0].title}
                         </h2>
-                        <span className="text-base text-white border border-white rounded-full px-6 py-1.5 font-sora shrink-0 bg-black/20 backdrop-blur-md">
+                        <span className="text-sm text-white border border-white rounded-full px-3.5 py-0.5 font-sora shrink-0 bg-black/20 backdrop-blur-md">
                           {currentProjects[0].category}
                         </span>
                       </div>
@@ -459,7 +455,7 @@ export function WorkSection() {
                             <h3 className="text-base sm:text-lg font-semibold font-inter-tight text-white line-clamp-1">
                               {project.title}
                             </h3>
-                            <span className="text-base text-white border border-white rounded-full px-8 py-2 font-sora shrink-0 bg-black/20 backdrop-blur-md">
+                            <span className="text-sm text-white border border-white rounded-full px-5 py-1 font-sora shrink-0 bg-black/20 backdrop-blur-md">
                               {project.category}
                             </span>
                           </div>

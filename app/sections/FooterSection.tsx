@@ -8,30 +8,30 @@ import { socialLinks } from "@/lib/config/social-links"
 export function FooterSection() {
   return (
     <section id="contact" className="h-[calc(100vh-45px)] snap-start scroll-mt-[45px] bg-black relative overflow-hidden">
-      {/* Main content - true center of screen */}
+      {/* Main content - centered */}
       <div className="absolute inset-0 flex items-center justify-center">
-        <div className="flex flex-col items-center text-center px-6">
+        <div className="flex flex-col items-center text-center px-6 gap-1">
           <LoadingWrapper delay={100}>
             {/* Logo */}
-            <a href="#home" className="block">
+            <a href="#home" className="flex justify-center w-full">
               <Image
-                src="/logo.svg"
+                src="/Stereographic_PNG-06.png"
                 alt="Stereographic Production"
                 width={400}
                 height={120}
-                className="h-28 sm:h-32 w-auto mx-auto hover:scale-105 transition-transform duration-300"
+                className="w-[30vw] sm:w-[20vw] h-auto hover:scale-105 transition-transform duration-300"
               />
             </a>
 
             {/* Title */}
-            <a href="mailto:stev.marinkovic@gmail.com" className="block mt-10">
+            <a href="mailto:stev.marinkovic@gmail.com" className="mt-8">
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-white hover:text-purple-400 transition-colors duration-300 font-inter-tight">
                 Let's Talk
               </h2>
             </a>
 
             {/* Contact Info */}
-            <div className="flex flex-col items-center gap-3 mt-8">
+            <div className="flex flex-col items-center gap-3 mt-3">
               <a
                 href="mailto:stev.marinkovic@gmail.com"
                 className="text-lg sm:text-xl text-gray-300 hover:text-purple-400 transition-colors font-sora"
@@ -47,7 +47,7 @@ export function FooterSection() {
             </div>
 
             {/* Social Links */}
-            <div className="flex items-center justify-center gap-6 mt-10">
+            <div className="flex items-center justify-center gap-6 mt-2">
               <Link
                 href={socialLinks.stevan.instagram}
                 target="_blank"

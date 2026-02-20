@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="49" height="49" viewBox="0 0 49 49">
+  <defs>
+    <filter id="to-purple-ab">
+      <feFlood flood-color="#b98fc9" result="color"/>
+      <feComposite in="color" in2="SourceAlpha" operator="in"/>
+    </filter>
+  </defs>
+  <g transform="translate(1.012 1.177)">
+    <path d="M4.962.662a4.3,4.3,0,0,0-4.3,4.3V41.683a4.3,4.3,0,0,0,4.3,4.3H42.014a4.3,4.3,0,0,0,4.3-4.3V4.962a4.3,4.3,0,0,0-4.3-4.3H4.962m0-.662H42.014a4.962,4.962,0,0,1,4.962,4.962V41.683a4.962,4.962,0,0,1-4.962,4.962H4.962A4.962,4.962,0,0,1,0,41.683V4.962A4.962,4.962,0,0,1,4.962,0Z" fill="#b98fc9"/>
+  </g>
+  <image href="ableton.png" x="9" y="10" width="31" height="31" filter="url(#to-purple-ab)"/>
+</svg>

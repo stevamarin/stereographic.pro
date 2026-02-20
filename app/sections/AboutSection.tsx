@@ -8,15 +8,22 @@ import { socialLinks } from "@/lib/config/social-links"
 
 
 const clientLogos = [
-  "black-street-entertainment.png",
-  "carblip.png",
+  "allermi.png",
+  "carblip-2.png",
   "dme-video.png",
+  "Hitco_Logo.png",
+  "JuliaElihuPink.png",
+  "krizia-vega.png",
   "le-film.png",
+  "logo_banini.png",
   "onehouse.png",
   "popsocial.png",
-  "rauch.webp",
+  "rauch.png",
+  "roundbox-white.png",
+  "SnapMixDigital.png",
+  "StepMobile.png",
   "subaru.png",
-  "roundbox-black.png",
+  "the-sukkah-store.png",
 ]
 
 export function AboutSection() {
@@ -168,46 +175,63 @@ export function AboutSection() {
                 <div className="space-y-5">
                   <div className="flex items-center gap-3 group">
                     <div className="w-2 h-2 rounded-full bg-white transition-all duration-300 group-hover:bg-purple-400 group-hover:scale-125 group-hover:shadow-[0_0_8px_rgba(185,143,201,0.6)]"></div>
-                    <span className="font-sora text-white text-2xl">Audio Production</span>
-                  </div>
-                  <div className="flex items-center gap-3 group">
-                    <div className="w-2 h-2 rounded-full bg-white transition-all duration-300 group-hover:bg-purple-400 group-hover:scale-125 group-hover:shadow-[0_0_8px_rgba(185,143,201,0.6)]"></div>
                     <span className="font-sora text-white text-2xl">Sound Design</span>
                   </div>
                   <div className="flex items-center gap-3 group">
                     <div className="w-2 h-2 rounded-full bg-white transition-all duration-300 group-hover:bg-purple-400 group-hover:scale-125 group-hover:shadow-[0_0_8px_rgba(185,143,201,0.6)]"></div>
-                    <span className="font-sora text-white text-2xl">Production Sound Mixer</span>
+                    <span className="font-sora text-white text-2xl">Foley and SFX</span>
                   </div>
                   <div className="flex items-center gap-3 group">
                     <div className="w-2 h-2 rounded-full bg-white transition-all duration-300 group-hover:bg-purple-400 group-hover:scale-125 group-hover:shadow-[0_0_8px_rgba(185,143,201,0.6)]"></div>
-                    <span className="font-sora text-white text-2xl">Dialogue Editor</span>
+                    <span className="font-sora text-white text-2xl">Original Score Production</span>
                   </div>
                   <div className="flex items-center gap-3 group">
                     <div className="w-2 h-2 rounded-full bg-white transition-all duration-300 group-hover:bg-purple-400 group-hover:scale-125 group-hover:shadow-[0_0_8px_rgba(185,143,201,0.6)]"></div>
-                    <span className="font-sora text-white text-2xl">Music Production</span>
+                    <span className="font-sora text-white text-2xl">Dialogue Editing</span>
+                  </div>
+                  <div className="flex items-center gap-3 group">
+                    <div className="w-2 h-2 rounded-full bg-white transition-all duration-300 group-hover:bg-purple-400 group-hover:scale-125 group-hover:shadow-[0_0_8px_rgba(185,143,201,0.6)]"></div>
+                    <span className="font-sora text-white text-2xl">Mixing and Mastering</span>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-5 pt-12">
-                  <div className="group flex flex-col items-center">
-                    <Image
-                      src="/icons/stevan-icon1.svg"
-                      alt="Logic Pro"
-                      width={64}
-                      height={64}
-                      className="group-hover:scale-110 transition-transform duration-300"
-                    />
-                    <span className="text-purple-400 text-xs font-sora mt-2 opacity-0 group-hover:opacity-60 transition-opacity duration-300">Logic Pro</span>
-                  </div>
+                <div className="flex items-center gap-3 sm:gap-5 pt-12">
                   <div className="group flex flex-col items-center">
                     <Image
                       src="/icons/stevan-icon2.svg"
                       alt="Pro Tools"
                       width={64}
                       height={64}
-                      className="group-hover:scale-110 transition-transform duration-300"
+                      className="w-10 h-10 sm:w-16 sm:h-16 group-hover:scale-110 transition-transform duration-300"
                     />
                     <span className="text-purple-400 text-xs font-sora mt-2 opacity-0 group-hover:opacity-60 transition-opacity duration-300">Pro Tools</span>
+                  </div>
+                  <div className="group flex flex-col items-center">
+                    <Image
+                      src="/icons/stevan-icon1.svg"
+                      alt="Logic Pro"
+                      width={64}
+                      height={64}
+                      className="w-10 h-10 sm:w-16 sm:h-16 group-hover:scale-110 transition-transform duration-300"
+                    />
+                    <span className="text-purple-400 text-xs font-sora mt-2 opacity-0 group-hover:opacity-60 transition-opacity duration-300">Logic Pro</span>
+                  </div>
+                  <div className="group flex flex-col items-center">
+                    <div className="group-hover:scale-110 transition-transform duration-300 relative w-10 h-10 sm:w-16 sm:h-16">
+                      <svg viewBox="0 0 49 49" className="absolute inset-0 w-full h-full">
+                        <g transform="translate(1.012 1.177)">
+                          <path d="M4.962.662a4.3,4.3,0,0,0-4.3,4.3V41.683a4.3,4.3,0,0,0,4.3,4.3H42.014a4.3,4.3,0,0,0,4.3-4.3V4.962a4.3,4.3,0,0,0-4.3-4.3H4.962m0-.662H42.014a4.962,4.962,0,0,1,4.962,4.962V41.683a4.962,4.962,0,0,1-4.962,4.962H4.962A4.962,4.962,0,0,1,0,41.683V4.962A4.962,4.962,0,0,1,4.962,0Z" fill="#b98fc9"/>
+                        </g>
+                      </svg>
+                      <Image
+                        src="/icons/ableton.png"
+                        alt="Ableton"
+                        width={44}
+                        height={44}
+                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70%] h-auto [filter:brightness(0)_saturate(100%)_invert(68%)_sepia(30%)_saturate(500%)_hue-rotate(244deg)_brightness(0.75)]"
+                      />
+                    </div>
+                    <span className="text-purple-400 text-xs font-sora mt-2 opacity-0 group-hover:opacity-60 transition-opacity duration-300">Ableton</span>
                   </div>
                   <div className="group flex flex-col items-center">
                     <Image
@@ -215,9 +239,26 @@ export function AboutSection() {
                       alt="iZotope RX"
                       width={64}
                       height={64}
-                      className="group-hover:scale-110 transition-transform duration-300"
+                      className="w-10 h-10 sm:w-16 sm:h-16 group-hover:scale-110 transition-transform duration-300"
                     />
                     <span className="text-purple-400 text-xs font-sora mt-2 opacity-0 group-hover:opacity-60 transition-opacity duration-300">iZotope RX</span>
+                  </div>
+                  <div className="group flex flex-col items-center">
+                    <div className="group-hover:scale-110 transition-transform duration-300 relative w-10 h-10 sm:w-16 sm:h-16">
+                      <svg viewBox="0 0 49 49" className="absolute inset-0 w-full h-full">
+                        <g transform="translate(1.012 1.177)">
+                          <path d="M4.962.662a4.3,4.3,0,0,0-4.3,4.3V41.683a4.3,4.3,0,0,0,4.3,4.3H42.014a4.3,4.3,0,0,0,4.3-4.3V4.962a4.3,4.3,0,0,0-4.3-4.3H4.962m0-.662H42.014a4.962,4.962,0,0,1,4.962,4.962V41.683a4.962,4.962,0,0,1-4.962,4.962H4.962A4.962,4.962,0,0,1,0,41.683V4.962A4.962,4.962,0,0,1,4.962,0Z" fill="#b98fc9"/>
+                        </g>
+                      </svg>
+                      <Image
+                        src="/icons/wwise.png"
+                        alt="Wwise"
+                        width={34}
+                        height={34}
+                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[68%] h-auto [filter:brightness(0)_saturate(100%)_invert(68%)_sepia(30%)_saturate(500%)_hue-rotate(244deg)_brightness(0.75)]"
+                      />
+                    </div>
+                    <span className="text-purple-400 text-xs font-sora mt-2 opacity-0 group-hover:opacity-60 transition-opacity duration-300">Wwise</span>
                   </div>
                 </div>
               </div>
@@ -298,14 +339,14 @@ export function AboutSection() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-5 pt-12">
+                <div className="flex items-center gap-3 sm:gap-5 pt-12">
                   <div className="group flex flex-col items-center">
                     <Image
                       src="/icons/ps.svg"
                       alt="Photoshop"
                       width={64}
                       height={64}
-                      className="group-hover:scale-110 transition-transform duration-300"
+                      className="w-10 h-10 sm:w-16 sm:h-16 group-hover:scale-110 transition-transform duration-300"
                     />
                     <span className="text-purple-400 text-xs font-sora mt-2 opacity-0 group-hover:opacity-60 transition-opacity duration-300">Photoshop</span>
                   </div>
@@ -315,7 +356,7 @@ export function AboutSection() {
                       alt="Illustrator"
                       width={64}
                       height={64}
-                      className="group-hover:scale-110 transition-transform duration-300"
+                      className="w-10 h-10 sm:w-16 sm:h-16 group-hover:scale-110 transition-transform duration-300"
                     />
                     <span className="text-purple-400 text-xs font-sora mt-2 opacity-0 group-hover:opacity-60 transition-opacity duration-300">Illustrator</span>
                   </div>
@@ -325,7 +366,7 @@ export function AboutSection() {
                       alt="Adobe XD"
                       width={64}
                       height={64}
-                      className="group-hover:scale-110 transition-transform duration-300"
+                      className="w-10 h-10 sm:w-16 sm:h-16 group-hover:scale-110 transition-transform duration-300"
                     />
                     <span className="text-purple-400 text-xs font-sora mt-2 opacity-0 group-hover:opacity-60 transition-opacity duration-300">Adobe XD</span>
                   </div>
@@ -335,7 +376,7 @@ export function AboutSection() {
                       alt="Premiere"
                       width={64}
                       height={64}
-                      className="group-hover:scale-110 transition-transform duration-300"
+                      className="w-10 h-10 sm:w-16 sm:h-16 group-hover:scale-110 transition-transform duration-300"
                     />
                     <span className="text-purple-400 text-xs font-sora mt-2 opacity-0 group-hover:opacity-60 transition-opacity duration-300">Premiere</span>
                   </div>
@@ -345,7 +386,7 @@ export function AboutSection() {
                       alt="Figma"
                       width={64}
                       height={64}
-                      className="group-hover:scale-110 transition-transform duration-300"
+                      className="w-10 h-10 sm:w-16 sm:h-16 group-hover:scale-110 transition-transform duration-300"
                     />
                     <span className="text-purple-400 text-xs font-sora mt-2 opacity-0 group-hover:opacity-60 transition-opacity duration-300">Figma</span>
                   </div>
@@ -374,9 +415,9 @@ export function AboutSection() {
       {/* Client logos carousel - full width edge to edge */}
       <div className="w-full mt-20 overflow-hidden">
         <div className="relative">
-          <div className="flex gap-12 sm:gap-16 animate-marquee-faster">
-            {clientLogos.concat(clientLogos).concat(clientLogos).concat(clientLogos).map((logo, index) => (
-              <div key={index} className="flex-shrink-0">
+          <div className="flex items-center animate-marquee-faster">
+            {clientLogos.concat(clientLogos).map((logo, index) => (
+              <div key={index} className="flex-shrink-0 mr-12 sm:mr-16">
                 <Image
                   src={`/logos/clients/${logo}`}
                   alt="Client logo"
@@ -384,7 +425,7 @@ export function AboutSection() {
                   height={100}
                   loading="lazy"
                   sizes="200px"
-                  className="h-16 sm:h-20 w-auto opacity-70 hover:opacity-100 transition-opacity grayscale hover:grayscale-0 filter brightness-200"
+                  className={`w-auto opacity-70 hover:opacity-100 transition-opacity grayscale hover:grayscale-0 filter brightness-200 ${logo === "Hitco_Logo.png" || logo === "logo_banini.png" ? "h-24 sm:h-32" : "h-16 sm:h-20"}`}
                 />
               </div>
             ))}
