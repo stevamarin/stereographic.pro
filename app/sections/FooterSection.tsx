@@ -19,19 +19,19 @@ export function FooterSection() {
                 alt="Stereographic Production"
                 width={400}
                 height={120}
-                className="w-[30vw] sm:w-[20vw] h-auto hover:scale-105 transition-transform duration-300"
+                className="w-[65vw] sm:w-[20vw] h-auto hover:scale-105 transition-transform duration-300"
               />
             </a>
 
             {/* Title */}
-            <a href="mailto:stev.marinkovic@gmail.com" className="mt-8">
+            <a href="mailto:stev.marinkovic@gmail.com" className="mt-4 sm:mt-8">
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-white hover:text-purple-400 transition-colors duration-300 font-inter-tight">
                 Let's Talk
               </h2>
             </a>
 
             {/* Contact Info */}
-            <div className="flex flex-col items-center gap-3 mt-3">
+            <div className="flex flex-col items-center gap-2 sm:gap-3 mt-2 sm:mt-3">
               <a
                 href="mailto:stev.marinkovic@gmail.com"
                 className="text-lg sm:text-xl text-gray-300 hover:text-purple-400 transition-colors font-sora"
