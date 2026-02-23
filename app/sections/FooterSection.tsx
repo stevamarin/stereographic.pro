@@ -10,7 +10,7 @@ export function FooterSection() {
     <section id="contact" className="h-[calc(100vh-45px)] snap-start scroll-mt-[45px] bg-black relative overflow-hidden">
       {/* Main content - centered */}
       <div className="absolute inset-0 flex items-center justify-center">
-        <div className="flex flex-col items-center text-center px-6 gap-1">
+        <div className="flex flex-col items-center text-center px-6 gap-1 -mt-[65px]">
           <LoadingWrapper delay={100}>
             {/* Logo */}
             <a href="#home" className="flex justify-center w-full">
@@ -19,9 +19,12 @@ export function FooterSection() {
                 alt="Stereographic Production"
                 width={400}
                 height={120}
-                className="w-[65vw] sm:w-[20vw] h-auto hover:scale-105 transition-transform duration-300"
+                className="w-[65vw] sm:w-[60vw] md:w-[40vw] lg:w-[25vw] h-auto hover:scale-105 transition-transform duration-300"
               />
             </a>
+
+            {/* Spacer - pushes text group down */}
+            <div style={{ height: '90px' }} />
 
             {/* Title */}
             <a href="mailto:stev.marinkovic@gmail.com" className="mt-4 sm:mt-8">

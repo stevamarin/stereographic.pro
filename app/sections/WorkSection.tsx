@@ -228,8 +228,23 @@ const designProjects: Project[] = [
 
 // Project Modal Component
 function ProjectModal({ project }: { project: Project }) {
+  const { requestMenuOpen } = useDialog()
+
+  const handleInteractOutside = (e: Event) => {
+    const pointer = (e as CustomEvent).detail?.originalEvent as PointerEvent
+    if (pointer && window.innerWidth < 768) {
+      const isHamburgerArea = pointer.clientX > window.innerWidth - 64 && pointer.clientY < 64
+      if (isHamburgerArea) {
+        requestMenuOpen()
+      }
+    }
+  }
+
   return (
-    <DialogContent className="max-w-6xl bg-black/60 backdrop-blur-3xl border-white/10 text-white p-5 rounded-3xl [&>button[data-slot=dialog-close]]:hidden [&>button[data-slot=dialog-close]]:md:flex">
+    <DialogContent
+      className="max-w-6xl bg-black/60 backdrop-blur-3xl border-white/10 text-white p-5 rounded-3xl [&>button[data-slot=dialog-close]]:hidden [&>button[data-slot=dialog-close]]:md:flex"
+      onInteractOutside={handleInteractOutside}
+    >
       <DialogHeader>
         <DialogTitle className="text-xl font-inter-tight">{project.title}</DialogTitle>
         <DialogDescription className="text-gray-400 font-sora">
@@ -368,12 +383,12 @@ export function WorkSection() {
   }
 
   return (
-    <section id="work" className="min-h-screen snap-start scroll-mt-[45px] bg-black overflow-y-auto pt-[calc(3rem+40px)] pb-32">
+    <section id="work" className="min-h-screen snap-start scroll-mt-[45px] bg-black overflow-y-auto pt-[25px] md:pt-[calc(3rem+40px)] pb-32">
       <div className="px-4 sm:px-6 lg:px-8 xl:px-16 2xl:px-24">
         <div className="max-w-[1800px] mx-auto">
           {/* Project Type Buttons */}
           <LoadingWrapper delay={100}>
-            <div className="flex items-center justify-center gap-3 sm:gap-4 mb-8">
+            <div className="sticky top-[25px] z-[50] bg-black py-3 flex items-center justify-center gap-3 sm:gap-4 mb-[26px] md:mb-8">
               <Button
                 onClick={() => switchProjectType("audio")}
                 className={`rounded-full px-4 py-2.5 sm:px-6 sm:py-3 md:px-8 md:py-4 lg:px-10 lg:py-5 text-sm sm:text-base md:text-lg font-medium font-sora transition-all duration-300 ${

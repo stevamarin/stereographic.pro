@@ -15,8 +15,9 @@ export function Navbar({ onNavigationStart }: NavbarProps) {
   const [lastScrollY, setLastScrollY] = useState(0)
   const [isOpen, setIsOpen] = useState(false)
   const [isNavigating, setIsNavigating] = useState(false)
+  const [tappedButton, setTappedButton] = useState<string | null>(null)
   const navigationTimeoutRef = useRef<NodeJS.Timeout | null>(null)
-  const { isDialogOpen } = useDialog()
+  const { isDialogOpen, menuOpenRequestCount } = useDialog()
 
   // Intersection Observer for section detection
   useEffect(() => {
@@ -85,7 +86,7 @@ export function Navbar({ onNavigationStart }: NavbarProps) {
     }
   }, [lastScrollY, isNavigating])
 
-  const scrollToSection = (id: string) => {
+  const scrollToSection = (id: string, keepMenuOpen = false) => {
     const section = document.getElementById(id)
     if (section) {
       // Clear any existing navigation timeout
@@ -101,7 +102,7 @@ export function Navbar({ onNavigationStart }: NavbarProps) {
 
       onNavigationStart?.() // Signal that navigation is starting to parent
       section.scrollIntoView({ behavior: "smooth" })
-      setIsOpen(false)
+      if (!keepMenuOpen) setIsOpen(false)
 
       // Reset navigating state and show navbar after scroll completes
       navigationTimeoutRef.current = setTimeout(() => {
@@ -119,6 +120,13 @@ export function Navbar({ onNavigationStart }: NavbarProps) {
   const closeMenu = () => {
     setIsOpen(false)
   }
+
+  // Open menu when hamburger tapped while a dialog is open
+  useEffect(() => {
+    if (menuOpenRequestCount > 0) {
+      setIsOpen(true)
+    }
+  }, [menuOpenRequestCount])
 
   // Prevent body scroll when menu is open
   useEffect(() => {
@@ -194,18 +202,18 @@ export function Navbar({ onNavigationStart }: NavbarProps) {
       <Button
         variant="ghost"
         size="icon"
-        className="md:hidden fixed top-4 right-4 z-[110] text-white hover:bg-gray-800/80 hover:text-purple-300 transition-all duration-300"
+        className="md:hidden fixed top-4 right-4 z-[110] text-white hover:bg-gray-800/80 hover:text-purple-300 transition-all duration-300 !w-12 !h-12"
         onClick={toggleMenu}
       >
-        <div className="w-6 h-6 flex flex-col justify-center items-center gap-2">
+        <div className="w-8 h-8 flex flex-col justify-center items-center gap-[9px]">
           <span
-            className={`block w-6 h-0.5 bg-current transition-all duration-300 ease-out ${
-              isOpen ? "rotate-45 translate-y-1.25" : ""
+            className={`block w-8 h-[3px] bg-current transition-all duration-300 ease-out ${
+              isOpen ? "rotate-45 translate-y-[6px]" : ""
             }`}
           />
           <span
-            className={`block w-6 h-0.5 bg-current transition-all duration-300 ease-out ${
-              isOpen ? "-rotate-45 -translate-y-1.25" : ""
+            className={`block w-8 h-[3px] bg-current transition-all duration-300 ease-out ${
+              isOpen ? "-rotate-45 -translate-y-[6px]" : ""
             }`}
           />
         </div>
@@ -216,6 +224,7 @@ export function Navbar({ onNavigationStart }: NavbarProps) {
         className={`fixed inset-0 z-[105] md:hidden transition-all duration-700 ease-out ${
           isOpen ? "opacity-300 visible" : "opacity-0 invisible"
         }`}
+        onClick={closeMenu}
       >
         {/* Background Overlay */}
         <div
@@ -230,9 +239,9 @@ export function Navbar({ onNavigationStart }: NavbarProps) {
           }`}
         >
           {/* Logo */}
-          <div className="mb-16">
+          <button className="mb-16" onClick={() => scrollToSection("home")}>
             <Image src="/logo.svg" alt="Stereographic Production" width={250} height={75} className="h-16 w-auto" />
-          </div>
+          </button>
 
           {/* Navigation Links */}
           <nav className="flex flex-col items-center space-y-8">
@@ -245,10 +254,17 @@ export function Navbar({ onNavigationStart }: NavbarProps) {
               <Button
                 key={item.name}
                 variant="ghost"
-                onClick={() => scrollToSection(item.id)}
-                className={`text-white hover:text-purple-300 text-2xl font-medium py-4 px-8 rounded-xl hover:bg-purple-900/20 transition-all duration-300 relative overflow-hidden group ${
+                onClick={() => {
+                  setTappedButton(item.id)
+                  scrollToSection(item.id, true)
+                  setTimeout(() => {
+                    setTappedButton(null)
+                    setIsOpen(false)
+                  }, 320)
+                }}
+                className={`text-white hover:text-purple-300 text-2xl font-medium py-4 px-8 rounded-xl transition-all duration-300 relative overflow-hidden group ${
                   isOpen ? `animate-in slide-in-from-bottom-4 ${item.delay}` : ""
-                }`}
+                } ${tappedButton === item.id ? "scale-[1.6] text-purple-300 drop-shadow-[0_0_24px_rgba(192,132,252,1)]" : "scale-100 hover:bg-purple-900/20"}`}
               >
                 <span className="relative z-10">{item.name}</span>
                 <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-purple-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>

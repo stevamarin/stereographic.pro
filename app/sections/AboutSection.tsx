@@ -56,7 +56,7 @@ export function AboutSection() {
   }, [])
 
   return (
-    <section id="about" className="min-h-screen snap-start scroll-mt-[45px] bg-black overflow-y-auto pt-[calc(4rem+15px)] pb-16">
+    <section id="about" className="min-h-screen snap-start scroll-mt-[45px] bg-black overflow-y-auto pt-[31px] md:pt-[calc(4rem+15px)] pb-16">
       <div className="px-4 sm:px-6 lg:px-8 xl:px-16 2xl:px-24">
         <div className="max-w-[1800px] mx-auto">
           {/* Stevan Section */}
@@ -195,7 +195,7 @@ export function AboutSection() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3 sm:gap-5 pt-12">
+                <div className="flex items-center justify-center lg:justify-start gap-3 sm:gap-5 pt-12">
                   <div className="group flex flex-col items-center">
                     <Image
                       src="/icons/stevan-icon2.svg"
@@ -339,7 +339,7 @@ export function AboutSection() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3 sm:gap-5 pt-12">
+                <div className="flex items-center justify-center lg:justify-start gap-3 sm:gap-5 pt-12">
                   <div className="group flex flex-col items-center">
                     <Image
                       src="/icons/ps.svg"
