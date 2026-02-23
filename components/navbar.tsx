@@ -141,6 +141,7 @@ export function Navbar({ onNavigationStart }: NavbarProps) {
   // Open menu when hamburger tapped while a dialog is open
   useEffect(() => {
     if (menuOpenRequestCount > 0) {
+      playSound(soundMenuIn)
       setIsOpen(true)
     }
   }, [menuOpenRequestCount])
