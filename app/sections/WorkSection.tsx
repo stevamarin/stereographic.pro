@@ -421,7 +421,7 @@ export function WorkSection() {
               onOpenChange={(open) => handleDialogChange(open, "hero")}
             >
               <DialogTrigger asChild>
-                <button className="group block w-full text-left mb-8">
+                <button className="group block w-full text-left mb-8" onClick={() => new Audio('/sounds/Project_Click_1.wav').play().catch(() => {})}>
                   <div className="relative overflow-hidden rounded-2xl">
                     <Image
                       src={currentProjects[0].thumbnail}
@@ -457,7 +457,7 @@ export function WorkSection() {
                   onOpenChange={(open) => handleDialogChange(open, `${activeProjectType}-${index}`)}
                 >
                   <DialogTrigger asChild>
-                    <button className="group block w-full text-left">
+                    <button className="group block w-full text-left" onClick={() => new Audio('/sounds/Project_Click_1.wav').play().catch(() => {})}>
                       <div className="relative overflow-hidden rounded-2xl">
                         <Image
                           src={project.thumbnail || "/placeholder.svg"}

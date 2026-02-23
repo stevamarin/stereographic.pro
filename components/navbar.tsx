@@ -113,7 +113,13 @@ export function Navbar({ onNavigationStart }: NavbarProps) {
     }
   }
 
+  const playSound = (src: string) => {
+    const audio = new Audio(src)
+    audio.play().catch(() => {})
+  }
+
   const toggleMenu = () => {
+    if (!isOpen) playSound('/sounds/Menu_IN_1.wav')
     setIsOpen(!isOpen)
   }
 
@@ -239,7 +245,7 @@ export function Navbar({ onNavigationStart }: NavbarProps) {
           }`}
         >
           {/* Logo */}
-          <button className="mb-16" onClick={() => scrollToSection("home")}>
+          <button className="mb-16" onClick={() => { playSound('/sounds/Menu_OUT_1.wav'); scrollToSection("home") }}>
             <Image src="/logo.svg" alt="Stereographic Production" width={250} height={75} className="h-16 w-auto" />
           </button>
 
@@ -255,6 +261,7 @@ export function Navbar({ onNavigationStart }: NavbarProps) {
                 key={item.name}
                 variant="ghost"
                 onClick={() => {
+                  playSound('/sounds/Menu_OUT_1.wav')
                   setTappedButton(item.id)
                   scrollToSection(item.id, true)
                   setTimeout(() => {
