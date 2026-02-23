@@ -3,7 +3,7 @@
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { LoadingWrapper } from "@/components/loading-wrapper"
-import { useState, useEffect, useCallback, useRef } from "react"
+import { useState, useEffect, useCallback } from "react"
 import {
   Dialog,
   DialogContent,
@@ -318,13 +318,6 @@ export function WorkSection() {
   const [activeProjectType, setActiveProjectType] = useState<"audio" | "design">("audio")
   const [visibleCount, setVisibleCount] = useState(6)
   const [batchStartIndex, setBatchStartIndex] = useState(0)
-  const soundProjectClick = useRef<HTMLAudioElement | null>(null)
-
-  useEffect(() => {
-    soundProjectClick.current = new Audio('/sounds/Project_Click_1.wav')
-    soundProjectClick.current.load()
-  }, [])
-
   const currentProjects = activeProjectType === "audio" ? audioProjects : designProjects
   const visibleProjects = currentProjects.slice(1, visibleCount + 1)
   const hasMore = visibleCount + 1 < currentProjects.length
@@ -427,7 +420,7 @@ export function WorkSection() {
               onOpenChange={(open) => handleDialogChange(open, "hero")}
             >
               <DialogTrigger asChild>
-                <button className="group block w-full text-left mb-8" onClick={() => { if (soundProjectClick.current) { soundProjectClick.current.currentTime = 0; soundProjectClick.current.play().catch(() => {}) } }}>
+                <button className="group block w-full text-left mb-8">
                   <div className="relative overflow-hidden rounded-2xl">
                     <Image
                       src={currentProjects[0].thumbnail}
@@ -463,7 +456,7 @@ export function WorkSection() {
                   onOpenChange={(open) => handleDialogChange(open, `${activeProjectType}-${index}`)}
                 >
                   <DialogTrigger asChild>
-                    <button className="group block w-full text-left" onClick={() => { if (soundProjectClick.current) { soundProjectClick.current.currentTime = 0; soundProjectClick.current.play().catch(() => {}) } }}>
+                    <button className="group block w-full text-left">
                       <div className="relative overflow-hidden rounded-2xl">
                         <Image
                           src={project.thumbnail || "/placeholder.svg"}
