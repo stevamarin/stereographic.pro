@@ -17,7 +17,16 @@ export function Navbar({ onNavigationStart }: NavbarProps) {
   const [isNavigating, setIsNavigating] = useState(false)
   const [tappedButton, setTappedButton] = useState<string | null>(null)
   const navigationTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const soundMenuIn = useRef<HTMLAudioElement | null>(null)
+  const soundMenuOut = useRef<HTMLAudioElement | null>(null)
   const { isDialogOpen, menuOpenRequestCount } = useDialog()
+
+  useEffect(() => {
+    soundMenuIn.current = new Audio('/sounds/Menu_IN_1.wav')
+    soundMenuOut.current = new Audio('/sounds/Menu_OUT_1.wav')
+    soundMenuIn.current.load()
+    soundMenuOut.current.load()
+  }, [])
 
   // Intersection Observer for section detection
   useEffect(() => {
@@ -113,13 +122,15 @@ export function Navbar({ onNavigationStart }: NavbarProps) {
     }
   }
 
-  const playSound = (src: string) => {
-    const audio = new Audio(src)
-    audio.play().catch(() => {})
+  const playSound = (ref: React.RefObject<HTMLAudioElement | null>) => {
+    if (ref.current) {
+      ref.current.currentTime = 0
+      ref.current.play().catch(() => {})
+    }
   }
 
   const toggleMenu = () => {
-    if (!isOpen) playSound('/sounds/Menu_IN_1.wav')
+    if (!isOpen) playSound(soundMenuIn)
     setIsOpen(!isOpen)
   }
 
@@ -245,7 +256,7 @@ export function Navbar({ onNavigationStart }: NavbarProps) {
           }`}
         >
           {/* Logo */}
-          <button className="mb-16" onClick={() => { playSound('/sounds/Menu_OUT_1.wav'); scrollToSection("home") }}>
+          <button className="mb-16" onClick={() => { playSound(soundMenuOut); scrollToSection("home") }}>
             <Image src="/logo.svg" alt="Stereographic Production" width={250} height={75} className="h-16 w-auto" />
           </button>
 
@@ -261,7 +272,7 @@ export function Navbar({ onNavigationStart }: NavbarProps) {
                 key={item.name}
                 variant="ghost"
                 onClick={() => {
-                  playSound('/sounds/Menu_OUT_1.wav')
+                  playSound(soundMenuOut)
                   setTappedButton(item.id)
                   scrollToSection(item.id, true)
                   setTimeout(() => {
