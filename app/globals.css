@@ -133,6 +133,7 @@
   }
   html {
     background-color: #000000 !important;
+    overflow-x: hidden;
   }
   .dotted-overlay {
     background-image: radial-gradient(circle, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
