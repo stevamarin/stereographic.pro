@@ -15,7 +15,7 @@ export function FooterSection() {
             {/* Logo */}
             <a href="#home" className="flex justify-center w-full">
               <Image
-                src="/Stereographic_PNG-06.png"
+                src="/logos/main/Stereographic_PNG-06.png"
                 alt="Stereographic Production"
                 width={400}
                 height={120}
