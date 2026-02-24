@@ -9,11 +9,7 @@ export function HomeSection() {
 
   useEffect(() => {
     const video = videoRef.current
-    if (video) {
-      video.play().catch(() => {
-        // Autoplay blocked — silently ignore
-      })
-    }
+    if (video) video.play().catch(() => {})
   }, [])
 
   return (
@@ -31,7 +27,7 @@ export function HomeSection() {
         <source src="/background.mp4" type="video/mp4" />
       </video>
 
-      {/* Logo display - positioned at top of section */}
+      {/* Logo display */}
       <div className="absolute top-0 left-0 right-0 h-screen flex items-center justify-center">
         <LoadingWrapper delay={100}>
           <div className="relative z-10">
@@ -41,7 +37,10 @@ export function HomeSection() {
               width={8000}
               height={4000}
               className="w-[90vmin]"
-              style={{ mixBlendMode: "screen" }}
+              style={{
+                opacity: 0.4,
+                filter: "blur(0.4px) drop-shadow(2px 5px 10px rgba(0,20,70,0.65))",
+              }}
               priority
             />
           </div>
