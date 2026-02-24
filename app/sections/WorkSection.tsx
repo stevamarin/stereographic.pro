@@ -387,26 +387,24 @@ export function WorkSection() {
         <div className="max-w-[1800px] mx-auto">
           {/* Project Type Buttons */}
           <LoadingWrapper delay={100}>
-            <div className="sticky top-[25px] z-[50] bg-black py-3 flex items-center justify-center gap-3 sm:gap-4 mb-[26px] md:mb-8">
+            <div className="sticky top-[25px] z-[50] py-3 flex items-center justify-center gap-3 sm:gap-4 mb-[26px] md:mb-8">
               <Button
                 onClick={() => switchProjectType("audio")}
-                className={`rounded-full px-4 py-2.5 sm:px-6 sm:py-3 md:px-8 md:py-4 lg:px-10 lg:py-5 text-sm sm:text-base md:text-lg font-medium font-sora transition-all duration-300 ${
+                className={`rounded-full px-4 py-2.5 sm:px-6 sm:py-3 md:px-8 md:py-4 lg:px-10 lg:py-5 text-sm sm:text-base md:text-lg font-medium font-sora transition-all duration-300 backdrop-blur-2xl md:backdrop-blur-md ${
                   activeProjectType === "audio"
-                    ? "text-white border border-purple-400 hover:bg-purple-500/20"
-                    : "text-white border border-white bg-transparent hover:bg-purple-500/20 hover:border-purple-400 hover:text-white"
+                    ? "text-white border border-purple-400/70 bg-purple-900/25 md:bg-purple-900/70 hover:bg-purple-500/40 md:hover:bg-purple-500/80"
+                    : "text-white border border-white/30 bg-white/10 md:bg-black/50 hover:bg-purple-500/30 md:hover:bg-purple-500/60 hover:border-purple-400 hover:text-white"
                 }`}
-                style={{ backgroundColor: activeProjectType === "audio" ? "#200F33" : "transparent" }}
               >
                 Audio Projects
               </Button>
               <Button
                 onClick={() => switchProjectType("design")}
-                className={`rounded-full px-4 py-2.5 sm:px-6 sm:py-3 md:px-8 md:py-4 lg:px-10 lg:py-5 text-sm sm:text-base md:text-lg font-medium font-sora transition-all duration-300 ${
+                className={`rounded-full px-4 py-2.5 sm:px-6 sm:py-3 md:px-8 md:py-4 lg:px-10 lg:py-5 text-sm sm:text-base md:text-lg font-medium font-sora transition-all duration-300 backdrop-blur-2xl md:backdrop-blur-md ${
                   activeProjectType === "design"
-                    ? "text-white border border-purple-400 hover:bg-purple-500/20"
-                    : "text-white border border-white bg-transparent hover:bg-purple-500/20 hover:border-purple-400 hover:text-white"
+                    ? "text-white border border-purple-400/70 bg-purple-900/25 md:bg-purple-900/70 hover:bg-purple-500/40 md:hover:bg-purple-500/80"
+                    : "text-white border border-white/30 bg-white/10 md:bg-black/50 hover:bg-purple-500/30 md:hover:bg-purple-500/60 hover:border-purple-400 hover:text-white"
                 }`}
-                style={{ backgroundColor: activeProjectType === "design" ? "#200F33" : "transparent" }}
               >
                 Design Projects
               </Button>
