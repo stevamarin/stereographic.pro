@@ -158,7 +158,7 @@ export function Navbar({ onNavigationStart }: NavbarProps) {
               onClick={() => scrollToSection("home")}
               className={`px-5 py-4 rounded-full text-lg font-medium font-sora transition-all duration-300 ${
                 activeSection === "home"
-                  ? "text-black bg-white hover:bg-white"
+                  ? "text-white border border-purple-400/70 bg-purple-900/70 hover:bg-purple-500/80"
                   : "text-white bg-transparent hover:bg-white/20"
               }`}
             >
@@ -168,7 +168,7 @@ export function Navbar({ onNavigationStart }: NavbarProps) {
               onClick={() => scrollToSection("work")}
               className={`px-5 py-4 rounded-full text-lg font-medium font-sora transition-all duration-300 ${
                 activeSection === "work"
-                  ? "text-black bg-white hover:bg-white"
+                  ? "text-white border border-purple-400/70 bg-purple-900/70 hover:bg-purple-500/80"
                   : "text-white bg-transparent hover:bg-white/20"
               }`}
             >
@@ -178,7 +178,7 @@ export function Navbar({ onNavigationStart }: NavbarProps) {
               onClick={() => scrollToSection("about")}
               className={`px-5 py-4 rounded-full text-lg font-medium font-sora transition-all duration-300 ${
                 activeSection === "about"
-                  ? "text-black bg-white hover:bg-white"
+                  ? "text-white border border-purple-400/70 bg-purple-900/70 hover:bg-purple-500/80"
                   : "text-white bg-transparent hover:bg-white/20"
               }`}
             >
@@ -188,7 +188,7 @@ export function Navbar({ onNavigationStart }: NavbarProps) {
               onClick={() => scrollToSection("contact")}
               className={`px-5 py-4 rounded-full text-lg font-medium font-sora transition-all duration-300 ${
                 activeSection === "contact"
-                  ? "text-black bg-white hover:bg-white"
+                  ? "text-white border border-purple-400/70 bg-purple-900/70 hover:bg-purple-500/80"
                   : "text-white bg-transparent hover:bg-white/20"
               }`}
             >

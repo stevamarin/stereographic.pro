@@ -28,19 +28,11 @@ interface Project {
 const audioProjects: Project[] = [
   
   {
-    title: 'Chelsea Collins | "Hotel Bed" (feat. Swae Lee)',
+    title: 'Chelsea Collins | Hotel Bed (feat. Swae Lee)',
     category: "Music Video",
     thumbnail: "/work-thumbnails/Swae_Lee.jpg",
     videoUrl: "https://www.youtube.com/embed/yzwsXIwwq-k",
     client: "Hitco Entertainment",
-    director: "Krizia Vega",
-  },
-  {
-    title: "POPSocial life | Lala Kent",
-    category: "Commercial",
-    thumbnail: "/work-thumbnails/POPSocial_3.jpg",
-    videoUrl: "https://www.youtube.com/embed/hNXkcCQy2jg",
-    client: "POPSocial",
     director: "Krizia Vega",
   },
   {
@@ -50,6 +42,14 @@ const audioProjects: Project[] = [
     videoUrl: "https://www.youtube.com/embed/dFs0u1-vZi4",
     client: "CarBlip",
     director: "Avi Richards",
+  },
+  {
+    title: "POPSocial life | Lala Kent",
+    category: "Commercial",
+    thumbnail: "/work-thumbnails/POPSocial_3.jpg",
+    videoUrl: "https://www.youtube.com/embed/hNXkcCQy2jg",
+    client: "POPSocial",
+    director: "Krizia Vega",
   },
   {
     title: "7 Days - Make a Difference | Tomchei LA",
@@ -430,10 +430,10 @@ export function WorkSection() {
                     />
                     <div className="absolute bottom-6 left-6 right-6">
                       <div className="flex items-center justify-between gap-3">
-                        <h2 className="text-xl sm:text-2xl font-semibold font-inter-tight text-white">
+                        <h2 className="text-xl sm:text-2xl lg:text-4xl font-semibold font-inter-tight text-white [text-shadow:0_1px_3px_rgba(0,0,0,1)]">
                           {currentProjects[0].title}
                         </h2>
-                        <span className="text-sm text-white border border-white rounded-full px-3.5 py-0.5 font-sora shrink-0 bg-black/20 backdrop-blur-md">
+                        <span className="text-sm text-white border border-white rounded-full px-5 py-1 font-sora shrink-0 bg-black/20 backdrop-blur-md">
                           {currentProjects[0].category}
                         </span>
                       </div>
@@ -467,7 +467,7 @@ export function WorkSection() {
                         />
                         <div className="absolute bottom-4 left-4 right-4">
                           <div className="flex items-center justify-between gap-2">
-                            <h3 className="text-base sm:text-lg font-semibold font-inter-tight text-white line-clamp-1">
+                            <h3 className="text-base sm:text-lg lg:text-2xl font-semibold font-inter-tight text-white line-clamp-1 [text-shadow:0_1px_3px_rgba(0,0,0,1)]">
                               {project.title}
                             </h3>
                             <span className="text-sm text-white border border-white rounded-full px-5 py-1 font-sora shrink-0 bg-black/20 backdrop-blur-md">

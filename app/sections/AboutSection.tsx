@@ -204,7 +204,7 @@ export function AboutSection() {
                       height={64}
                       className="w-10 h-10 sm:w-16 sm:h-16 group-hover:scale-110 transition-transform duration-300"
                     />
-                    <span className="text-purple-400 text-xs font-sora mt-2 opacity-0 group-hover:opacity-60 transition-opacity duration-300">Pro Tools</span>
+                    <span className="text-[#b98fc9] text-xs font-sora mt-2 opacity-0 group-hover:opacity-60 transition-opacity duration-300">Pro Tools</span>
                   </div>
                   <div className="group flex flex-col items-center">
                     <Image
@@ -214,7 +214,7 @@ export function AboutSection() {
                       height={64}
                       className="w-10 h-10 sm:w-16 sm:h-16 group-hover:scale-110 transition-transform duration-300"
                     />
-                    <span className="text-purple-400 text-xs font-sora mt-2 opacity-0 group-hover:opacity-60 transition-opacity duration-300">Logic Pro</span>
+                    <span className="text-[#b98fc9] text-xs font-sora mt-2 opacity-0 group-hover:opacity-60 transition-opacity duration-300">Logic Pro</span>
                   </div>
                   <div className="group flex flex-col items-center">
                     <div className="group-hover:scale-110 transition-transform duration-300 relative w-10 h-10 sm:w-16 sm:h-16">
@@ -228,10 +228,10 @@ export function AboutSection() {
                         alt="Ableton"
                         width={44}
                         height={44}
-                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70%] h-auto [filter:brightness(0)_saturate(100%)_invert(68%)_sepia(30%)_saturate(500%)_hue-rotate(244deg)_brightness(0.75)]"
+                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85%] h-auto [filter:brightness(0)_saturate(100%)_invert(68%)_sepia(30%)_saturate(280%)_hue-rotate(244deg)_brightness(0.9)]"
                       />
                     </div>
-                    <span className="text-purple-400 text-xs font-sora mt-2 opacity-0 group-hover:opacity-60 transition-opacity duration-300">Ableton</span>
+                    <span className="text-[#b98fc9] text-xs font-sora mt-2 opacity-0 group-hover:opacity-60 transition-opacity duration-300">Ableton</span>
                   </div>
                   <div className="group flex flex-col items-center">
                     <Image
@@ -241,7 +241,7 @@ export function AboutSection() {
                       height={64}
                       className="w-10 h-10 sm:w-16 sm:h-16 group-hover:scale-110 transition-transform duration-300"
                     />
-                    <span className="text-purple-400 text-xs font-sora mt-2 opacity-0 group-hover:opacity-60 transition-opacity duration-300">iZotope RX</span>
+                    <span className="text-[#b98fc9] text-xs font-sora mt-2 opacity-0 group-hover:opacity-60 transition-opacity duration-300">iZotope RX</span>
                   </div>
                   <div className="group flex flex-col items-center">
                     <div className="group-hover:scale-110 transition-transform duration-300 relative w-10 h-10 sm:w-16 sm:h-16">
@@ -255,10 +255,10 @@ export function AboutSection() {
                         alt="Wwise"
                         width={34}
                         height={34}
-                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[68%] h-auto [filter:brightness(0)_saturate(100%)_invert(68%)_sepia(30%)_saturate(500%)_hue-rotate(244deg)_brightness(0.75)]"
+                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[68%] h-auto [filter:brightness(0)_saturate(100%)_invert(68%)_sepia(30%)_saturate(280%)_hue-rotate(244deg)_brightness(0.9)]"
                       />
                     </div>
-                    <span className="text-purple-400 text-xs font-sora mt-2 opacity-0 group-hover:opacity-60 transition-opacity duration-300">Wwise</span>
+                    <span className="text-[#b98fc9] text-xs font-sora mt-2 opacity-0 group-hover:opacity-60 transition-opacity duration-300">Wwise</span>
                   </div>
                 </div>
               </div>
@@ -348,7 +348,7 @@ export function AboutSection() {
                       height={64}
                       className="w-10 h-10 sm:w-16 sm:h-16 group-hover:scale-110 transition-transform duration-300"
                     />
-                    <span className="text-purple-400 text-xs font-sora mt-2 opacity-0 group-hover:opacity-60 transition-opacity duration-300">Photoshop</span>
+                    <span className="text-[#b98fc9] text-xs font-sora mt-2 opacity-0 group-hover:opacity-60 transition-opacity duration-300">Photoshop</span>
                   </div>
                   <div className="group flex flex-col items-center">
                     <Image
@@ -358,7 +358,7 @@ export function AboutSection() {
                       height={64}
                       className="w-10 h-10 sm:w-16 sm:h-16 group-hover:scale-110 transition-transform duration-300"
                     />
-                    <span className="text-purple-400 text-xs font-sora mt-2 opacity-0 group-hover:opacity-60 transition-opacity duration-300">Illustrator</span>
+                    <span className="text-[#b98fc9] text-xs font-sora mt-2 opacity-0 group-hover:opacity-60 transition-opacity duration-300">Illustrator</span>
                   </div>
                   <div className="group flex flex-col items-center">
                     <Image
@@ -368,7 +368,7 @@ export function AboutSection() {
                       height={64}
                       className="w-10 h-10 sm:w-16 sm:h-16 group-hover:scale-110 transition-transform duration-300"
                     />
-                    <span className="text-purple-400 text-xs font-sora mt-2 opacity-0 group-hover:opacity-60 transition-opacity duration-300">Adobe XD</span>
+                    <span className="text-[#b98fc9] text-xs font-sora mt-2 opacity-0 group-hover:opacity-60 transition-opacity duration-300">Adobe XD</span>
                   </div>
                   <div className="group flex flex-col items-center">
                     <Image
@@ -378,7 +378,7 @@ export function AboutSection() {
                       height={64}
                       className="w-10 h-10 sm:w-16 sm:h-16 group-hover:scale-110 transition-transform duration-300"
                     />
-                    <span className="text-purple-400 text-xs font-sora mt-2 opacity-0 group-hover:opacity-60 transition-opacity duration-300">Premiere</span>
+                    <span className="text-[#b98fc9] text-xs font-sora mt-2 opacity-0 group-hover:opacity-60 transition-opacity duration-300">Premiere</span>
                   </div>
                   <div className="group flex flex-col items-center">
                     <Image
@@ -388,7 +388,7 @@ export function AboutSection() {
                       height={64}
                       className="w-10 h-10 sm:w-16 sm:h-16 group-hover:scale-110 transition-transform duration-300"
                     />
-                    <span className="text-purple-400 text-xs font-sora mt-2 opacity-0 group-hover:opacity-60 transition-opacity duration-300">Figma</span>
+                    <span className="text-[#b98fc9] text-xs font-sora mt-2 opacity-0 group-hover:opacity-60 transition-opacity duration-300">Figma</span>
                   </div>
                 </div>
               </div>
