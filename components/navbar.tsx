@@ -12,11 +12,13 @@ interface NavbarProps {
 export function Navbar({ onNavigationStart }: NavbarProps) {
   const [activeSection, setActiveSection] = useState("home")
   const [isVisible, setIsVisible] = useState(true)
-  const [lastScrollY, setLastScrollY] = useState(0)
   const [isOpen, setIsOpen] = useState(false)
+  const [isScrolling, setIsScrolling] = useState(false)
   const [isNavigating, setIsNavigating] = useState(false)
   const [tappedButton, setTappedButton] = useState<string | null>(null)
   const navigationTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const lastScrollYRef = useRef(0)
   const { isDialogOpen, menuOpenRequestCount } = useDialog()
 
   // Intersection Observer for section detection
@@ -53,8 +55,6 @@ export function Navbar({ onNavigationStart }: NavbarProps) {
     const mainElement = document.querySelector("main")
     if (!mainElement) return
 
-    let scrollTimeout: NodeJS.Timeout
-
     const handleScroll = () => {
       const currentScrollY = mainElement.scrollTop
       const scrollHeight = mainElement.scrollHeight
@@ -66,25 +66,27 @@ export function Navbar({ onNavigationStart }: NavbarProps) {
       // Only update visibility during manual scrolling (not during navbar navigation)
       if (!isNavigating) {
         // Show navbar if scrolling up, at top, or at bottom
-        setIsVisible(currentScrollY < lastScrollY || currentScrollY < 100 || isAtBottom)
+        setIsVisible(currentScrollY < lastScrollYRef.current || currentScrollY < 100 || isAtBottom)
       }
-      setLastScrollY(currentScrollY)
+      lastScrollYRef.current = currentScrollY
 
-      // Clear existing timeout
-      clearTimeout(scrollTimeout)
+      // Hide mobile hamburger as soon as scrolling starts
+      setIsScrolling(true)
 
-      // Show navbar when scrolling stops (snap complete)
-      scrollTimeout = setTimeout(() => {
+      // Clear existing timeout and set a new one
+      if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current)
+      scrollTimeoutRef.current = setTimeout(() => {
         setIsVisible(true)
+        setIsScrolling(false)
       }, 150)
     }
 
     mainElement.addEventListener("scroll", handleScroll, { passive: true })
     return () => {
       mainElement.removeEventListener("scroll", handleScroll)
-      clearTimeout(scrollTimeout)
+      if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current)
     }
-  }, [lastScrollY, isNavigating])
+  }, [isNavigating])
 
   const scrollToSection = (id: string, keepMenuOpen = false) => {
     const section = document.getElementById(id)
@@ -202,7 +204,9 @@ export function Navbar({ onNavigationStart }: NavbarProps) {
       <Button
         variant="ghost"
         size="icon"
-        className="md:hidden fixed top-4 right-4 z-[110] text-white hover:bg-gray-800/80 hover:text-purple-300 transition-all duration-300 !w-12 !h-12"
+        className={`md:hidden fixed top-4 right-4 z-[110] text-white hover:bg-gray-800/80 hover:text-purple-300 transition-all duration-300 !w-12 !h-12 ${
+          isScrolling && !isOpen ? "opacity-0 pointer-events-none" : "opacity-100"
+        }`}
         onClick={toggleMenu}
       >
         <div className="w-8 h-8 flex flex-col justify-center items-center gap-[9px]">
