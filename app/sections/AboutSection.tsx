@@ -139,14 +139,11 @@ export function AboutSection() {
                     rel="noopener noreferrer"
                     className="flex items-center gap-2 text-white hover:text-pink-500 transition-all duration-300 group hover:scale-110"
                   >
-                    <Image
-                      src="/icons/instagram.svg"
-                      alt="Instagram"
-                      width={20}
-                      height={20}
-                      className="w-5 h-5 transition-all duration-300 brightness-0 invert group-hover:brightness-100 group-hover:invert-0 group-hover:drop-shadow-[0_0_8px_rgba(236,72,153,0.5)]"
-                      style={{ filter: 'brightness(0) invert(1)' }}
-                    />
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 transition-all duration-300">
+                      <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                      <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                    </svg>
                     <span className="text-sm font-medium font-sora">Instagram</span>
                   </Link>
                   <Link
@@ -155,16 +152,22 @@ export function AboutSection() {
                     rel="noopener noreferrer"
                     className="flex items-center gap-2 text-white hover:text-blue-500 transition-all duration-300 group hover:scale-110"
                   >
-                    <Image
-                      src="/icons/linkedin.svg"
-                      alt="LinkedIn"
-                      width={20}
-                      height={20}
-                      className="w-5 h-5 transition-all duration-300 brightness-0 invert group-hover:brightness-100 group-hover:invert-0 group-hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]"
-                      style={{ filter: 'brightness(0) invert(1)' }}
-                    />
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 transition-all duration-300">
+                      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                      <rect x="2" y="9" width="4" height="12"></rect>
+                      <circle cx="4" cy="4" r="2"></circle>
+                    </svg>
                     <span className="text-sm font-medium font-sora">LinkedIn</span>
                   </Link>
+                  <a
+                    href="mailto:stevan@stereographic.pro"
+                    className="flex items-center gap-2 text-white hover:text-purple-400 transition-all duration-300 group hover:scale-110"
+                  >
+                    <svg viewBox="0 0 1024 1024" fill="currentColor" className="w-6 h-6 transition-all duration-300">
+                      <path d="M874.666667 375.189333V746.666667a64 64 0 0 1-64 64H213.333333a64 64 0 0 1-64-64V375.189333l64 54.250667V746.666667h597.333334V429.44l64-54.250667zM810.666667 213.333333a64.789333 64.789333 0 0 1 22.826666 4.181334 63.616 63.616 0 0 1 26.794667 19.413333 64.32 64.32 0 0 1 9.344 15.466667c2.773333 6.570667 4.48 13.696 4.906667 21.184L874.666667 277.333333v21.333334L553.536 572.586667a64 64 0 0 1-79.893333 2.538666l-3.178667-2.56L149.333333 298.666667v-21.333334a63.786667 63.786667 0 0 1 35.136-57.130666A63.872 63.872 0 0 1 213.333333 213.333333h597.333334z m-9.6 64h-578.133334L512 523.882667 801.066667 277.333333z" />
+                    </svg>
+                    <span className="text-sm font-medium font-sora">Email</span>
+                  </a>
                 </div>
 
                 <p className="text-gray-300 leading-relaxed font-sora text-xl">
@@ -284,14 +287,11 @@ export function AboutSection() {
                     rel="noopener noreferrer"
                     className="flex items-center gap-2 text-white hover:text-pink-500 transition-all duration-300 group hover:scale-110"
                   >
-                    <Image
-                      src="/icons/instagram.svg"
-                      alt="Instagram"
-                      width={20}
-                      height={20}
-                      className="w-5 h-5 transition-all duration-300 ease-in-out brightness-0 invert group-hover:brightness-100 group-hover:invert-0 group-hover:drop-shadow-[0_0_8px_rgba(236,72,153,0.5)]"
-                      style={{ filter: 'brightness(0) invert(1)', transition: 'filter 300ms ease-in-out' }}
-                    />
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 transition-all duration-300">
+                      <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                      <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                    </svg>
                     <span className="text-sm font-medium font-sora">Instagram</span>
                   </Link>
                   <Link
@@ -300,14 +300,11 @@ export function AboutSection() {
                     rel="noopener noreferrer"
                     className="flex items-center gap-2 text-white hover:text-blue-500 transition-all duration-300 group hover:scale-110"
                   >
-                    <Image
-                      src="/icons/linkedin.svg"
-                      alt="LinkedIn"
-                      width={20}
-                      height={20}
-                      className="w-5 h-5 transition-all duration-300 ease-in-out brightness-0 invert group-hover:brightness-100 group-hover:invert-0 group-hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]"
-                      style={{ filter: 'brightness(0) invert(1)', transition: 'filter 300ms ease-in-out' }}
-                    />
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 transition-all duration-300">
+                      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                      <rect x="2" y="9" width="4" height="12"></rect>
+                      <circle cx="4" cy="4" r="2"></circle>
+                    </svg>
                     <span className="text-sm font-medium font-sora">LinkedIn</span>
                   </Link>
                 </div>
