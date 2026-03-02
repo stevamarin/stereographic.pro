@@ -284,10 +284,10 @@ export function Navbar({ onNavigationStart }: NavbarProps) {
           >
             <p className="text-gray-400 text-sm mb-2 font-sora">Get in touch</p>
             <a
-              href="mailto:stev.marinkovic@gmail.com"
+              href="mailto:stevan@stereographic.pro"
               className="text-purple-300 hover:text-white transition-colors duration-300 font-sora"
             >
-              stev.marinkovic@gmail.com
+              stevan@stereographic.pro
             </a>
           </div>
         </div>
