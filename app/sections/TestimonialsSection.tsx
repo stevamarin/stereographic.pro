@@ -184,6 +184,20 @@ export function TestimonialsSection() {
         </div>
       </LoadingWrapper>
 
+      {/* CTA */}
+      <LoadingWrapper delay={300}>
+        <div className="flex justify-center mt-12">
+          <button
+            onClick={() => {
+              document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })
+            }}
+            className="px-8 py-3 rounded-full border border-purple-500/30 bg-purple-500/10 text-white font-sora text-sm sm:text-base font-medium hover:bg-purple-500/20 hover:border-purple-400/50 transition-all duration-300"
+          >
+            Start Your Project
+          </button>
+        </div>
+      </LoadingWrapper>
+
     </section>
   )
 }
