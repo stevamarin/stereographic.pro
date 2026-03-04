@@ -484,7 +484,7 @@ export function AboutSection() {
                 height={100}
                 loading="lazy"
                 sizes="200px"
-                className={`w-auto opacity-70 hover:opacity-100 transition-opacity grayscale hover:grayscale-0 filter brightness-200 ${logo === "Hitco_Logo.png" || logo === "logo_banini.png" ? "h-24 sm:h-32" : "h-16 sm:h-20"}`}
+                className={`w-auto opacity-70 hover:opacity-100 transition-opacity grayscale hover:grayscale-0 filter brightness-200 ${logo === "Hitco_Logo.png" || logo === "logo_banini.png" ? "h-24 sm:h-32" : logo === "SnapMixDigital.png" || logo === "StepMobile.png" || logo === "subaru.png" ? "h-20 sm:h-24" : "h-16 sm:h-20"}`}
               />
             </div>
           ))}
