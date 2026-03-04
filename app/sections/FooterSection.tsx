@@ -21,7 +21,7 @@ export function FooterSection() {
     const formData = new FormData(form)
 
     try {
-      const response = await fetch("https://formspree.io/f/YOUR_FORM_ID", {
+      const response = await fetch("https://formspree.io/f/maqdrlwe", {
         method: "POST",
         body: formData,
         headers: { Accept: "application/json" },
