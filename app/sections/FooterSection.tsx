@@ -7,15 +7,16 @@ import { LoadingWrapper } from "@/components/loading-wrapper"
 import { socialLinks } from "@/lib/config/social-links"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { Button } from "@/components/ui/button"
 
 export function FooterSection() {
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [error, setError] = useState("")
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsSubmitting(true)
+    setError("")
 
     const form = e.currentTarget
     const formData = new FormData(form)
@@ -30,9 +31,11 @@ export function FooterSection() {
       if (response.ok) {
         setIsSubmitted(true)
         form.reset()
+      } else {
+        setError("Something went wrong. Please try again or email us directly.")
       }
     } catch {
-      // Silently handle - user can retry
+      setError("Could not connect. Please try again or email us directly.")
     } finally {
       setIsSubmitting(false)
     }
@@ -150,13 +153,17 @@ export function FooterSection() {
                 className="bg-white/5 border-white/10 text-white placeholder:text-gray-500 focus-visible:border-purple-500 focus-visible:ring-purple-500/20 font-sora resize-none min-h-[100px]"
               />
 
-              <Button
+              {error && (
+                <p className="text-red-400 text-sm font-sora text-center">{error}</p>
+              )}
+
+              <button
                 type="submit"
                 disabled={isSubmitting}
                 className="w-full h-11 bg-purple-600 hover:bg-purple-500 text-white font-sora font-medium rounded-md transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? "Sending..." : "Send Message"}
-              </Button>
+              </button>
             </form>
           )}
 
