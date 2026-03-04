@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState, useCallback } from "react"
 import { LoadingWrapper } from "@/components/loading-wrapper"
 import { socialLinks } from "@/lib/config/social-links"
 
@@ -29,6 +29,49 @@ const clientLogos = [
 export function AboutSection() {
   const photoRef = useRef<HTMLDivElement>(null)
   const [mustacheVisible, setMustacheVisible] = useState(false)
+
+  // Client logo carousel auto-scroll
+  const logoScrollRef = useRef<HTMLDivElement>(null)
+  const [isLogoUserScrolling, setIsLogoUserScrolling] = useState(false)
+  const logoResumeRef = useRef<NodeJS.Timeout | null>(null)
+  const logoAnimRef = useRef<number | null>(null)
+  const logoPosRef = useRef(0)
+
+  const autoScrollLogos = useCallback(() => {
+    if (isLogoUserScrolling || !logoScrollRef.current) return
+    const el = logoScrollRef.current
+    logoPosRef.current += 0.4
+    const halfWidth = el.scrollWidth / 2
+    if (logoPosRef.current >= halfWidth) {
+      logoPosRef.current -= halfWidth
+    }
+    el.scrollLeft = logoPosRef.current
+    logoAnimRef.current = requestAnimationFrame(autoScrollLogos)
+  }, [isLogoUserScrolling])
+
+  useEffect(() => {
+    logoAnimRef.current = requestAnimationFrame(autoScrollLogos)
+    return () => {
+      if (logoAnimRef.current) cancelAnimationFrame(logoAnimRef.current)
+      if (logoResumeRef.current) clearTimeout(logoResumeRef.current)
+    }
+  }, [autoScrollLogos])
+
+  const handleLogoInteractionStart = () => {
+    setIsLogoUserScrolling(true)
+    if (logoAnimRef.current) cancelAnimationFrame(logoAnimRef.current)
+    if (logoResumeRef.current) clearTimeout(logoResumeRef.current)
+  }
+
+  const handleLogoInteractionEnd = () => {
+    if (logoResumeRef.current) clearTimeout(logoResumeRef.current)
+    logoResumeRef.current = setTimeout(() => {
+      if (logoScrollRef.current) {
+        logoPosRef.current = logoScrollRef.current.scrollLeft
+      }
+      setIsLogoUserScrolling(false)
+    }, 3000)
+  }
 
   useEffect(() => {
     const isMobile = window.matchMedia("(hover: none) or (pointer: coarse)").matches
@@ -419,23 +462,32 @@ export function AboutSection() {
       </div>
 
       {/* Client logos carousel - full width edge to edge */}
-      <div className="w-full mt-20 overflow-hidden">
-        <div className="relative">
-          <div className="flex items-center animate-marquee-faster">
-            {clientLogos.concat(clientLogos).map((logo, index) => (
-              <div key={index} className="flex-shrink-0 mr-12 sm:mr-16">
-                <Image
-                  src={`/logos/clients/${logo}`}
-                  alt="Client logo"
-                  width={200}
-                  height={100}
-                  loading="lazy"
-                  sizes="200px"
-                  className={`w-auto opacity-70 hover:opacity-100 transition-opacity grayscale hover:grayscale-0 filter brightness-200 ${logo === "Hitco_Logo.png" || logo === "logo_banini.png" ? "h-24 sm:h-32" : "h-16 sm:h-20"}`}
-                />
-              </div>
-            ))}
-          </div>
+      <div className="w-full mt-20 overflow-hidden relative">
+        <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-24 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-24 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none" />
+        <div
+          ref={logoScrollRef}
+          className="flex items-center overflow-x-auto cursor-grab active:cursor-grabbing"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none", WebkitOverflowScrolling: "touch" }}
+          onTouchStart={handleLogoInteractionStart}
+          onTouchEnd={handleLogoInteractionEnd}
+          onMouseDown={handleLogoInteractionStart}
+          onMouseUp={handleLogoInteractionEnd}
+          onMouseLeave={handleLogoInteractionEnd}
+        >
+          {clientLogos.concat(clientLogos).map((logo, index) => (
+            <div key={index} className="flex-shrink-0 mr-12 sm:mr-16">
+              <Image
+                src={`/logos/clients/${logo}`}
+                alt="Client logo"
+                width={200}
+                height={100}
+                loading="lazy"
+                sizes="200px"
+                className={`w-auto opacity-70 hover:opacity-100 transition-opacity grayscale hover:grayscale-0 filter brightness-200 ${logo === "Hitco_Logo.png" || logo === "logo_banini.png" ? "h-24 sm:h-32" : "h-16 sm:h-20"}`}
+              />
+            </div>
+          ))}
         </div>
       </div>
     </section>

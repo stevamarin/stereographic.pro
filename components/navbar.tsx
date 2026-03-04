@@ -154,7 +154,7 @@ export function Navbar({ onNavigationStart }: NavbarProps) {
           (isVisible && !isDialogOpen) ? "translate-y-0" : "-translate-y-full"
         }`}
       >
-        <div className="max-w-md mx-auto px-2 py-4">
+        <div className="max-w-xl mx-auto px-2 py-4">
           <div className="flex items-center justify-center gap-1 bg-black/40 backdrop-blur-2xl border border-white/10 rounded-full py-1.5 shadow-2xl">
             <Button
               onClick={() => scrollToSection("home")}
@@ -175,6 +175,16 @@ export function Navbar({ onNavigationStart }: NavbarProps) {
               }`}
             >
               Work
+            </Button>
+            <Button
+              onClick={() => scrollToSection("services")}
+              className={`px-5 py-4 rounded-full text-lg font-medium font-sora transition-all duration-300 ${
+                activeSection === "services"
+                  ? "text-white border border-purple-400/70 bg-purple-900/70 hover:bg-purple-500/80"
+                  : "text-white bg-transparent hover:bg-white/20"
+              }`}
+            >
+              Services
             </Button>
             <Button
               onClick={() => scrollToSection("about")}
@@ -252,8 +262,9 @@ export function Navbar({ onNavigationStart }: NavbarProps) {
             {[
               { name: "Home", id: "home", delay: "delay-100" },
               { name: "Work", id: "work", delay: "delay-200" },
-              { name: "About", id: "about", delay: "delay-300" },
-              { name: "Let's Talk", id: "contact", delay: "delay-400" },
+              { name: "Services", id: "services", delay: "delay-300" },
+              { name: "About", id: "about", delay: "delay-400" },
+              { name: "Let's Talk", id: "contact", delay: "delay-500" },
             ].map((item) => (
               <Button
                 key={item.name}

@@ -8,6 +8,8 @@ import { BackToTop } from "@/components/back-to-top"
 import { DialogProvider } from "@/contexts/dialog-context"
 
 const WorkSection = dynamic(() => import("./sections/WorkSection").then(mod => ({ default: mod.WorkSection })), { ssr: false })
+const ServicesSection = dynamic(() => import("./sections/ServicesSection").then(mod => ({ default: mod.ServicesSection })), { ssr: false })
+const TestimonialsSection = dynamic(() => import("./sections/TestimonialsSection").then(mod => ({ default: mod.TestimonialsSection })), { ssr: false })
 const AboutSection = dynamic(() => import("./sections/AboutSection").then(mod => ({ default: mod.AboutSection })), { ssr: false })
 const FooterSection = dynamic(() => import("./sections/FooterSection").then(mod => ({ default: mod.FooterSection })), { ssr: false })
 
@@ -65,6 +67,8 @@ export default function HomePage() {
       <main className={`h-screen overflow-y-scroll overflow-x-hidden snap-y snap-proximity scroll-smooth ${shouldBounce ? 'animate-subtle-bounce' : ''}`}>
         <HomeSection />
         <WorkSection />
+        <ServicesSection />
+        <TestimonialsSection />
         <AboutSection />
         <FooterSection />
       </main>
