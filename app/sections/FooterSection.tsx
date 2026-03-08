@@ -1,20 +1,32 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useRef } from "react"
 import Image from "next/image"
 import Link from "next/link"
+import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile"
 import { LoadingWrapper } from "@/components/loading-wrapper"
 import { socialLinks } from "@/lib/config/social-links"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 
+const TURNSTILE_SITE_KEY =
+  process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY ?? ""
+
 export function FooterSection() {
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState("")
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
+  const turnstileRef = useRef<TurnstileInstance>(null)
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+
+    if (TURNSTILE_SITE_KEY && !turnstileToken) {
+      setError("Please wait for the security check to complete.")
+      return
+    }
+
     setIsSubmitting(true)
     setError("")
 
@@ -22,20 +34,33 @@ export function FooterSection() {
     const formData = new FormData(form)
 
     try {
-      const response = await fetch("https://formspree.io/f/maqdrlwe", {
+      const response = await fetch("/api/contact", {
         method: "POST",
-        body: formData,
-        headers: { Accept: "application/json" },
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.get("name"),
+          email: formData.get("email"),
+          project_type: formData.get("project_type"),
+          budget: formData.get("budget"),
+          message: formData.get("message"),
+          honeypot: formData.get("_hp"),
+          token: turnstileToken,
+        }),
       })
 
-      if (response.ok) {
+      const data = await response.json()
+
+      if (response.ok && data.success) {
         setIsSubmitted(true)
         form.reset()
+        setTurnstileToken(null)
       } else {
-        setError("Something went wrong. Please try again or email us directly.")
+        setError(data.error ?? "Something went wrong. Please try again or email us directly.")
+        turnstileRef.current?.reset()
       }
     } catch {
       setError("Could not connect. Please try again or email us directly.")
+      turnstileRef.current?.reset()
     } finally {
       setIsSubmitting(false)
     }
@@ -153,13 +178,36 @@ export function FooterSection() {
                 className="bg-white/5 border-white/10 text-white placeholder:text-gray-500 focus-visible:border-purple-500 focus-visible:ring-purple-500/20 font-sora resize-none min-h-[100px]"
               />
 
+              {/* Honeypot — hidden from real users, bots fill it in */}
+              <input
+                name="_hp"
+                type="text"
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                style={{ position: "absolute", left: "-9999px", opacity: 0, pointerEvents: "none" }}
+              />
+
+              {TURNSTILE_SITE_KEY && (
+                <div className="flex justify-center">
+                  <Turnstile
+                    ref={turnstileRef}
+                    siteKey={TURNSTILE_SITE_KEY}
+                    onSuccess={setTurnstileToken}
+                    onError={() => setTurnstileToken(null)}
+                    onExpire={() => setTurnstileToken(null)}
+                    options={{ theme: "dark", size: "normal" }}
+                  />
+                </div>
+              )}
+
               {error && (
                 <p className="text-red-400 text-sm font-sora text-center">{error}</p>
               )}
 
               <button
                 type="submit"
-                disabled={isSubmitting}
+                disabled={isSubmitting || (TURNSTILE_SITE_KEY !== "" && !turnstileToken)}
                 className="w-full h-11 bg-purple-600 hover:bg-purple-500 text-white font-sora font-medium rounded-md transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? "Sending..." : "Send Message"}
