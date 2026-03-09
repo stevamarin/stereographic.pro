@@ -98,7 +98,9 @@ export async function POST(req: NextRequest) {
     })
   }
 
-  const res = NextResponse.redirect(new URL("/test-test", req.url))
+  const raw = readFileSync(join(process.cwd(), "public/test-test/index.html"), "utf-8")
+  const html = raw.replace("<head>", '<head>\n  <base href="/test-test/">')
+  const res = new NextResponse(html, { headers: { "Content-Type": "text/html" } })
   res.cookies.set(COOKIE, PASSWORD, { httpOnly: true, sameSite: "lax", path: "/test-test" })
   return res
 }
