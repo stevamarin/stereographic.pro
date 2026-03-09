@@ -1,0 +1,1988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Content Transformation — St. Luke's Health Network × PeakActivity</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&family=IBM+Plex+Sans+Condensed:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollToPlugin.min.js"></script>
+
+  <style>
+    /* ======================================================
+       TOKENS
+    ====================================================== */
+    :root {
+      --onyx:       #09252F;
+      --onyx-deep:  #04141b;
+      --magenta:    #D51C57;
+      --orange:     #F0533C;
+      --blue:       #0155D2;
+      --cyan:       #00A2C4;
+      --white:      #FFFFFF;
+      --font-title: 'Playfair Display', Georgia, serif;
+      --font-body:  'DM Sans', sans-serif;
+      --font-label: 'IBM Plex Sans Condensed', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: auto; }
+
+    body {
+      background: var(--onyx-deep);
+      color: var(--white);
+      font-family: var(--font-body);
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ======================================================
+       SLIDE NUMBER
+    ====================================================== */
+    #slide-num {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 300;
+      font-family: var(--font-label);
+      font-size: 1.95rem;
+      letter-spacing: 0.2em;
+      color: rgba(255,255,255,0.45);
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+      opacity: 0;
+    }
+    .slide-sep { opacity: 0.4; }
+    #slide-current {
+      color: var(--magenta);
+    }
+
+    /* ======================================================
+       CURSOR
+    ====================================================== */
+    .cursor,
+    .cursor-ring {
+      position: fixed;
+      pointer-events: none;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 9999;
+    }
+    .cursor {
+      width: 18px; height: 18px;
+      background: #ff0033;
+      mix-blend-mode: difference;
+    }
+    .cursor-ring {
+      width: 52px; height: 52px;
+      border: 2px solid rgba(255,0,51,0.6);
+      z-index: 9998;
+      transition: width .35s ease, height .35s ease;
+    }
+    body:hover .cursor-ring { width: 52px; height: 52px; }
+    a:hover ~ .cursor-ring,
+    button:hover ~ .cursor-ring { width: 72px; height: 72px; }
+
+    /* ======================================================
+       LOADER
+    ====================================================== */
+    #loader {
+      position: fixed;
+      inset: 0;
+      background: var(--onyx-deep);
+      z-index: 2000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 28px;
+    }
+    .loader-logo svg { height: 20px; width: auto; opacity: 0.55; }
+    .loader-track {
+      width: 260px; height: 1px;
+      background: rgba(255,255,255,0.08);
+    }
+    .loader-fill {
+      height: 100%;
+      background: var(--magenta);
+      width: 0%;
+      transition: width .08s linear;
+    }
+    .loader-meta {
+      font-family: var(--font-label);
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.28);
+    }
+
+    /* ======================================================
+       NAV
+    ====================================================== */
+    #nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 48px;
+    }
+    #nav::before { display: none; }
+    #nav svg { height: 36px; width: auto; display: block; }
+    .nav-tag {
+      font-family: var(--font-label);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.38);
+      position: relative;
+    }
+
+    /* ======================================================
+       HERO  (standalone 100vh — outside scroll container)
+    ====================================================== */
+    #hero {
+      position: relative;
+      height: 100vh;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 200px;
+      overflow: hidden;
+    }
+
+    /* Canvas fills hero — circle-wipe reveal */
+    #hero-canvas-wrap {
+      position: absolute;
+      inset: 0;
+      clip-path: circle(0% at 50% 50%);
+    }
+    #hero-canvas {
+      width: 100%; height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    #hero-gradient { display: none; }
+
+    .hero-content {
+      position: relative;
+      z-index: 3;
+      text-align: center;
+    }
+
+    .hero-eyebrow {
+      font-family: var(--font-label);
+      font-size: 0.92rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 28px;
+      opacity: 0;
+    }
+
+    .hero-heading {
+      font-family: var(--font-title);
+      font-size: clamp(4.5rem, 9vw, 9rem);
+      font-weight: 700;
+      line-height: 0.88;
+      letter-spacing: -0.025em;
+    }
+
+    .h-word {
+      display: block;
+      overflow: hidden;
+    }
+
+    .h-word-inner {
+      display: block;
+      transform: translateY(100%);
+    }
+
+    .h-word:last-child .h-word-inner {
+      font-style: italic;
+      color: var(--magenta);
+    }
+
+    .hero-sub {
+      font-family: var(--font-body);
+      font-size: 1.8rem;
+      font-weight: 300;
+      color: #2e6b7a;
+      margin-top: 32px;
+      letter-spacing: 0.04em;
+      opacity: 0;
+    }
+
+    .scroll-cue {
+      position: absolute;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      opacity: 0;
+      z-index: 3;
+    }
+    .scroll-cue-label {
+      font-family: var(--font-label);
+      font-size: 0.75rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+    }
+    .scroll-cue-body {
+      display: grid;
+      place-items: center;
+    }
+    .scroll-cue-body > * {
+      grid-column: 1;
+      grid-row: 1;
+    }
+    .scroll-cue-line {
+      position: relative;
+      width: 1.5px;
+      height: 72px;
+      background: rgba(255,255,255,0.12);
+      overflow: hidden;
+      transition: opacity 0.4s ease;
+    }
+    .scroll-cue-line.hidden { opacity: 0; }
+    .scroll-cue-line::after {
+      content: '';
+      position: absolute;
+      top: -40px;
+      left: 0;
+      width: 100%;
+      height: 40px;
+      background: linear-gradient(to bottom, transparent, var(--magenta));
+    }
+    .scroll-cue-line.drip-active::after {
+      animation: scrollDrip 1.6s cubic-bezier(0.4, 0, 0.6, 1) 3 forwards;
+    }
+    @keyframes scrollDrip {
+      0%   { top: -40px; opacity: 1; }
+      100% { top: 72px;  opacity: 0.2; }
+    }
+    .scroll-key {
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    .scroll-key.visible { opacity: 1; }
+    .arrow-keys {
+      display: flex;
+      flex-direction: row;
+      gap: 5px;
+      align-items: flex-end;
+    }
+    .arrow-center-col {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .arrow-key {
+      border: 1.5px solid rgba(255,255,255,0.6);
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,0.85);
+      border-radius: 10px;
+      transition: transform 0.15s ease, background 0.2s ease,
+                  border-color 0.2s ease, color 0.2s ease;
+    }
+    .arrow-key--left,
+    .arrow-key--right,
+    .arrow-key--up,
+    .arrow-key--down  { width: 52px; height: 36px; }
+    .arrow-key.pressed {
+      transform: translateY(2px);
+      background: rgba(213,28,87,0.2);
+      border-color: var(--magenta);
+      color: var(--magenta);
+    }
+
+    /* ======================================================
+       FIXED CANVAS LAYER  (scroll-driven frames)
+    ====================================================== */
+    #canvas-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      opacity: 1;
+    }
+    #main-canvas {
+      width: 100%; height: 100%;
+      display: block;
+    }
+
+    /* Permanent gradient overlay on canvas */
+    #canvas-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      opacity: 1;
+      pointer-events: none;
+      background: none;
+    }
+
+    /* ======================================================
+       SCROLL CONTAINER
+    ====================================================== */
+    #scroll-container {
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Each section wrapper controls dwell time */
+    .sw { position: relative; }
+
+    /* Sticky section — capped to 16:9 so layout is consistent across aspect ratios */
+    .content-section {
+      position: sticky;
+      top: 0;
+      height: min(100vh, 56.25vw);
+      display: flex;
+      align-items: center;
+    }
+
+    /* Text alignment zones */
+    .align-left   { padding-left: clamp(32px, 6vw, 80px); padding-right: 54vw; }
+    .align-right  { padding-right: clamp(32px, 6vw, 80px); padding-left: 54vw; }
+    .align-center { padding-left: clamp(32px, 6vw, 80px); padding-right: clamp(32px, 6vw, 80px); justify-content: center; text-align: center; }
+
+    .section-inner { max-width: 35rem; }
+    .opp-body {
+      position: absolute;
+      left: 54vw;
+      max-width: 42.5rem;
+      transform: translateY(215px);
+    }
+    .opp-body .s-body { font-size: 1.6rem; }
+    #s-opportunity .s-heading { font-size: clamp(3.93rem, 6.34vw, 6.34rem); }
+    #s-opportunity > .section-inner:first-child { transform: translateY(-50px); }
+
+    .p1-body {
+      position: absolute;
+      left: calc(36vw + 90px);
+      right: clamp(24px, 3vw, 60px);
+      max-width: 63.75rem;
+      transform: translateY(215px);
+    }
+    .p1-body .s-body { font-size: 1.84rem; }
+    #s-p1 > .section-inner:first-child { transform: translateY(-160px); }
+    #s-p1 .pillar-ghost { -webkit-text-stroke-color: #fff; }
+    #s-p1 .s-label { color: #fff; }
+
+    .p2-body {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%) translateY(215px);
+      max-width: 1350px;
+      text-align: center;
+    }
+    .p2-body .s-body { font-size: 1.76rem; }
+    .p2-body .tag-row { justify-content: center; }
+    #s-p2 > .section-inner:first-child { transform: translateY(-200px); }
+    #s-p2 .s-heading { font-size: clamp(3.575rem, 5.775vw, 5.775rem); }
+    #s-p1 .s-heading { font-size: clamp(3.933rem, 6.353vw, 6.353rem); }
+
+    .p3-body {
+      position: absolute;
+      left: clamp(32px, 6vw, 80px);
+      max-width: 45.625rem;
+      transform: translateY(-40px);
+    }
+    .p3-body .s-body { font-size: 1.932rem; }
+    #s-p3 > .section-inner:first-child { transform: translate(140px, 160px); margin-left: auto; margin-right: clamp(32px, 4vw, 60px); }
+    #s-p3 .s-heading { font-size: clamp(4.326rem, 6.988vw, 6.988rem); }
+
+    /* Section label */
+    .s-label {
+      font-family: var(--font-label);
+      font-size: 0.81rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--onyx);
+      margin-bottom: 18px;
+      opacity: 0;
+      transform: translateY(16px);
+    }
+
+    /* Section heading */
+    .s-heading {
+      font-family: var(--font-title);
+      font-size: clamp(3.25rem, 5.25vw, 5.25rem);
+      font-weight: 700;
+      line-height: 1.0;
+      letter-spacing: -0.02em;
+      color: var(--onyx);
+      margin-bottom: 24px;
+      opacity: 0;
+      transform: translateY(28px);
+    }
+    .s-heading em  { font-style: italic; color: var(--magenta); }
+    .s-heading .ao { color: var(--orange); }
+
+    /* Body text */
+    .s-body {
+      font-size: 1.22rem;
+      font-weight: 400;
+      line-height: 1.72;
+      color: rgba(9,37,47,0.75);
+      margin-bottom: 20px;
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    .s-body strong { color: var(--onyx); font-weight: 600; }
+
+    /* Tag row */
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 28px;
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    .tag {
+      font-family: var(--font-label);
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border: 1px solid rgba(9,37,47,0.25);
+      color: rgba(9,37,47,0.6);
+    }
+    .tag.tm { border-color: var(--magenta); color: var(--magenta); }
+    .tag.tc { border-color: var(--blue);    color: var(--blue); }
+    .tag.to { border-color: var(--orange);  color: var(--orange); }
+
+    /* Pillar number ghost */
+    .pillar-ghost {
+      font-family: var(--font-title);
+      font-size: 8.75rem;
+      font-weight: 900;
+      line-height: 1;
+      color: transparent;
+      -webkit-text-stroke: 1px #09252F;
+      margin-bottom: -2px;
+      opacity: 0;
+      transform: translateX(-16px);
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 55%);
+      mask-image: linear-gradient(to bottom, transparent 0%, black 55%);
+    }
+
+    /* ======================================================
+       STATS SECTION
+    ====================================================== */
+    #s-stats {
+      background: none;
+    }
+    .stats-layout {
+      width: 100%;
+      padding: 0 clamp(32px, 6vw, 80px);
+      text-align: center;
+      transform: translateY(145px);
+    }
+    .stats-eyebrow {
+      font-family: var(--font-label);
+      font-size: 1.1rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--onyx);
+      margin-bottom: 20px;
+      opacity: 0;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8.75rem;
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+    .stat-item {
+      opacity: 0;
+      transform: translateY(28px);
+    }
+    .stat-num {
+      font-family: var(--font-title);
+      font-size: clamp(6rem, 10vw, 10rem);
+      font-weight: 700;
+      line-height: 1;
+      color: var(--onyx);
+    }
+    .stat-num .prefix { font-size: .55em; color: var(--magenta); vertical-align: super; }
+    .stat-num .suffix { font-size: .5em;  color: var(--magenta); }
+    .stat-desc {
+      font-family: var(--font-label);
+      font-size: 1rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #111111;
+      margin-top: 12px;
+      line-height: 1.4;
+    }
+
+    /* ======================================================
+       MARQUEE
+    ====================================================== */
+    #marquee-wrap {
+      position: relative;
+      z-index: 3;
+      overflow: hidden;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding-bottom: 14vh;
+      background: none;
+      border: none;
+      clip-path: inset(0 50% 0 50%);
+    }
+    .marquee-track {
+      display: flex;
+      white-space: nowrap;
+      will-change: transform;
+      line-height: 0.85;
+      margin-bottom: 10px;
+    }
+    .marquee-item {
+      font-family: var(--font-title);
+      font-size: clamp(12vw, 13vw, 15vw);
+      font-weight: 700;
+      font-style: italic;
+      text-transform: uppercase;
+      color: transparent;
+      -webkit-text-stroke: 2px var(--magenta);
+      padding-right: 0.28em;
+      flex-shrink: 0;
+      user-select: none;
+    }
+    .marquee-item .fill {
+      -webkit-text-stroke: 2px var(--magenta);
+    }
+
+    /* ======================================================
+       OPTIONS CARDS
+    ====================================================== */
+    .options-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      margin-top: 32px;
+      opacity: 0;
+      transform: translateY(28px);
+    }
+    .options-center {
+      position: absolute;
+      right: 0;
+      transform: translateY(160px);
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      width: 58.6vw;
+      opacity: 0;
+    }
+    #s-options > .section-inner { transform: translateY(60px); }
+    #s-options .s-heading { font-size: clamp(3.738rem, 6.038vw, 6.038rem); }
+    .opt-content { max-width: 28.75rem; }
+
+    .roadmap-frame {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+    .roadmap-heading {
+      position: absolute;
+      top: calc(15% + 140px);
+      right: clamp(32px, 6vw, 80px);
+      text-align: right;
+      max-width: 35rem;
+    }
+    .roadmap-list {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+    }
+    .rm-item {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      max-width: 12.5rem;
+    }
+    .rm-item::after {
+      content: '';
+      position: absolute;
+      bottom: -5.56vh;
+      left: 50%;
+      width: 1.5px;
+      height: 5.56vh;
+      background: var(--magenta);
+      transform-origin: top center;
+    }
+    .rm-item--1::after { transform: rotate(20deg); }
+    .rm-item--2::after { transform: rotate(10deg); }
+    .rm-item--3::after { transform: rotate(25deg); }
+    .rm-item--1 { left: calc(12% - 30px); top: calc(40% - 26px); }
+    .rm-item--2 { left: calc(44% - 220px); top: calc(24% - 40px); }
+    .rm-item--3 { left: calc(74% - 460px); top: calc(30% - 200px); }
+
+    /* MacBook: viewport taller than 16:9 (e.g. 16:10) — shift items down 50px and scale up 30% */
+    @media (min-width: 1200px) and (max-aspect-ratio: 1599/900) {
+      .rm-item--1 { top: calc(40% - 26px + 50px); transform: scale(1.3); transform-origin: top left; }
+      .rm-item--2 { top: calc(24% - 40px + 50px); transform: scale(1.3); transform-origin: top left; }
+      .rm-item--3 { top: calc(30% - 200px + 50px); transform: scale(1.3); transform-origin: top left; }
+    }
+
+    .roadmap-bg-wrap {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      clip-path: inset(0 100% 0 0);
+      overflow: hidden;
+    }
+    .roadmap-draw-edge {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      width: 3px;
+      background: linear-gradient(to bottom,
+        transparent 0%,
+        rgba(0, 162, 196, 0.8) 30%,
+        rgba(0, 162, 196, 1) 50%,
+        rgba(0, 162, 196, 0.8) 70%,
+        transparent 100%);
+      box-shadow: 0 0 12px 4px rgba(0, 162, 196, 0.5);
+      pointer-events: none;
+      opacity: 0;
+    }
+    .roadmap-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center bottom;
+      opacity: 0.85;
+      transform: scaleX(-1) scale(1.725) translateY(50%) translateX(5px);
+      transform-origin: center bottom;
+      pointer-events: none;
+    }
+    #s-roadmap .section-inner,
+    #s-roadmap .roadmap-body { z-index: 1; position: relative; }
+    .opt-card {
+      padding: 44px 50px;
+      background: linear-gradient(
+        135deg,
+        rgba(255,255,255,0.30) 0%,
+        rgba(255,255,255,0.10) 50%,
+        rgba(255,255,255,0.18) 100%
+      );
+      backdrop-filter: blur(32px) saturate(180%);
+      -webkit-backdrop-filter: blur(32px) saturate(180%);
+      border-radius: 20px 0 0 20px;
+      border-top: 1px solid rgba(255,255,255,0.75);
+      border-left: 1px solid rgba(255,255,255,0.55);
+      border-right: none;
+      border-bottom: 1px solid rgba(255,255,255,0.10);
+      box-shadow:
+        0 8px 32px rgba(0,0,0,0.12),
+        0 2px 8px rgba(0,0,0,0.08),
+        inset 0 1px 0 rgba(255,255,255,0.6),
+        inset 0 -1px 0 rgba(255,255,255,0.1);
+      position: relative;
+      overflow: hidden;
+    }
+    .opt-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 30% 0%, rgba(255,255,255,0.25) 0%, transparent 65%);
+      pointer-events: none;
+      border-radius: inherit;
+    }
+    .opt-card.featured {
+      background: linear-gradient(
+        135deg,
+        rgba(255,255,255,0.42) 0%,
+        rgba(200,220,255,0.18) 50%,
+        rgba(255,255,255,0.28) 100%
+      );
+      border-top: 1px solid rgba(255,255,255,0.9);
+      box-shadow:
+        0 12px 40px rgba(1,85,210,0.15),
+        0 4px 12px rgba(0,0,0,0.10),
+        inset 0 1px 0 rgba(255,255,255,0.8),
+        inset 0 -1px 0 rgba(255,255,255,0.15);
+    }
+    .opt-badge {
+      font-family: var(--font-label);
+      font-size: 0.853rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 8px;
+    }
+    .opt-card.featured .opt-badge { color: var(--blue); }
+    .opt-name {
+      font-family: var(--font-title);
+      font-size: 1.719rem;
+      font-weight: 700;
+      color: var(--onyx);
+      margin-bottom: 8px;
+    }
+    .opt-price {
+      font-family: var(--font-title);
+      font-size: 3.3rem;
+      font-weight: 700;
+      color: var(--magenta);
+      -webkit-text-stroke: 0;
+      line-height: 1;
+    }
+    .opt-price span {
+      font-size: .38em;
+      color: rgba(9,37,47,0.45);
+      -webkit-text-stroke: 0;
+      font-family: var(--font-body);
+      font-weight: 300;
+    }
+    .opt-total {
+      font-size: 1.128rem;
+      color: var(--blue);
+      margin-top: 6px;
+      font-family: var(--font-label);
+      letter-spacing: 0.06em;
+    }
+    .opt-desc {
+      font-size: 1.183rem;
+      color: rgba(9,37,47,0.65);
+      line-height: 1.6;
+      margin-top: 14px;
+      border-top: 1px solid rgba(9,37,47,0.08);
+      padding-top: 14px;
+    }
+
+    /* ======================================================
+       ROADMAP
+    ====================================================== */
+    .roadmap-list {
+      display: block;
+      opacity: 0;
+    }
+    .rm-item { display: flex; flex-direction: column; gap: 6px; }
+    .rm-num {
+      font-family: var(--font-label);
+      font-size: 0.713rem;
+      letter-spacing: 0.1em;
+      color: var(--magenta);
+      padding-top: 3px;
+      flex-shrink: 0;
+      width: 26px;
+    }
+    .rm-phase {
+      font-family: var(--font-label);
+      font-size: 0.782rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(9,37,47,0.5);
+      margin-bottom: 4px;
+    }
+    .rm-title {
+      font-family: var(--font-title);
+      font-size: 1.265rem;
+      font-weight: 700;
+      color: var(--onyx);
+    }
+    .rm-desc {
+      font-size: 0.966rem;
+      color: rgba(9,37,47,0.7);
+      line-height: 1.5;
+      margin-top: 3px;
+    }
+
+    /* ======================================================
+       CTA
+    ====================================================== */
+    #cta-section {
+      position: relative;
+      z-index: 10;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 48px;
+      background: #dce6ec;
+      overflow: hidden;
+    }
+    #cta-video {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      opacity: 0;
+    }
+    #cta-still {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      pointer-events: none;
+    }
+    #cta-mist {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: #dce6ec;
+      pointer-events: none;
+      will-change: transform, opacity;
+    }
+    #cta-tagline {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-end;
+      padding-bottom: clamp(60px, 9vh, 110px);
+      padding-left: clamp(32px, 6vw, 80px);
+      opacity: 0;
+      pointer-events: none;
+      text-align: left;
+    }
+    #cta-tagline .cta-label {
+      font-family: var(--font-label);
+      font-size: 1.2rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 14px;
+    }
+    #cta-tagline h2 {
+      font-family: var(--font-title);
+      font-size: clamp(3.25rem, 5.25vw, 5.25rem);
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      font-style: italic;
+      text-shadow: 0 2px 40px rgba(0,0,0,0.3);
+      margin: 0;
+    }
+
+
+
+    /* Footer */
+    #footer {
+      position: relative;
+      z-index: 10;
+      background: var(--onyx-deep);
+      padding: 36px 48px;
+      text-align: center;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+    .footer-text {
+      font-family: var(--font-label);
+      font-size: 0.62rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.18);
+    }
+
+    /* ======================================================
+       MOBILE  (≤ 768px)
+    ====================================================== */
+    @media (max-width: 768px) {
+
+      /* Restore native cursor on touch */
+      body { cursor: auto; }
+      .cursor, .cursor-ring { display: none; }
+
+      /* ── Stacking order — later sections slide on top of earlier ── */
+      #s-opportunity { z-index: 10; }
+      #s-stats       { z-index: 11; }
+      #s-p1          { z-index: 12; }
+      #s-p2          { z-index: 13; }
+      #s-p3          { z-index: 14; }
+      #s-options     { z-index: 15; }
+      #s-roadmap     { z-index: 16; }
+
+      /* ── Nav ── */
+      #nav { padding: 16px 20px; }
+      #nav svg { height: 22px; }
+      .nav-tag { display: none; }
+
+      /* ── Hero ── */
+      #hero { padding-bottom: 200px; }
+      .hero-eyebrow { font-size: 0.7rem; letter-spacing: 0.14em; margin-bottom: 12px; }
+      .hero-heading { font-size: clamp(3rem, 13vw, 5rem); }
+      .hero-sub { font-size: 1.05rem; margin-top: 14px; }
+      .scroll-key { display: none; }
+
+      /* ── Sticky sections — full viewport height, solid carousel cards ── */
+      .content-section {
+        height: 100svh;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        padding-top: 80px;
+        padding-bottom: 32px;
+      }
+
+      /* ── Remove side-push padding ── */
+      .align-left,
+      .align-right  { padding-left: 24px; padding-right: 24px; }
+      .align-center { padding-left: 24px; padding-right: 24px; text-align: left; justify-content: flex-start; }
+
+      /* ── Pillar sections — center everything ── */
+      #s-p1, #s-p2, #s-p3 { align-items: center; text-align: center; }
+
+      /* ── Section inner ── */
+      .section-inner { max-width: 100%; width: 100%; }
+
+      /* ── Headings — size only, no colour override ── */
+      .s-heading { font-size: clamp(2.2rem, 8.5vw, 3.2rem) !important; }
+      .s-body    { font-size: 1rem; }
+
+      /* ── Ghost numbers ── */
+      .pillar-ghost { font-size: 5rem; }
+
+      /* ── Opportunity ── */
+      #s-opportunity > .section-inner:first-child { transform: none; }
+      .opp-body {
+        position: relative;
+        left: auto;
+        max-width: 100%;
+        transform: none;
+        margin-top: 24px;
+      }
+      .opp-body .s-body { font-size: 1rem; }
+
+      /* ── Pillar 1 ── */
+      #s-p1 > .section-inner:first-child { transform: none; width: 100%; text-align: center; }
+      #s-p1 .s-heading { text-align: center; }
+      .p1-body {
+        position: relative;
+        left: auto;
+        right: auto;
+        max-width: 100%;
+        transform: none;
+        margin-top: 24px;
+        text-align: center;
+      }
+      .p1-body .tag-row { justify-content: center; }
+
+      /* ── Pillar 2 ── */
+      #s-p2 > .section-inner:first-child { transform: none; width: 100%; text-align: center; }
+      #s-p2 .s-heading { text-align: center; }
+      .p2-body {
+        position: relative;
+        left: auto;
+        max-width: 100%;
+        transform: none;
+        text-align: center;
+        margin-top: 24px;
+      }
+      .p2-body .tag-row { justify-content: center; }
+
+      /* ── Pillar 3 ── */
+      #s-p3 > .section-inner:first-child { transform: none !important; margin-left: 0; margin-right: 0; width: 100%; text-align: center; }
+      #s-p3 .s-heading { text-align: center; }
+      .p3-body {
+        position: relative;
+        left: auto;
+        max-width: 100%;
+        transform: none;
+        margin-top: 24px;
+        text-align: center;
+      }
+      .p3-body .tag-row { justify-content: center; }
+
+      /* ── Stats ── */
+      .stats-layout { transform: none; padding: 0 24px; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 2rem 1rem; }
+      .stat-num { font-size: clamp(2.8rem, 13vw, 5rem); }
+      .stat-desc { font-size: 0.8rem; }
+      .stats-eyebrow { font-size: 0.85rem; }
+
+      /* ── Options ── */
+      #s-options > .section-inner { transform: none; }
+      .options-center {
+        position: relative;
+        width: 100%;
+        transform: none;
+        margin-top: 24px;
+      }
+      .opt-card { padding: 24px 20px; }
+      .opt-name { font-size: 1.3rem; }
+      .opt-price { font-size: 2.4rem; }
+
+      /* ── Roadmap ── */
+      #s-roadmap .content-section {
+        height: auto;
+        min-height: 100svh;
+        overflow-y: visible;
+        padding: 0;
+      }
+      .roadmap-frame {
+        display: flex;
+        flex-direction: column;
+        min-height: 100svh;
+        padding: 80px 24px 40px;
+      }
+      .roadmap-bg-wrap { display: none; }
+      .roadmap-heading {
+        position: relative;
+        top: auto;
+        right: auto;
+        text-align: left;
+        max-width: 100%;
+        margin-bottom: 32px;
+      }
+      .roadmap-list {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 28px;
+        opacity: 1;
+      }
+      .rm-item {
+        position: relative !important;
+        left: auto !important;
+        top: auto !important;
+        transform: none !important;
+        max-width: 100%;
+      }
+      .rm-item::after { display: none; }
+
+      /* ── CTA ── */
+      #cta-section { padding: 80px 24px; }
+      #cta-tagline { padding-left: 24px; padding-bottom: 48px; }
+      #cta-tagline h2 { font-size: clamp(2.2rem, 8.5vw, 3.2rem); }
+      #cta-tagline .cta-label { font-size: 0.85rem; }
+
+      /* ── Footer ── */
+      #footer { padding: 24px 20px; }
+
+      /* ── Slide number ── */
+      #slide-num { font-size: 1.2rem; }
+
+      /* ── Marquee ── */
+      .marquee-item { font-size: 18vw; -webkit-text-stroke: 1px var(--magenta); }
+
+      /* ── Stats slide — lock 150px lower ── */
+      #s-stats { top: 430px; }
+
+      /* ── Auto contrast — flip text dark/light based on canvas brightness ── */
+      html[data-bg-mode="dark"] .s-heading  { color: #fff !important; }
+      html[data-bg-mode="dark"] .s-body     { color: rgba(255,255,255,0.82) !important; }
+      html[data-bg-mode="dark"] .s-label    { color: rgba(255,255,255,0.5) !important; }
+      html[data-bg-mode="dark"] .stat-num   { color: #fff !important; }
+      html[data-bg-mode="dark"] .stat-desc  { color: rgba(255,255,255,0.65) !important; }
+      html[data-bg-mode="dark"] .stats-eyebrow { color: rgba(255,255,255,0.5) !important; }
+      html[data-bg-mode="light"] .s-heading { color: var(--onyx) !important; }
+      html[data-bg-mode="light"] .s-body    { color: rgba(9,37,47,0.75) !important; }
+      html[data-bg-mode="light"] .s-label   { color: var(--onyx) !important; }
+      html[data-bg-mode="light"] .stat-num  { color: var(--onyx) !important; }
+      html[data-bg-mode="light"] .stat-desc { color: #111 !important; }
+      html[data-bg-mode="light"] .stats-eyebrow { color: var(--onyx) !important; }
+
+      /* Magenta/orange words always stay their colour */
+      .s-heading em  { color: var(--magenta) !important; }
+      .s-heading .ao { color: var(--orange)  !important; }
+
+    }
+  </style>
+</head>
+<body>
+
+<!-- Cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<!-- ======================================================
+     LOADER
+====================================================== -->
+<div id="loader">
+  <div class="loader-logo">
+    <svg viewBox="0 0 335 37" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet"><g clip-path="url(#lc)"><path d="M18.9351 16.2894C20.3353 14.7213 21.0702 12.694 20.9909 10.6183C21.0485 9.60399 20.8961 8.58873 20.543 7.63269C20.1899 6.67665 19.6431 5.79928 18.9351 5.05255C18.2053 4.35063 17.3323 3.80531 16.3726 3.45176C15.4128 3.09822 14.3875 2.94429 13.3628 2.99992H2.16417V18.4473H13.3628C14.3977 18.5094 15.4339 18.3482 16.3973 17.9752C17.3606 17.6021 18.2273 17.0264 18.9351 16.2894ZM20.477 3.71044C21.3788 4.62803 22.0828 5.71195 22.5474 6.89833C23.0119 8.08471 23.2277 9.34956 23.182 10.6183C23.2042 12.3806 22.7914 14.1224 21.9782 15.6973C21.2089 17.1711 20.0214 18.3995 18.5564 19.2368C17.0178 20.1217 15.2583 20.577 13.471 20.5525H2.16417V34.9999C2.16121 35.1327 2.12958 35.2634 2.07133 35.3836C2.01308 35.5037 1.92951 35.6106 1.82604 35.6973C1.63015 35.895 1.36412 36.0127 1.08217 36.0262C0.939299 36.0292 0.797295 36.0039 0.664774 35.9519C0.532253 35.8999 0.411978 35.8222 0.311246 35.7236C0.210645 35.6306 0.131039 35.5182 0.0774858 35.3936C0.0239326 35.269 -0.00239655 35.1349 0.000171283 34.9999V1.99992C0.00129876 1.86932 0.0294199 1.74028 0.0828611 1.62048C0.136302 1.50067 0.213971 1.39255 0.311246 1.30255C0.40376 1.20791 0.514897 1.13235 0.638044 1.08036C0.761191 1.02837 0.893831 1.00101 1.02807 0.999917H13.3628C14.6601 0.945007 15.9551 1.15029 17.1673 1.60301C18.3795 2.05573 19.4831 2.7462 20.4094 3.6315" fill="#FFFFFF"/><path d="M48.9468 34.3026C49.0441 34.3926 49.1217 34.5008 49.1752 34.6206C49.2286 34.7404 49.2568 34.8694 49.2579 35C49.2622 35.1352 49.2366 35.2698 49.1829 35.3946C49.1293 35.5195 49.0488 35.6317 48.9468 35.7237C48.7538 35.9028 48.4967 36.0019 48.23 36H28.8487C28.5793 35.9902 28.3236 35.8817 28.133 35.6963C27.9424 35.5108 27.8309 35.2621 27.8208 35V2C27.8219 1.86941 27.85 1.74037 27.9035 1.62056C27.9569 1.50076 28.0346 1.39263 28.1319 1.30263C28.2244 1.208 28.3355 1.13244 28.4587 1.08045C28.5818 1.02845 28.7145 1.0011 28.8487 1H48.23C48.3642 1.0011 48.4969 1.02845 48.62 1.08045C48.7432 1.13244 48.8543 1.208 48.9468 1.30263C49.0441 1.39263 49.1217 1.50076 49.1752 1.62056C49.2286 1.74037 49.2568 1.86941 49.2579 2C49.2622 2.13524 49.2366 2.26981 49.1829 2.39464C49.1293 2.51947 49.0488 2.63167 48.9468 2.72368C48.7538 2.90279 48.4967 3.00187 48.23 3H29.9848V16.9474H45.9848C46.2542 16.9571 46.5099 17.0656 46.7005 17.2511C46.8912 17.4366 47.0027 17.6853 47.0127 17.9474C47.017 18.0826 46.9915 18.2172 46.9378 18.342C46.8841 18.4668 46.8036 18.579 46.7017 18.6711C46.5044 18.8406 46.2479 18.9301 45.9848 18.9211H29.9848V34H48.23C48.3642 34.0011 48.4969 34.0285 48.62 34.0804C48.7432 34.1324 48.8543 34.208 48.9468 34.3026Z" fill="#FFFFFF"/><path d="M61.9582 23.1447H77.539L69.6674 4.30262L61.9582 23.1447ZM84.7343 35.0526C84.7402 35.1842 84.7152 35.3154 84.6613 35.4362C84.6074 35.557 84.526 35.6643 84.4232 35.75C84.2067 35.9229 83.9321 36.012 83.6523 36C83.4273 36.0078 83.2054 35.9481 83.0166 35.8289C82.833 35.7204 82.6942 35.5529 82.6244 35.3553L78.3099 25.0526V25.1447H61.1467L56.981 35.3553C56.9211 35.5483 56.7969 35.7164 56.6279 35.8331C56.459 35.9499 56.2548 36.0086 56.0478 36C55.776 36.0131 55.5094 35.9236 55.3039 35.75C55.1222 35.5945 55.0064 35.3787 54.9793 35.1447C54.9281 34.9818 54.9281 34.8077 54.9793 34.6447L68.8559 1.55262C68.9142 1.33914 69.0484 1.15267 69.2346 1.0263C69.4201 0.938907 69.6237 0.893902 69.8297 0.894722C70.0519 0.877378 70.2737 0.932678 70.4599 1.05185C70.6461 1.17103 70.7861 1.34727 70.8576 1.55262L84.6802 34.7105C84.7044 34.8455 84.7044 34.9835 84.6802 35.1184" fill="#FFFFFF"/><path d="M117.505 35.1971C117.519 35.3513 117.491 35.5064 117.425 35.6471C117.358 35.7877 117.256 35.9093 117.126 35.9997C116.894 36.1632 116.615 36.2507 116.329 36.2497C116.187 36.2473 116.048 36.2141 115.922 36.1527C115.796 36.0912 115.685 36.003 115.598 35.8945L100.18 17.355L92.4705 24.3024V34.9471C92.4506 35.2303 92.3256 35.4968 92.1188 35.6971C92.0263 35.7918 91.9152 35.8673 91.792 35.9193C91.6689 35.9713 91.5362 35.9986 91.402 35.9997C91.2544 36.0081 91.1068 35.9854 90.9691 35.9331C90.8314 35.8809 90.7068 35.8004 90.604 35.6971C90.4117 35.4932 90.3096 35.2237 90.32 34.9471V2.05238C90.3118 1.91396 90.3342 1.77545 90.3855 1.64611C90.4368 1.51677 90.5159 1.39958 90.6175 1.30238C90.7183 1.20377 90.8386 1.1261 90.9711 1.07407C91.1036 1.02205 91.2456 0.996765 91.3885 0.999748C91.6763 0.998169 91.9533 1.10688 92.1594 1.30238C92.259 1.40103 92.3367 1.51846 92.3879 1.64744C92.4391 1.77642 92.4626 1.91423 92.4569 2.05238V21.7892L114.678 1.49975C114.771 1.40511 114.882 1.32955 115.005 1.27756C115.128 1.22557 115.261 1.19821 115.395 1.19712C115.53 1.19667 115.663 1.22333 115.786 1.27542C115.91 1.3275 116.021 1.40388 116.112 1.49975C116.212 1.58775 116.291 1.69549 116.345 1.81575C116.399 1.93602 116.425 2.06603 116.423 2.19712C116.425 2.3282 116.399 2.45822 116.345 2.57848C116.291 2.69874 116.212 2.80648 116.112 2.89448L101.884 15.8024L117.248 34.4997C117.41 34.6986 117.5 34.9436 117.505 35.1971Z" fill="#FFFFFF"/><path d="M185.549 4.69707C185.559 4.93227 185.488 5.16391 185.346 5.35497C185.26 5.47681 185.145 5.57644 185.011 5.64522C184.877 5.71401 184.727 5.74988 184.575 5.74971C184.357 5.7243 184.145 5.65723 183.953 5.55234C180.993 3.51614 177.462 2.41378 173.837 2.39444C171.044 2.37987 168.299 3.09968 165.892 4.47777C163.485 5.85585 161.506 7.84101 160.163 10.2234C158.734 12.7576 158.007 15.6096 158.053 18.4997C158 21.4031 158.727 24.2696 160.163 26.8155C161.497 29.2101 163.472 31.2086 165.88 32.5986C168.287 33.9887 171.037 34.7184 173.837 34.7102C177.464 34.6796 180.993 33.5582 183.94 31.4997C184.113 31.367 184.328 31.2972 184.548 31.3023C184.709 31.2969 184.868 31.3302 185.012 31.399C185.156 31.4679 185.28 31.5703 185.373 31.6971C185.51 31.8705 185.581 32.084 185.576 32.3023C185.579 32.4579 185.544 32.612 185.474 32.7517C185.403 32.8913 185.299 33.0125 185.17 33.105C183.58 34.1477 181.838 34.9548 180.004 35.4997C178.025 36.1479 175.952 36.4855 173.864 36.4997C170.7 36.5301 167.589 35.7154 164.869 34.1444C162.137 32.5922 159.882 30.357 158.337 27.6708C156.709 24.8625 155.879 21.6837 155.929 18.4602C155.879 15.2367 156.709 12.058 158.337 9.24971C159.882 6.56344 162.137 4.32825 164.869 2.77602C167.592 1.2435 170.691 0.456891 173.837 0.499706C177.855 0.494307 181.779 1.67831 185.089 3.89444C185.226 3.98272 185.34 4.10168 185.42 4.24133C185.5 4.38099 185.544 4.53727 185.549 4.69707Z" fill="#FFFFFF"/><path d="M215.872 1.27585C215.97 1.35984 216.048 1.46312 216.102 1.57881C216.155 1.69451 216.183 1.81999 216.183 1.94691C216.192 2.07641 216.172 2.20628 216.122 2.32696C216.073 2.44765 215.997 2.55608 215.899 2.64427C215.694 2.81906 215.427 2.90881 215.155 2.89427H203.7V34.9995C203.697 35.1998 203.634 35.3949 203.518 35.5602C203.401 35.7255 203.237 35.8535 203.046 35.9281C202.855 36.0027 202.646 36.0206 202.444 35.9795C202.243 35.9383 202.058 35.84 201.914 35.6969C201.739 35.505 201.642 35.2565 201.644 34.9995V2.89427H190.175C189.908 2.89615 189.651 2.79706 189.458 2.61796C189.358 2.53569 189.278 2.43276 189.224 2.31666C189.17 2.20056 189.144 2.07424 189.147 1.94691C189.147 1.81999 189.174 1.69451 189.228 1.57881C189.282 1.46312 189.36 1.35984 189.458 1.27585C189.651 1.09675 189.908 0.997667 190.175 0.999538H215.155C215.422 0.997667 215.679 1.09675 215.872 1.27585Z" fill="#FFFFFF"/><path d="M224.92 35.6971C224.828 35.7918 224.717 35.8673 224.594 35.9193C224.47 35.9713 224.338 35.9986 224.204 35.9997C224.056 36.0081 223.908 35.9854 223.771 35.9331C223.633 35.8809 223.508 35.8004 223.406 35.6971C223.213 35.4932 223.111 35.2237 223.122 34.9471V2.05238C223.115 1.91298 223.14 1.77387 223.193 1.64447C223.247 1.51507 223.329 1.39841 223.433 1.30238C223.533 1.20377 223.654 1.1261 223.786 1.07407C223.919 1.02205 224.061 0.996765 224.204 0.999748C224.491 0.998169 224.768 1.10688 224.975 1.30238C225.076 1.40038 225.156 1.51739 225.209 1.64631C225.263 1.77524 225.289 1.91339 225.286 2.05238V34.9471C225.25 35.2289 225.122 35.492 224.92 35.6971Z" fill="#FFFFFF"/><path d="M262.263 1.24971C262.351 1.3332 262.421 1.43358 262.467 1.54454C262.514 1.6555 262.536 1.77464 262.533 1.89444C262.53 2.06504 262.498 2.23397 262.439 2.39444L248.359 35.2892C248.301 35.4317 248.211 35.5597 248.095 35.6639C247.98 35.768 247.842 35.8457 247.691 35.8911C247.541 35.9365 247.382 35.9486 247.226 35.9264C247.07 35.9042 246.921 35.8483 246.79 35.7629C246.607 35.6544 246.468 35.4868 246.398 35.2892L232.427 2.55234C232.323 2.36621 232.268 2.15859 232.264 1.94708C232.262 1.82223 232.286 1.6982 232.334 1.58274C232.383 1.46728 232.456 1.36286 232.548 1.27602C232.638 1.1863 232.745 1.11544 232.864 1.0679C232.982 1.02036 233.11 0.997142 233.238 0.999708C233.491 0.999026 233.737 1.07641 233.941 1.22068C234.145 1.36496 234.297 1.56865 234.374 1.80234L247.426 32.355L260.532 1.64444C260.613 1.45695 260.748 1.29628 260.92 1.18186C261.093 1.06744 261.296 1.00418 261.505 0.999708C261.782 0.984505 262.053 1.07412 262.263 1.24971Z" fill="#FFFFFF"/><path d="M271.271 35.6969C271.174 35.8029 271.056 35.8873 270.922 35.9441C270.789 36.0009 270.645 36.0288 270.5 36.0259C270.352 36.0325 270.205 36.009 270.068 35.9569C269.93 35.9048 269.806 35.8252 269.702 35.7232C269.509 35.5193 269.407 35.2499 269.418 34.9732V2.07851C269.418 1.94028 269.446 1.8034 269.5 1.67569C269.554 1.54797 269.634 1.43193 269.735 1.33419C269.835 1.23644 269.954 1.15891 270.086 1.10601C270.217 1.05311 270.358 1.02588 270.5 1.02588C270.642 1.02588 270.783 1.05311 270.914 1.10601C271.045 1.15891 271.164 1.23644 271.265 1.33419C271.365 1.43193 271.445 1.54797 271.499 1.67569C271.554 1.8034 271.582 1.94028 271.582 2.07851V34.9732C271.557 35.2579 271.427 35.5243 271.217 35.7232" fill="#FFFFFF"/><path d="M305.299 1.27585C305.397 1.35984 305.476 1.46312 305.529 1.57881C305.583 1.69451 305.611 1.81999 305.611 1.94691C305.62 2.07641 305.599 2.20628 305.55 2.32696C305.501 2.44765 305.424 2.55608 305.327 2.64427C305.121 2.81784 304.854 2.90741 304.583 2.89427H293.113V34.9995C293.115 35.1293 293.089 35.258 293.038 35.3779C292.987 35.4977 292.911 35.6063 292.816 35.6969C292.642 35.8862 292.4 36.0038 292.14 36.0259C292.001 36.03 291.862 36.0052 291.734 35.953C291.606 35.9008 291.49 35.8224 291.396 35.7232C291.212 35.5354 291.11 35.2854 291.112 35.0259V2.89427H279.656C279.389 2.89615 279.132 2.79706 278.939 2.61796C278.835 2.53901 278.751 2.43704 278.694 2.32039C278.638 2.20375 278.61 2.07576 278.615 1.94691C278.611 1.81944 278.637 1.69281 278.691 1.57656C278.745 1.46031 278.825 1.35749 278.926 1.27585C279.119 1.09675 279.376 0.997667 279.643 0.999538H304.583C304.849 0.997667 305.106 1.09675 305.299 1.27585Z" fill="#FFFFFF"/><path d="M334.797 2.39442L323.085 17.8944V34.9997C323.084 35.1303 323.055 35.2593 323.002 35.3791C322.949 35.4989 322.871 35.607 322.774 35.6971C322.567 35.8916 322.29 36.0004 322.003 36.0004C321.715 36.0004 321.439 35.8916 321.232 35.6971C321.134 35.607 321.057 35.4989 321.003 35.3791C320.95 35.2593 320.922 35.1303 320.921 34.9997V18.1049L309.154 2.39442C309.011 2.20934 308.939 1.9811 308.951 1.74968C308.955 1.62591 308.986 1.50435 309.042 1.39315C309.098 1.28195 309.177 1.18369 309.276 1.10494C309.373 1.00893 309.489 0.932714 309.616 0.880751C309.744 0.828788 309.881 0.802122 310.02 0.802313C310.194 0.794776 310.367 0.832195 310.521 0.910769C310.675 0.989343 310.806 1.10627 310.899 1.24968L322.003 15.9997L333.107 1.24968C333.196 1.10636 333.324 0.989185 333.476 0.910464C333.629 0.831744 333.8 0.794385 333.972 0.802313C334.114 0.79664 334.255 0.823451 334.384 0.880588C334.514 0.937724 334.627 1.02359 334.716 1.13126C334.885 1.29701 334.986 1.51683 335 1.74968C334.983 1.97662 334.913 2.19691 334.797 2.39442Z" fill="#FFFFFF"/><path d="M124.971 36.0262C125.242 36.0264 125.506 35.9475 125.731 35.7998C125.955 35.652 126.128 35.4421 126.229 35.1972L139.754 2.63144C139.833 2.46946 139.878 2.29333 139.885 2.11388C139.892 1.93444 139.861 1.75548 139.795 1.58803C139.728 1.42057 139.627 1.26817 139.497 1.14021C139.368 1.01224 139.213 0.911423 139.042 0.843954C138.871 0.776486 138.687 0.743798 138.503 0.747902C138.318 0.752007 138.136 0.792818 137.969 0.867823C137.801 0.942827 137.651 1.05044 137.527 1.18403C137.404 1.31762 137.31 1.47436 137.251 1.6446L123.726 34.2104C123.642 34.4097 123.61 34.6261 123.632 34.8406C123.654 35.055 123.729 35.261 123.852 35.4403C123.975 35.6196 124.141 35.7668 124.336 35.8689C124.531 35.9711 124.749 36.0251 124.971 36.0262Z" fill="#8F0437"/><path d="M152.007 36.0262C151.737 36.0265 151.472 35.9476 151.248 35.7998C151.023 35.652 150.85 35.4421 150.75 35.1973L137.225 2.63151C137.115 2.31391 137.134 1.9676 137.278 1.6632C137.422 1.3588 137.68 1.11924 137.999 0.993368C138.318 0.867499 138.674 0.864802 138.995 0.985827C139.316 1.10685 139.578 1.34248 139.727 1.64467L153.252 34.2105C153.336 34.4098 153.368 34.6262 153.347 34.8406C153.325 35.0551 153.249 35.261 153.126 35.4403C153.003 35.6197 152.837 35.7669 152.642 35.869C152.447 35.9712 152.229 36.0252 152.007 36.0262Z" fill="#D61E57"/></g><defs><clipPath id="lc"><rect width="335" height="36" fill="white" transform="translate(0 0.5)"/></clipPath></defs></svg>
+  </div>
+  <div class="loader-track"><div class="loader-fill" id="loader-fill"></div></div>
+  <div class="loader-meta" id="loader-meta">Preparing experience — 0%</div>
+</div>
+
+<!-- ======================================================
+     NAV
+====================================================== -->
+<nav id="nav">
+  <svg viewBox="0 0 335 37" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet"><g clip-path="url(#nc)"><path d="M18.9351 16.2894C20.3353 14.7213 21.0702 12.694 20.9909 10.6183C21.0485 9.60399 20.8961 8.58873 20.543 7.63269C20.1899 6.67665 19.6431 5.79928 18.9351 5.05255C18.2053 4.35063 17.3323 3.80531 16.3726 3.45176C15.4128 3.09822 14.3875 2.94429 13.3628 2.99992H2.16417V18.4473H13.3628C14.3977 18.5094 15.4339 18.3482 16.3973 17.9752C17.3606 17.6021 18.2273 17.0264 18.9351 16.2894ZM20.477 3.71044C21.3788 4.62803 22.0828 5.71195 22.5474 6.89833C23.0119 8.08471 23.2277 9.34956 23.182 10.6183C23.2042 12.3806 22.7914 14.1224 21.9782 15.6973C21.2089 17.1711 20.0214 18.3995 18.5564 19.2368C17.0178 20.1217 15.2583 20.577 13.471 20.5525H2.16417V34.9999C2.16121 35.1327 2.12958 35.2634 2.07133 35.3836C2.01308 35.5037 1.92951 35.6106 1.82604 35.6973C1.63015 35.895 1.36412 36.0127 1.08217 36.0262C0.939299 36.0292 0.797295 36.0039 0.664774 35.9519C0.532253 35.8999 0.411978 35.8222 0.311246 35.7236C0.210645 35.6306 0.131039 35.5182 0.0774858 35.3936C0.0239326 35.269 -0.00239655 35.1349 0.000171283 34.9999V1.99992C0.00129876 1.86932 0.0294199 1.74028 0.0828611 1.62048C0.136302 1.50067 0.213971 1.39255 0.311246 1.30255C0.40376 1.20791 0.514897 1.13235 0.638044 1.08036C0.761191 1.02837 0.893831 1.00101 1.02807 0.999917H13.3628C14.6601 0.945007 15.9551 1.15029 17.1673 1.60301C18.3795 2.05573 19.4831 2.7462 20.4094 3.6315" fill="#FFFFFF"/><path d="M48.9468 34.3026C49.0441 34.3926 49.1217 34.5008 49.1752 34.6206C49.2286 34.7404 49.2568 34.8694 49.2579 35C49.2622 35.1352 49.2366 35.2698 49.1829 35.3946C49.1293 35.5195 49.0488 35.6317 48.9468 35.7237C48.7538 35.9028 48.4967 36.0019 48.23 36H28.8487C28.5793 35.9902 28.3236 35.8817 28.133 35.6963C27.9424 35.5108 27.8309 35.2621 27.8208 35V2C27.8219 1.86941 27.85 1.74037 27.9035 1.62056C27.9569 1.50076 28.0346 1.39263 28.1319 1.30263C28.2244 1.208 28.3355 1.13244 28.4587 1.08045C28.5818 1.02845 28.7145 1.0011 28.8487 1H48.23C48.3642 1.0011 48.4969 1.02845 48.62 1.08045C48.7432 1.13244 48.8543 1.208 48.9468 1.30263C49.0441 1.39263 49.1217 1.50076 49.1752 1.62056C49.2286 1.74037 49.2568 1.86941 49.2579 2C49.2622 2.13524 49.2366 2.26981 49.1829 2.39464C49.1293 2.51947 49.0488 2.63167 48.9468 2.72368C48.7538 2.90279 48.4967 3.00187 48.23 3H29.9848V16.9474H45.9848C46.2542 16.9571 46.5099 17.0656 46.7005 17.2511C46.8912 17.4366 47.0027 17.6853 47.0127 17.9474C47.017 18.0826 46.9915 18.2172 46.9378 18.342C46.8841 18.4668 46.8036 18.579 46.7017 18.6711C46.5044 18.8406 46.2479 18.9301 45.9848 18.9211H29.9848V34H48.23C48.3642 34.0011 48.4969 34.0285 48.62 34.0804C48.7432 34.1324 48.8543 34.208 48.9468 34.3026Z" fill="#FFFFFF"/><path d="M61.9582 23.1447H77.539L69.6674 4.30262L61.9582 23.1447ZM84.7343 35.0526C84.7402 35.1842 84.7152 35.3154 84.6613 35.4362C84.6074 35.557 84.526 35.6643 84.4232 35.75C84.2067 35.9229 83.9321 36.012 83.6523 36C83.4273 36.0078 83.2054 35.9481 83.0166 35.8289C82.833 35.7204 82.6942 35.5529 82.6244 35.3553L78.3099 25.0526V25.1447H61.1467L56.981 35.3553C56.9211 35.5483 56.7969 35.7164 56.6279 35.8331C56.459 35.9499 56.2548 36.0086 56.0478 36C55.776 36.0131 55.5094 35.9236 55.3039 35.75C55.1222 35.5945 55.0064 35.3787 54.9793 35.1447C54.9281 34.9818 54.9281 34.8077 54.9793 34.6447L68.8559 1.55262C68.9142 1.33914 69.0484 1.15267 69.2346 1.0263C69.4201 0.938907 69.6237 0.893902 69.8297 0.894722C70.0519 0.877378 70.2737 0.932678 70.4599 1.05185C70.6461 1.17103 70.7861 1.34727 70.8576 1.55262L84.6802 34.7105C84.7044 34.8455 84.7044 34.9835 84.6802 35.1184" fill="#FFFFFF"/><path d="M117.505 35.1971C117.519 35.3513 117.491 35.5064 117.425 35.6471C117.358 35.7877 117.256 35.9093 117.126 35.9997C116.894 36.1632 116.615 36.2507 116.329 36.2497C116.187 36.2473 116.048 36.2141 115.922 36.1527C115.796 36.0912 115.685 36.003 115.598 35.8945L100.18 17.355L92.4705 24.3024V34.9471C92.4506 35.2303 92.3256 35.4968 92.1188 35.6971C92.0263 35.7918 91.9152 35.8673 91.792 35.9193C91.6689 35.9713 91.5362 35.9986 91.402 35.9997C91.2544 36.0081 91.1068 35.9854 90.9691 35.9331C90.8314 35.8809 90.7068 35.8004 90.604 35.6971C90.4117 35.4932 90.3096 35.2237 90.32 34.9471V2.05238C90.3118 1.91396 90.3342 1.77545 90.3855 1.64611C90.4368 1.51677 90.5159 1.39958 90.6175 1.30238C90.7183 1.20377 90.8386 1.1261 90.9711 1.07407C91.1036 1.02205 91.2456 0.996765 91.3885 0.999748C91.6763 0.998169 91.9533 1.10688 92.1594 1.30238C92.259 1.40103 92.3367 1.51846 92.3879 1.64744C92.4391 1.77642 92.4626 1.91423 92.4569 2.05238V21.7892L114.678 1.49975C114.771 1.40511 114.882 1.32955 115.005 1.27756C115.128 1.22557 115.261 1.19821 115.395 1.19712C115.53 1.19667 115.663 1.22333 115.786 1.27542C115.91 1.3275 116.021 1.40388 116.112 1.49975C116.212 1.58775 116.291 1.69549 116.345 1.81575C116.399 1.93602 116.425 2.06603 116.423 2.19712C116.425 2.3282 116.399 2.45822 116.345 2.57848C116.291 2.69874 116.212 2.80648 116.112 2.89448L101.884 15.8024L117.248 34.4997C117.41 34.6986 117.5 34.9436 117.505 35.1971Z" fill="#FFFFFF"/><path d="M185.549 4.69707C185.559 4.93227 185.488 5.16391 185.346 5.35497C185.26 5.47681 185.145 5.57644 185.011 5.64522C184.877 5.71401 184.727 5.74988 184.575 5.74971C184.357 5.7243 184.145 5.65723 183.953 5.55234C180.993 3.51614 177.462 2.41378 173.837 2.39444C171.044 2.37987 168.299 3.09968 165.892 4.47777C163.485 5.85585 161.506 7.84101 160.163 10.2234C158.734 12.7576 158.007 15.6096 158.053 18.4997C158 21.4031 158.727 24.2696 160.163 26.8155C161.497 29.2101 163.472 31.2086 165.88 32.5986C168.287 33.9887 171.037 34.7184 173.837 34.7102C177.464 34.6796 180.993 33.5582 183.94 31.4997C184.113 31.367 184.328 31.2972 184.548 31.3023C184.709 31.2969 184.868 31.3302 185.012 31.399C185.156 31.4679 185.28 31.5703 185.373 31.6971C185.51 31.8705 185.581 32.084 185.576 32.3023C185.579 32.4579 185.544 32.612 185.474 32.7517C185.403 32.8913 185.299 33.0125 185.17 33.105C183.58 34.1477 181.838 34.9548 180.004 35.4997C178.025 36.1479 175.952 36.4855 173.864 36.4997C170.7 36.5301 167.589 35.7154 164.869 34.1444C162.137 32.5922 159.882 30.357 158.337 27.6708C156.709 24.8625 155.879 21.6837 155.929 18.4602C155.879 15.2367 156.709 12.058 158.337 9.24971C159.882 6.56344 162.137 4.32825 164.869 2.77602C167.592 1.2435 170.691 0.456891 173.837 0.499706C177.855 0.494307 181.779 1.67831 185.089 3.89444C185.226 3.98272 185.34 4.10168 185.42 4.24133C185.5 4.38099 185.544 4.53727 185.549 4.69707Z" fill="#FFFFFF"/><path d="M215.872 1.27585C215.97 1.35984 216.048 1.46312 216.102 1.57881C216.155 1.69451 216.183 1.81999 216.183 1.94691C216.192 2.07641 216.172 2.20628 216.122 2.32696C216.073 2.44765 215.997 2.55608 215.899 2.64427C215.694 2.81906 215.427 2.90881 215.155 2.89427H203.7V34.9995C203.697 35.1998 203.634 35.3949 203.518 35.5602C203.401 35.7255 203.237 35.8535 203.046 35.9281C202.855 36.0027 202.646 36.0206 202.444 35.9795C202.243 35.9383 202.058 35.84 201.914 35.6969C201.739 35.505 201.642 35.2565 201.644 34.9995V2.89427H190.175C189.908 2.89615 189.651 2.79706 189.458 2.61796C189.358 2.53569 189.278 2.43276 189.224 2.31666C189.17 2.20056 189.144 2.07424 189.147 1.94691C189.147 1.81999 189.174 1.69451 189.228 1.57881C189.282 1.46312 189.36 1.35984 189.458 1.27585C189.651 1.09675 189.908 0.997667 190.175 0.999538H215.155C215.422 0.997667 215.679 1.09675 215.872 1.27585Z" fill="#FFFFFF"/><path d="M224.92 35.6971C224.828 35.7918 224.717 35.8673 224.594 35.9193C224.47 35.9713 224.338 35.9986 224.204 35.9997C224.056 36.0081 223.908 35.9854 223.771 35.9331C223.633 35.8809 223.508 35.8004 223.406 35.6971C223.213 35.4932 223.111 35.2237 223.122 34.9471V2.05238C223.115 1.91298 223.14 1.77387 223.193 1.64447C223.247 1.51507 223.329 1.39841 223.433 1.30238C223.533 1.20377 223.654 1.1261 223.786 1.07407C223.919 1.02205 224.061 0.996765 224.204 0.999748C224.491 0.998169 224.768 1.10688 224.975 1.30238C225.076 1.40038 225.156 1.51739 225.209 1.64631C225.263 1.77524 225.289 1.91339 225.286 2.05238V34.9471C225.25 35.2289 225.122 35.492 224.92 35.6971Z" fill="#FFFFFF"/><path d="M262.263 1.24971C262.351 1.3332 262.421 1.43358 262.467 1.54454C262.514 1.6555 262.536 1.77464 262.533 1.89444C262.53 2.06504 262.498 2.23397 262.439 2.39444L248.359 35.2892C248.301 35.4317 248.211 35.5597 248.095 35.6639C247.98 35.768 247.842 35.8457 247.691 35.8911C247.541 35.9365 247.382 35.9486 247.226 35.9264C247.07 35.9042 246.921 35.8483 246.79 35.7629C246.607 35.6544 246.468 35.4868 246.398 35.2892L232.427 2.55234C232.323 2.36621 232.268 2.15859 232.264 1.94708C232.262 1.82223 232.286 1.6982 232.334 1.58274C232.383 1.46728 232.456 1.36286 232.548 1.27602C232.638 1.1863 232.745 1.11544 232.864 1.0679C232.982 1.02036 233.11 0.997142 233.238 0.999708C233.491 0.999026 233.737 1.07641 233.941 1.22068C234.145 1.36496 234.297 1.56865 234.374 1.80234L247.426 32.355L260.532 1.64444C260.613 1.45695 260.748 1.29628 260.92 1.18186C261.093 1.06744 261.296 1.00418 261.505 0.999708C261.782 0.984505 262.053 1.07412 262.263 1.24971Z" fill="#FFFFFF"/><path d="M271.271 35.6969C271.174 35.8029 271.056 35.8873 270.922 35.9441C270.789 36.0009 270.645 36.0288 270.5 36.0259C270.352 36.0325 270.205 36.009 270.068 35.9569C269.93 35.9048 269.806 35.8252 269.702 35.7232C269.509 35.5193 269.407 35.2499 269.418 34.9732V2.07851C269.418 1.94028 269.446 1.8034 269.5 1.67569C269.554 1.54797 269.634 1.43193 269.735 1.33419C269.835 1.23644 269.954 1.15891 270.086 1.10601C270.217 1.05311 270.358 1.02588 270.5 1.02588C270.642 1.02588 270.783 1.05311 270.914 1.10601C271.045 1.15891 271.164 1.23644 271.265 1.33419C271.365 1.43193 271.445 1.54797 271.499 1.67569C271.554 1.8034 271.582 1.94028 271.582 2.07851V34.9732C271.557 35.2579 271.427 35.5243 271.217 35.7232" fill="#FFFFFF"/><path d="M305.299 1.27585C305.397 1.35984 305.476 1.46312 305.529 1.57881C305.583 1.69451 305.611 1.81999 305.611 1.94691C305.62 2.07641 305.599 2.20628 305.55 2.32696C305.501 2.44765 305.424 2.55608 305.327 2.64427C305.121 2.81784 304.854 2.90741 304.583 2.89427H293.113V34.9995C293.115 35.1293 293.089 35.258 293.038 35.3779C292.987 35.4977 292.911 35.6063 292.816 35.6969C292.642 35.8862 292.4 36.0038 292.14 36.0259C292.001 36.03 291.862 36.0052 291.734 35.953C291.606 35.9008 291.49 35.8224 291.396 35.7232C291.212 35.5354 291.11 35.2854 291.112 35.0259V2.89427H279.656C279.389 2.89615 279.132 2.79706 278.939 2.61796C278.835 2.53901 278.751 2.43704 278.694 2.32039C278.638 2.20375 278.61 2.07576 278.615 1.94691C278.611 1.81944 278.637 1.69281 278.691 1.57656C278.745 1.46031 278.825 1.35749 278.926 1.27585C279.119 1.09675 279.376 0.997667 279.643 0.999538H304.583C304.849 0.997667 305.106 1.09675 305.299 1.27585Z" fill="#FFFFFF"/><path d="M334.797 2.39442L323.085 17.8944V34.9997C323.084 35.1303 323.055 35.2593 323.002 35.3791C322.949 35.4989 322.871 35.607 322.774 35.6971C322.567 35.8916 322.29 36.0004 322.003 36.0004C321.715 36.0004 321.439 35.8916 321.232 35.6971C321.134 35.607 321.057 35.4989 321.003 35.3791C320.95 35.2593 320.922 35.1303 320.921 34.9997V18.1049L309.154 2.39442C309.011 2.20934 308.939 1.9811 308.951 1.74968C308.955 1.62591 308.986 1.50435 309.042 1.39315C309.098 1.28195 309.177 1.18369 309.276 1.10494C309.373 1.00893 309.489 0.932714 309.616 0.880751C309.744 0.828788 309.881 0.802122 310.02 0.802313C310.194 0.794776 310.367 0.832195 310.521 0.910769C310.675 0.989343 310.806 1.10627 310.899 1.24968L322.003 15.9997L333.107 1.24968C333.196 1.10636 333.324 0.989185 333.476 0.910464C333.629 0.831744 333.8 0.794385 333.972 0.802313C334.114 0.79664 334.255 0.823451 334.384 0.880588C334.514 0.937724 334.627 1.02359 334.716 1.13126C334.885 1.29701 334.986 1.51683 335 1.74968C334.983 1.97662 334.913 2.19691 334.797 2.39442Z" fill="#FFFFFF"/><path d="M124.971 36.0262C125.242 36.0264 125.506 35.9475 125.731 35.7998C125.955 35.652 126.128 35.4421 126.229 35.1972L139.754 2.63144C139.833 2.46946 139.878 2.29333 139.885 2.11388C139.892 1.93444 139.861 1.75548 139.795 1.58803C139.728 1.42057 139.627 1.26817 139.497 1.14021C139.368 1.01224 139.213 0.911423 139.042 0.843954C138.871 0.776486 138.687 0.743798 138.503 0.747902C138.318 0.752007 138.136 0.792818 137.969 0.867823C137.801 0.942827 137.651 1.05044 137.527 1.18403C137.404 1.31762 137.31 1.47436 137.251 1.6446L123.726 34.2104C123.642 34.4097 123.61 34.6261 123.632 34.8406C123.654 35.055 123.729 35.261 123.852 35.4403C123.975 35.6196 124.141 35.7668 124.336 35.8689C124.531 35.9711 124.749 36.0251 124.971 36.0262Z" fill="#8F0437"/><path d="M152.007 36.0262C151.737 36.0265 151.472 35.9476 151.248 35.7998C151.023 35.652 150.85 35.4421 150.75 35.1973L137.225 2.63151C137.115 2.31391 137.134 1.9676 137.278 1.6632C137.422 1.3588 137.68 1.11924 137.999 0.993368C138.318 0.867499 138.674 0.864802 138.995 0.985827C139.316 1.10685 139.578 1.34248 139.727 1.64467L153.252 34.2105C153.336 34.4098 153.368 34.6262 153.347 34.8406C153.325 35.0551 153.249 35.261 153.126 35.4403C153.003 35.6197 152.837 35.7669 152.642 35.869C152.447 35.9712 152.229 36.0252 152.007 36.0262Z" fill="#D61E57"/></g><defs><clipPath id="nc"><rect width="335" height="36" fill="white" transform="translate(0 0.5)"/></clipPath></defs></svg>
+  <span class="nav-tag">St. Luke's Health Network × Content Transformation</span>
+</nav>
+
+<!-- ======================================================
+     HERO
+====================================================== -->
+<section id="hero">
+  <div id="hero-canvas-wrap">
+    <canvas id="hero-canvas"></canvas>
+  </div>
+  <div id="hero-gradient"></div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">PeakActivity × St. Luke's Health Network</div>
+    <h1 class="hero-heading">
+      <span class="h-word"><span class="h-word-inner">Content</span></span>
+      <span class="h-word"><span class="h-word-inner">Transformation</span></span>
+    </h1>
+    <p class="hero-sub">A Proposal for SLHN — From Invisible to Unmistakable</p>
+  </div>
+
+  <div class="scroll-cue">
+    <span class="scroll-cue-label">Scroll</span>
+    <div class="scroll-cue-body">
+    <div class="scroll-cue-line"></div>
+    <div class="scroll-key">
+      <div class="arrow-keys">
+        <div class="arrow-key arrow-key--left">
+          <svg width="8" height="10" viewBox="0 0 8 10" fill="currentColor"><polygon points="0,5 8,0 8,10"/></svg>
+        </div>
+        <div class="arrow-center-col">
+          <div class="arrow-key arrow-key--up">
+            <svg width="10" height="7" viewBox="0 0 10 7" fill="currentColor"><polygon points="5,0 10,7 0,7"/></svg>
+          </div>
+          <div class="arrow-key arrow-key--down">
+            <svg width="10" height="7" viewBox="0 0 10 7" fill="currentColor"><polygon points="5,7 0,0 10,0"/></svg>
+          </div>
+        </div>
+        <div class="arrow-key arrow-key--right">
+          <svg width="8" height="10" viewBox="0 0 8 10" fill="currentColor"><polygon points="8,5 0,0 0,10"/></svg>
+        </div>
+      </div>
+    </div>
+    </div><!-- /.scroll-cue-body -->
+  </div>
+</section>
+
+<!-- ======================================================
+     FIXED CANVAS + OVERLAY
+====================================================== -->
+<div id="canvas-layer">
+  <canvas id="main-canvas"></canvas>
+</div>
+<div id="canvas-overlay"></div>
+
+<!-- ======================================================
+     SCROLL CONTAINER
+====================================================== -->
+<div id="scroll-container">
+
+  <!-- 1. Opportunity -->
+  <div class="sw" style="height:170vh">
+    <section class="content-section align-left" id="s-opportunity">
+      <div class="section-inner">
+        <div class="s-label">001 / The Opportunity</div>
+        <h2 class="s-heading">Your story is<br>already <em>written…</em><br><span style="font-size:1.15em">Who's reading it?</span></h2>
+      </div>
+      <div class="section-inner opp-body">
+        <p class="s-body">St. Luke's Health Network is ranked <strong>#1 nationally</strong> for clinical quality — with Emmy-winning content, breakthrough AI protocols, and outcomes that outperform the industry. Yet this extraordinary story reaches almost no one.</p>
+        <p class="s-body">A content transformation isn't more marketing. It's making your clinical excellence visible at the scale it deserves.</p>
+        <div class="tag-row">
+          <span class="tag tm">#1 Nationally Ranked</span>
+          <span class="tag tc">Emmy-Winning Content</span>
+          <span class="tag to">Untapped Reach</span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- 2. Stats -->
+  <div class="sw" style="height:140vh">
+    <section class="content-section" id="s-stats">
+      <div class="stats-layout">
+        <div class="stats-eyebrow">The SLHN advantage — by the numbers</div>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-num"><span class="prefix">#</span><span class="counter" data-target="1">0</span></div>
+            <div class="stat-desc">National clinical ranking</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num"><span class="counter" data-target="11">0</span></div>
+            <div class="stat-desc">AI radiology protocols deployed</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num"><span class="counter" data-target="30">0</span><span class="suffix">%</span></div>
+            <div class="stat-desc">Lower sepsis mortality</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num"><span class="counter" data-target="1200">0</span><span class="suffix">+</span></div>
+            <div class="stat-desc">Patients monitored via AI daily</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Marquee (non-sticky, flows between sections) -->
+  <div id="marquee-wrap">
+    <div class="marquee-track" id="marquee-a">
+      <span class="marquee-item">The Three Pillars</span>
+      <span class="marquee-item">The Three Pillars</span>
+      <span class="marquee-item">The Three Pillars</span>
+      <span class="marquee-item">The Three Pillars</span>
+    </div>
+  </div>
+
+  <!-- 3. Pillar 1 — Clinical Storytelling -->
+  <div class="sw" style="height:160vh">
+    <section class="content-section align-left" id="s-p1">
+      <div class="section-inner">
+        <div style="display: inline-block; text-align: center;">
+          <div class="pillar-ghost">01</div>
+          <div class="s-label">Pillar One</div>
+        </div>
+        <h2 class="s-heading">Clinical<br><em style="font-size:1.1em">Storytelling</em></h2>
+      </div>
+      <div class="section-inner p1-body">
+        <p class="s-body">You have Emmy-winning video content, AI breakthrough stories, and life-changing patient outcomes. We transform these raw materials into resonant narratives that move across channels — from LinkedIn to local news to patient touchpoints.</p>
+        <p class="s-body">Every clinical innovation becomes a story. Every outcome becomes proof. Every physician becomes a voice the community trusts.</p>
+        <div class="tag-row">
+          <span class="tag">Patient Stories</span>
+          <span class="tag tc">Video Repurposing</span>
+          <span class="tag">Physician Spotlights</span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- 4. Pillar 2 — Executive Visibility -->
+  <div class="sw" style="height:160vh">
+    <section class="content-section align-center" id="s-p2">
+      <div class="section-inner">
+        <div style="display: inline-block; text-align: center;">
+          <div class="pillar-ghost">02</div>
+          <div class="s-label">Pillar Two</div>
+        </div>
+        <h2 class="s-heading">Executive<br><em>Visibility</em></h2>
+      </div>
+      <div class="section-inner p2-body">
+        <p class="s-body">Your C-suite and clinical leaders are some of the most innovative in regional healthcare. Their insights deserve an audience beyond the boardroom — published in trade press, amplified on LinkedIn, and positioned as the forward-thinking voice of health innovation in the Northeast.</p>
+        <div class="tag-row">
+          <span class="tag tm">Thought Leadership</span>
+          <span class="tag">LinkedIn Strategy</span>
+          <span class="tag to">Trade Press</span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- 5. Pillar 3 — Content Quality -->
+  <div class="sw" style="height:140vh">
+    <section class="content-section align-right" id="s-p3">
+      <div class="section-inner">
+        <div style="display: inline-block; text-align: center;">
+          <div class="pillar-ghost">03</div>
+          <div class="s-label">Pillar Three</div>
+        </div>
+        <h2 class="s-heading">Content Quality<br>& <em>Process</em></h2>
+      </div>
+      <div class="section-inner p3-body">
+        <p class="s-body">Sustainable transformation requires infrastructure — editorial rhythms, production workflows, and quality standards that make excellence repeatable. We audit your existing content, streamline production, and build systems that scale without burning out your team.</p>
+        <div class="tag-row">
+          <span class="tag">Editorial Systems</span>
+          <span class="tag tc">Content Audit</span>
+          <span class="tag">AI-Assisted Workflows</span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- 6. Two Paths Forward -->
+  <div class="sw" style="height:190vh">
+    <section class="content-section align-left" id="s-options">
+      <div class="section-inner" style="max-width:600px">
+        <div class="s-label">005 / The Investment</div>
+        <h2 class="s-heading">Two paths<br>to the <em style="font-size:1.3225em; position:relative; top:-20px">summit.</em></h2>
+        <p class="s-body">Both options deliver full PeakActivity partnership. The difference is scope and velocity.</p>
+      </div>
+      <div class="options-center">
+        <div class="opt-card featured">
+          <div class="opt-content">
+            <div class="opt-badge">Option A — Recommended</div>
+            <div class="opt-name">Full Content Transformation</div>
+            <div class="opt-price">$8,000<span>/mo</span></div>
+            <div class="opt-total">$48,000 total · 6 months</div>
+            <div class="opt-desc">Complete transformation across all three pillars — clinical storytelling, executive visibility, and content quality infrastructure. Maximum reach, maximum velocity.</div>
+          </div>
+        </div>
+        <div class="opt-card">
+          <div class="opt-content">
+            <div class="opt-badge">Option B — Strategic Partnership</div>
+            <div class="opt-name">Focused Engagement</div>
+            <div class="opt-price">$6,500<span>/mo</span></div>
+            <div class="opt-total">$39,000 total · 6 months</div>
+            <div class="opt-desc">Targeted focus on your highest-priority pillars. A leaner engagement with the same quality standards and direct partnership access.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- 7. Roadmap -->
+  <div class="sw" style="height:170vh">
+    <section class="content-section" id="s-roadmap" style="padding:0;">
+      <div class="roadmap-frame">
+        <div class="roadmap-bg-wrap">
+          <img src="assets/Moutain_path_2.svg" class="roadmap-bg" alt="" aria-hidden="true">
+          <div class="roadmap-draw-edge"></div>
+        </div>
+        <div class="roadmap-heading">
+          <div class="s-label">006 / 6-Month Roadmap</div>
+          <h2 class="s-heading">The path from<br>here to <em>the peak.</em></h2>
+        </div>
+        <div class="roadmap-list">
+          <div class="rm-item rm-item--1">
+            <div class="rm-num">01</div>
+            <div class="rm-phase">Months 1–2</div>
+            <div class="rm-title">Discovery & Foundation</div>
+            <div class="rm-desc">Content audit, brand voice alignment, editorial calendar setup, initial story identification and prioritisation.</div>
+          </div>
+          <div class="rm-item rm-item--2">
+            <div class="rm-num">02</div>
+            <div class="rm-phase">Months 3–4</div>
+            <div class="rm-title">Activation & Production</div>
+            <div class="rm-desc">First content cadence live. Clinical stories publishing. Executive LinkedIn presence activated. Trade press outreach begins.</div>
+          </div>
+          <div class="rm-item rm-item--3">
+            <div class="rm-num">03</div>
+            <div class="rm-phase">Months 5–6</div>
+            <div class="rm-title">Scale & Optimisation</div>
+            <div class="rm-desc">Performance review, channel expansion, systems handoff — SLHN owns the engine we built together.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+</div><!-- #scroll-container -->
+
+<!-- ======================================================
+     CTA
+====================================================== -->
+<section id="cta-section" data-persist="true">
+  <video id="cta-video" muted playsinline preload="auto">
+    <source src="assets/Arial_video_02.mp4" type="video/mp4">
+  </video>
+  <canvas id="cta-still"></canvas>
+  <div id="cta-mist"></div>
+  <div id="cta-tagline">
+    <div class="cta-label">PeakActivity × SLHN</div>
+    <h2>Let's Climb Mountains<br>Together</h2>
+  </div>
+</section>
+
+<footer id="footer">
+  <p class="footer-text">© 2026 PeakActivity · Confidential proposal prepared for St. Luke's Health Network</p>
+</footer>
+
+<!-- ======================================================
+     JAVASCRIPT
+====================================================== -->
+<script>
+/* ============================================================
+   CONSTANTS
+============================================================ */
+gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+
+const FRAME_COUNT = 179;
+const FRAME_SPEED = 2.0;   // scrub smoothing
+const IMAGE_SCALE = 1.0;   // canvas fill scale — full bleed
+
+/* ============================================================
+   CURSOR
+============================================================ */
+const $cursor = document.getElementById('cursor');
+const $ring   = document.getElementById('cursor-ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+(function tickCursor() {
+  rx += (mx - rx) * 0.1;
+  ry += (my - ry) * 0.1;
+  $cursor.style.cssText = `left:${mx}px;top:${my}px`;
+  $ring.style.cssText   = `left:${rx}px;top:${ry}px`;
+  requestAnimationFrame(tickCursor);
+})();
+
+/* ============================================================
+   CANVAS RESIZE
+============================================================ */
+const heroCanvas = document.getElementById('hero-canvas');
+const heroCtx    = heroCanvas.getContext('2d');
+const mainCanvas = document.getElementById('main-canvas');
+const mainCtx    = mainCanvas.getContext('2d');
+
+function resizeCanvases() {
+  heroCanvas.width  = mainCanvas.width  = window.innerWidth;
+  heroCanvas.height = mainCanvas.height = window.innerHeight;
+}
+resizeCanvases();
+window.addEventListener('resize', () => {
+  resizeCanvases();
+  if (frames[Math.floor(currentIdx)]?.complete) drawFrame(mainCtx, mainCanvas, frames[Math.floor(currentIdx)]);
+  if (frames[0]?.complete)          drawFrame(heroCtx, heroCanvas, frames[0]);
+});
+
+/* ============================================================
+   DRAW FRAME (cover-fit with IMAGE_SCALE)
+============================================================ */
+const isMobile = () => window.innerWidth <= 768;
+
+const MOBILE_SHIFT = 40;
+
+function drawFrame(ctx, canvas, img) {
+  if (!img || !img.complete || !img.naturalWidth) return;
+  const cw = canvas.width, ch = canvas.height;
+  const mobile = isMobile();
+  const shift = mobile ? MOBILE_SHIFT : 0;
+  const ir = img.naturalWidth / img.naturalHeight;
+  const cr = cw / ch;
+  let dw, dh;
+  if (ir > cr) { dh = (ch + shift) * IMAGE_SCALE; dw = dh * ir; }
+  else         { dw = cw * IMAGE_SCALE; dh = dw / ir; }
+  ctx.clearRect(0, 0, cw, ch);
+  const dy = mobile ? -shift : (ch - dh) / 2;
+  ctx.drawImage(img, (cw - dw) / 2, dy, dw, dh);
+}
+
+// Crossfade between two adjacent frames using fractional position
+function drawFrameBlend(ctx, canvas, imgA, imgB, frac) {
+  if (!imgA?.complete || !imgA.naturalWidth) return;
+  const cw = canvas.width, ch = canvas.height;
+  const mobile = isMobile();
+  const shift = mobile ? MOBILE_SHIFT : 0;
+  const ir = imgA.naturalWidth / imgA.naturalHeight;
+  const cr = cw / ch;
+  let dw, dh;
+  if (ir > cr) { dh = (ch + shift) * IMAGE_SCALE; dw = dh * ir; }
+  else         { dw = cw * IMAGE_SCALE; dh = dw / ir; }
+  const dx = (cw - dw) / 2;
+  const dy = mobile ? -shift : (ch - dh) / 2;
+  ctx.clearRect(0, 0, cw, ch);
+  ctx.drawImage(imgA, dx, dy, dw, dh);
+  if (frac > 0.005 && imgB?.complete && imgB.naturalWidth) {
+    ctx.globalAlpha = frac;
+    ctx.drawImage(imgB, dx, dy, dw, dh);
+    ctx.globalAlpha = 1;
+  }
+}
+
+/* ============================================================
+   FRAME PRELOAD
+============================================================ */
+const frames = new Array(FRAME_COUNT);
+let loadedCount = 0;
+let currentIdx  = FRAME_COUNT - 1;  // start at last frame (clouds)
+
+const $loaderFill = document.getElementById('loader-fill');
+const $loaderMeta = document.getElementById('loader-meta');
+
+function onLoad() {
+  loadedCount++;
+  const pct = Math.round((loadedCount / FRAME_COUNT) * 100);
+  $loaderFill.style.width = pct + '%';
+  $loaderMeta.textContent = `Preparing experience — ${pct}%`;
+  if (loadedCount === FRAME_COUNT) initSite();
+}
+
+for (let i = 0; i < FRAME_COUNT; i++) {
+  const img = new Image();
+  img.src = `assets/frames/frame_${String(i + 1).padStart(4, '0')}.webp`;
+  img.onload  = onLoad;
+  img.onerror = onLoad;
+  frames[i] = img;
+}
+
+/* ============================================================
+   INIT — runs after all frames loaded
+============================================================ */
+function initSite() {
+  // Draw first frame (clear mountain peak) on hero canvas
+  // Frame 0 = crystal clear mountain (start of reversed sequence)
+  drawFrame(heroCtx, heroCanvas, frames[0]);
+
+  // Hide loader, then animate hero
+  gsap.to('#loader', {
+    opacity: 0, duration: 0.7,
+    onComplete() {
+      document.getElementById('loader').style.display = 'none';
+      heroEntrance();
+    }
+  });
+
+  // Setup scroll-driven content (called after hero entrance)
+  setTimeout(setupScrollSite, 900);
+}
+
+/* ============================================================
+   HERO ENTRANCE
+============================================================ */
+function heroEntrance() {
+  // Circle-wipe reveal
+  gsap.to('#hero-canvas-wrap', {
+    clipPath: 'circle(150% at 50% 50%)',
+    duration: 1.8, ease: 'power3.out', delay: 0.1
+  });
+
+  // Eyebrow fade
+  gsap.to('.hero-eyebrow', { opacity: 1, duration: 0.9, delay: 0.5 });
+
+  // Word reveal — rise up from mist (blur + translateY)
+  gsap.set('.h-word-inner', { opacity: 0, filter: 'blur(14px)' });
+  gsap.to('.h-word-inner', {
+    y: 0, opacity: 1, filter: 'blur(0px)', duration: 1.3, stagger: 0.22, ease: 'power3.out', delay: 0.7
+  });
+
+  // Sub + scroll cue
+  gsap.to('.hero-sub',   { opacity: 1, duration: 0.8, delay: 1.5 });
+  gsap.to('.scroll-cue', { opacity: 1, duration: 0.8, delay: 2.1, onComplete: startScrollCueCycle });
+
+  // Hide/show scroll cue based on scroll position
+  let scrollCueShown = true;
+  window.addEventListener('scroll', () => {
+    if (window.scrollY < 50 && !scrollCueShown) {
+      scrollCueShown = true;
+      gsap.to('.scroll-cue', { opacity: 1, duration: 0.6 });
+      startScrollCueCycle();
+    } else if (window.scrollY >= 50 && scrollCueShown) {
+      scrollCueShown = false;
+      gsap.to('.scroll-cue', { opacity: 0, duration: 0.4 });
+      scrollCueCycleGen++;
+    }
+  }, { passive: true });
+}
+
+/* ============================================================
+   SCROLL-DRIVEN SETUP
+============================================================ */
+let scrollCueCycleGen = 0;
+
+function startScrollCueCycle() {
+  const myGen   = ++scrollCueCycleGen;
+  const line    = document.querySelector('.scroll-cue-line');
+  const key     = document.querySelector('.scroll-key');
+  const downKey = document.querySelector('.arrow-key--down');
+  const upKey   = document.querySelector('.arrow-key--up');
+
+  function alive() { return myGen === scrollCueCycleGen; }
+
+  function press(el, cb) {
+    if (!alive()) return;
+    el.classList.add('pressed');
+    setTimeout(() => {
+      el.classList.remove('pressed');
+      setTimeout(() => { if (alive()) cb(); }, 400);
+    }, 600);
+  }
+
+  function runSequence() {
+    if (!alive()) return;
+    press(downKey, () => {
+      press(upKey, () => {
+        press(downKey, () => {
+          if (alive()) setTimeout(runSequence, 1400);
+        });
+      });
+    });
+  }
+
+  function showDrip() {
+    if (!alive()) return;
+    downKey.classList.remove('pressed');
+    upKey.classList.remove('pressed');
+    key.classList.remove('visible');
+    line.classList.remove('hidden');
+    line.classList.remove('drip-active');
+    void line.offsetWidth;
+    line.classList.add('drip-active');
+    setTimeout(() => { if (alive()) showKey(); }, 1600 * 3 + 300);
+  }
+
+  function showKey() {
+    if (!alive()) return;
+    line.classList.add('hidden');
+    key.classList.add('visible');
+    runSequence();
+    setTimeout(() => { if (alive()) showDrip(); }, 5500);
+  }
+
+  showDrip();
+}
+
+function setupScrollSite() {
+  const $sc = document.getElementById('scroll-container');
+
+  // Draw starting frame (clear mountain) on main canvas immediately
+  drawFrame(mainCtx, mainCanvas, frames[0]);
+  updateTextContrast();
+
+  // Frame animation — native scroll event bypasses GSAP overhead entirely
+  let rafId = null;
+  const maxScroll = $sc.scrollHeight - window.innerHeight;
+
+  function updateTextContrast() {
+    if (!isMobile()) return;
+    try {
+      const px = mainCtx.getImageData(Math.floor(mainCanvas.width / 2), Math.floor(mainCanvas.height * 0.3), 1, 1).data;
+      const lum = (0.299 * px[0] + 0.587 * px[1] + 0.114 * px[2]) / 255;
+      document.documentElement.dataset.bgMode = lum < 0.5 ? 'dark' : 'light';
+    } catch(e) {}
+  }
+
+  function renderFrame() {
+    const n = Math.max(0, Math.min(window.scrollY / maxScroll, 1)) * (FRAME_COUNT - 1);
+    if (Math.abs(n - currentIdx) < 0.001) return;
+    currentIdx = n;
+    const idxA = Math.floor(n);
+    const idxB = Math.min(idxA + 1, FRAME_COUNT - 1);
+    drawFrameBlend(mainCtx, mainCanvas, frames[idxA], frames[idxB], n - idxA);
+    updateTextContrast();
+  }
+
+  window.addEventListener('scroll', () => {
+    cancelAnimationFrame(rafId);
+    rafId = requestAnimationFrame(renderFrame);
+  }, { passive: true });
+
+  // Animate each content section
+  animSection('#s-opportunity', 'left');
+  animSection('#s-stats',       'up');
+  animSection('#s-p1',          'right');
+  animSection('#s-p2',          'left');
+  animSection('#s-p3',          'right');
+  animSection('#s-options',     'left');
+  animSection('#s-roadmap',     'right');
+
+  // Slide number indicator — hidden on hero, starts at 01 from second slide
+  const slideNumWrap = document.getElementById('slide-num');
+  const slideEl = document.getElementById('slide-current');
+  const totalEl = document.querySelector('.slide-total');
+  totalEl.textContent = '07';
+  gsap.set(slideNumWrap, { opacity: 0 });
+
+  // Hide on hero and CTA, show in between
+  ScrollTrigger.create({
+    trigger: document.getElementById('hero'),
+    start: 'bottom 60%',
+    onLeave:     () => gsap.to(slideNumWrap, { opacity: 1, duration: 0.4 }),
+    onEnterBack: () => gsap.to(slideNumWrap, { opacity: 0, duration: 0.4 }),
+  });
+  ScrollTrigger.create({
+    trigger: document.getElementById('cta-section'),
+    start: 'top 60%',
+    onEnter:     () => gsap.to(slideNumWrap, { opacity: 0, duration: 0.4 }),
+    onLeaveBack: () => gsap.to(slideNumWrap, { opacity: 1, duration: 0.4 }),
+  });
+
+  const slides = [
+    { el: document.getElementById('s-opportunity'), num: '01' },
+    { el: document.getElementById('s-stats'),       num: '02' },
+    { el: document.getElementById('s-p1'),          num: '03' },
+    { el: document.getElementById('s-p2'),          num: '04' },
+    { el: document.getElementById('s-p3'),          num: '05' },
+    { el: document.getElementById('s-options'),     num: '06' },
+    { el: document.getElementById('s-roadmap'),     num: '07' },
+  ];
+  slides.forEach(({ el, num }) => {
+    if (!el) return;
+    ScrollTrigger.create({
+      trigger: el,
+      start: 'top 60%',
+      end: 'bottom 40%',
+      onEnter:      () => { slideEl.textContent = num; },
+      onEnterBack:  () => { slideEl.textContent = num; },
+    });
+  });
+
+  // Mountain SVG draw-on animation — plays to completion on enter, resets on leave
+  const drawEdge = document.querySelector('.roadmap-draw-edge');
+  let mountainTween = null;
+  ScrollTrigger.create({
+    trigger: '#s-roadmap',
+    start: 'top 80%',
+    onEnter() {
+      gsap.set('.roadmap-bg-wrap', { clipPath: 'inset(0 100% 0 0)' });
+      gsap.set(drawEdge, { opacity: 1 });
+      mountainTween = gsap.to('.roadmap-bg-wrap', {
+        clipPath: 'inset(0 0% 0 0)',
+        duration: 1.8,
+        ease: 'power2.inOut',
+        onComplete() { gsap.set(drawEdge, { opacity: 0 }); }
+      });
+    },
+    onLeaveBack() {
+      if (mountainTween) mountainTween.kill();
+      gsap.set('.roadmap-bg-wrap', { clipPath: 'inset(0 100% 0 0)' });
+      gsap.set(drawEdge, { opacity: 0 });
+    }
+  });
+
+  // Counters — reset and replay every time the stats section enters view
+  document.querySelectorAll('.counter').forEach(el => {
+    const target = +el.dataset.target;
+    let tween = null;
+    ScrollTrigger.create({
+      trigger: el, start: 'top 75%',
+      onEnter() {
+        if (tween) tween.kill();
+        el.textContent = '0';
+        tween = gsap.to({ v: 0 }, {
+          v: target, duration: 2.2, ease: 'power2.out',
+          snap: { v: 1 },
+          onUpdate() { el.textContent = Math.round(this.targets()[0].v).toLocaleString(); }
+        });
+      },
+      onLeaveBack() {
+        if (tween) tween.kill();
+        el.textContent = '0';
+      }
+    });
+  });
+
+  // Marquee — burst out from behind the mountain peak (center → full width)
+  const track = document.getElementById('marquee-a');
+  const clone  = track.cloneNode(true);
+  track.parentElement.appendChild(clone);
+  // Both run at base 10s — clone starts at half speed (= 20s equivalent)
+  const mTween1 = gsap.to(track, { xPercent: -50, duration: 10, ease: 'none', repeat: -1 });
+  const mTween2 = gsap.to(clone,  { xPercent: -50, duration: 10, ease: 'none', repeat: -1, delay: -7 });
+  mTween2.timeScale(0.5);
+
+  // Swap speeds every 7 seconds with a smooth transition
+  setInterval(() => {
+    const fast = mTween1.timeScale() === 1;
+    gsap.to(mTween1, { timeScale: fast ? 0.5 : 1, duration: 1.5, ease: 'power2.inOut' });
+    gsap.to(mTween2, { timeScale: fast ? 1 : 0.5, duration: 1.5, ease: 'power2.inOut' });
+  }, 7000);
+
+  // Reveal: text erupts from centre as if pushing through the mountain
+  gsap.to('#marquee-wrap', {
+    clipPath: 'inset(0 0% 0 0%)',
+    duration: 1.4,
+    ease: 'power4.out',
+    scrollTrigger: {
+      trigger: '#marquee-wrap',
+      start: 'top 75%',
+      toggleActions: 'play none none reverse'
+    }
+  });
+
+  // ── CTA: play once → freeze last frame → reset on scroll up ──
+  const ctaVideo = document.getElementById('cta-video');
+  const ctaStill = document.getElementById('cta-still');
+  const stillCtx = ctaStill.getContext('2d');
+
+  function captureStill() {
+    // file:// protocol: canvas drawImage on video is blocked by Chrome — just freeze the video in place
+    if (window.location.protocol === 'file:') {
+      ctaVideo.pause();
+      gsap.set(ctaVideo, { opacity: 1 });
+      return;
+    }
+
+    const w = ctaStill.offsetWidth;
+    const h = ctaStill.offsetHeight;
+    ctaStill.width  = w;
+    ctaStill.height = h;
+
+    // Replicate object-fit: cover so the frame matches the video exactly
+    const vw = ctaVideo.videoWidth;
+    const vh = ctaVideo.videoHeight;
+    const scale = Math.max(w / vw, h / vh);
+    const dw = vw * scale;
+    const dh = vh * scale;
+    const dx = (w - dw) / 2;
+    const dy = (h - dh) / 2;
+
+    stillCtx.drawImage(ctaVideo, dx, dy, dw, dh);
+    gsap.set(ctaStill, { opacity: 1 });
+    gsap.set(ctaVideo,  { opacity: 0 });
+    ctaVideo.pause();
+  }
+
+  let taglineTriggered = false;
+
+  function onCTATimeUpdate() {
+    if (!taglineTriggered && ctaVideo.duration && ctaVideo.currentTime >= ctaVideo.duration - 2) {
+      taglineTriggered = true;
+      gsap.to('#cta-tagline', { opacity: 1, y: 0, duration: 1.2, ease: 'power2.out' });
+    }
+  }
+
+  function startCTA() {
+    ctaVideo.currentTime = 0;
+    taglineTriggered = false;
+    gsap.set(ctaStill, { opacity: 0 });
+    gsap.set('#cta-tagline', { opacity: 0, y: 20 });
+
+    ctaVideo.addEventListener('timeupdate', onCTATimeUpdate);
+
+    // Capture the last frame the moment the video ends
+    ctaVideo.onended = captureStill;
+
+    // Start video immediately — plays while clouds rush past
+    ctaVideo.play();
+    gsap.to(ctaVideo, { opacity: 1, duration: 0.6, ease: 'power2.in' });
+
+    // Falling through clouds: whole mist layer blasts outward from center
+    gsap.to('#cta-mist', {
+      scale: 6,
+      opacity: 0,
+      duration: 0.45,
+      ease: 'power4.in',
+      transformOrigin: 'center center',
+    });
+  }
+
+  function resetCTA() {
+    ctaVideo.pause();
+    ctaVideo.currentTime = 0;
+    ctaVideo.onended = null;
+    ctaVideo.removeEventListener('timeupdate', onCTATimeUpdate);
+    taglineTriggered = false;
+    gsap.set('#cta-mist', { scale: 1, opacity: 1, transformOrigin: 'center center' });
+    gsap.set(ctaVideo, { opacity: 0 });
+    gsap.set(ctaStill, { opacity: 0 });
+    gsap.set('#cta-tagline', { opacity: 0, y: 20 });
+    stillCtx.clearRect(0, 0, ctaStill.width, ctaStill.height);
+  }
+
+  ScrollTrigger.create({
+    trigger: '#cta-section',
+    start: 'top 80%',
+    onEnter:     () => startCTA(),
+    onLeaveBack: () => resetCTA()
+  });
+}
+
+/* ============================================================
+   SECTION ANIMATION FACTORY
+============================================================ */
+function animSection(sel, dir) {
+  const el = document.querySelector(sel);
+  if (!el) return;
+
+  const label  = el.querySelector('.s-label');
+  const hdg    = el.querySelector('.s-heading');
+  const bodies = el.querySelectorAll('.s-body');
+  const tags   = el.querySelector('.tag-row');
+  const ghost  = el.querySelector('.pillar-ghost');
+  const opts   = el.querySelector('.options-stack') || el.querySelector('.options-center');
+  const rm     = el.querySelector('.roadmap-list');
+  const seye   = el.querySelector('.stats-eyebrow');
+  const sItems = el.querySelectorAll('.stat-item');
+
+  // Entrance direction
+  const xIn = dir === 'left' ? -44 : dir === 'right' ? 44 : 0;
+
+  const tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: el.parentElement,  // trigger on the .sw wrapper
+      start: 'top 65%',
+      toggleActions: 'play none none reverse'
+    }
+  });
+
+  // Roadmap items animate one-by-one; exclude container from blur set
+  const rmItems = rm ? [...rm.querySelectorAll('.rm-item')] : [];
+  if (rmItems.length) {
+    gsap.set(rm, { opacity: 1 });
+    gsap.set(rmItems, { opacity: 0, y: 18, filter: 'blur(8px)' });
+  }
+
+  // Set initial blur (mist) state on all text elements
+  const blurEls = [seye, ghost, label, hdg, ...bodies, tags, opts, rmItems.length ? null : rm].filter(Boolean);
+  const blurElsArr = [...(sItems.length ? sItems : [])];
+  gsap.set(blurEls,    { filter: 'blur(10px)' });
+  gsap.set(blurElsArr, { filter: 'blur(10px)' });
+
+  if (seye)   tl.to(seye,   { opacity: 1, filter: 'blur(0px)', duration: 0.65 });
+  if (sItems.length) tl.to(sItems, { opacity: 1, y: 0, filter: 'blur(0px)', stagger: 0.1, duration: 0.8, ease: 'power3.out' }, '-=0.2');
+
+  if (ghost)  tl.to(ghost,  { opacity: 1, x: 0, filter: 'blur(0px)', duration: 0.7,  ease: 'power2.out' });
+  if (label)  tl.to(label,  { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.55, ease: 'power2.out' }, ghost ? '-=0.3' : '+=0');
+  if (hdg)    tl.to(hdg,    { opacity: 1, y: 0, x: 0, filter: 'blur(0px)', duration: 0.95, ease: 'power3.out' }, '-=0.25');
+  if (bodies.length) tl.to(bodies, { opacity: 1, y: 0, filter: 'blur(0px)', stagger: 0.1, duration: 0.75, ease: 'power2.out' }, '-=0.55');
+  if (tags)   tl.to(tags,   { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.55 }, '-=0.35');
+  if (opts)   tl.to(opts,   { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.7, ease: 'power3.out' }, '-=0.35');
+  if (rmItems.length) tl.to(rmItems, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.65, ease: 'power3.out', stagger: 0.45 }, '-=0.35');
+  else if (rm) tl.to(rm,    { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.7, ease: 'power3.out' }, '-=0.35');
+
+  // Add slide direction to heading initial state
+  if (hdg) gsap.set(hdg, { x: xIn });
+}
+
+/* ============================================================
+   ARROW KEY NAVIGATION
+============================================================ */
+function getSnapPoints() {
+  const points = [0]; // top of page (hero)
+  document.querySelectorAll('.sw').forEach(sw => {
+    points.push(sw.getBoundingClientRect().top + window.scrollY);
+  });
+  const marquee = document.getElementById('marquee-wrap');
+  if (marquee) points.push(marquee.getBoundingClientRect().top + window.scrollY);
+  const cta = document.getElementById('cta-section');
+  if (cta) points.push(cta.getBoundingClientRect().top + window.scrollY);
+  return points.sort((a, b) => a - b);
+}
+
+let isScrolling = false;
+
+document.addEventListener('keydown', e => {
+  if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
+  if (isScrolling) return;
+  e.preventDefault();
+
+  const points  = getSnapPoints();
+  const current = window.scrollY;
+  const buffer  = 60; // px tolerance so we don't get stuck on current
+
+  let target;
+  if (e.key === 'ArrowDown') {
+    target = points.find(p => p > current + buffer);
+  } else {
+    target = [...points].reverse().find(p => p < current - buffer);
+  }
+
+  if (target === undefined) return;
+
+  isScrolling = true;
+  gsap.to(window, {
+    scrollTo: { y: target, autoKill: false },
+    duration: 1.1,
+    ease: 'power3.inOut',
+    onComplete() { isScrolling = false; }
+  });
+});
+</script>
+
+<div id="slide-num">
+  <span id="slide-current">01</span><span class="slide-sep"> / </span><span class="slide-total">09</span>
+</div>
+
+</body>
+</html>
