@@ -2,7 +2,7 @@ import { readFileSync } from "fs"
 import { join } from "path"
 import { NextRequest, NextResponse } from "next/server"
 
-const PASSWORD = "DME12345!!!"
+const PASSWORD = "peakactivity!"
 const COOKIE = "tt_auth"
 
 const loginPage = `<!DOCTYPE html>
