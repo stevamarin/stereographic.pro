@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="About Matt Simunec — CEO of DME Studio. From Belgrade to Daytona Beach, building a B2B video agency and the AI systems that run it." />
+  <title>About — Matt Simunec</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- NAVIGATION -->
+  <nav class="site-nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-brand">Matt Simunec</a>
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <ul class="nav-links" role="list">
+        <li><a href="the-build.html">The Build</a></li>
+        <li><a href="about.html" class="active">About</a></li>
+        <li><a href="speaking.html">Speaking</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- PAGE HEADER -->
+  <header class="page-header">
+    <div class="wrap">
+      <span class="label">About</span>
+      <h1>The long version.</h1>
+      <p>For those who want to know who's behind the work.</p>
+    </div>
+  </header>
+
+  <!-- PHOTO PLACEHOLDER -->
+  <div class="wrap">
+    <div class="photo-placeholder" role="img" aria-label="Photo of Matt Simunec">Photo</div>
+  </div>
+
+  <!-- STORY -->
+  <section class="section" id="story">
+    <div class="wrap">
+      <div class="section-header">
+        <span class="label">The story</span>
+        <h2>From Belgrade to Daytona</h2>
+      </div>
+      <p>I grew up in Serbia with an early obsession with how things work — not just the output, but the systems underneath. That instinct drove me to media production, then to running a studio, then, eventually, to building the infrastructure that makes the studio run.</p>
+      <p style="margin-top: 20px;">DME Studio started as a one-person operation doing scrappy B2B video work. It grew into a 10-person agency producing content for companies across North America and Europe — with teams operating out of Daytona Beach and Belgrade simultaneously. We figured out how to make that work.</p>
+      <p style="margin-top: 20px;">A few years in, I started building automation into our operations — not because it was fashionable, but because the alternative was hiring my way through every bottleneck. I'm a builder by instinct. When something breaks or slows down, I'd rather redesign the system than add more people to the broken one.</p>
+    </div>
+  </section>
+
+  <!-- THE AI TURN -->
+  <section class="section" id="the-build">
+    <div class="wrap">
+      <div class="section-header">
+        <span class="label">The build</span>
+        <h2>Why I started building agents</h2>
+      </div>
+      <p>The honest answer: I got tired of doing the same things twice. Client intake, project briefs, status updates, caption processing — work that was necessary but mechanical. In 2023, I started building agents to handle that layer. By the end of 2024, our operations ran differently.</p>
+      <p style="margin-top: 20px;">This isn't a pivot or a rebrand. DME Studio still makes B2B video. But I now run it with AI infrastructure I built myself, and I think that changes what's possible for a small team.</p>
+    </div>
+  </section>
+
+  <!-- PERSONAL -->
+  <section class="section" id="personal">
+    <div class="wrap">
+      <div class="section-header">
+        <span class="label">Outside the work</span>
+        <h2>The rest of it</h2>
+      </div>
+      <p>I live in Daytona Beach with my family. I'm drawn to things that reward patience — building systems, long-form reading, learning how adjacent fields solve problems I have. Most of what I've learned about operations, I learned from manufacturing, not media.</p>
+    </div>
+  </section>
+
+  <!-- THE WHY -->
+  <section class="section" id="why">
+    <div class="wrap">
+      <div class="section-header">
+        <span class="label">The why</span>
+        <h2>What drives this</h2>
+      </div>
+      <p>Small teams shouldn't have to choose between scale and quality. That's the thesis. I believe a 10-person operation can do work that used to require 40 people — if the systems are right. I'm building those systems. The Build Log is how I share what I learn.</p>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section" id="cta">
+    <div class="wrap">
+      <p>Want to see the work? <a href="https://dme.studio" target="_blank" rel="noopener noreferrer" style="color: var(--text); font-weight: 500; text-decoration: underline; text-decoration-color: var(--border-strong); text-underline-offset: 3px;">Visit dme.studio &#8594;</a></p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <ul class="footer-links" role="list">
+        <li><a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+        <li><a href="https://dme.studio" target="_blank" rel="noopener noreferrer">dme.studio</a></li>
+        <li><a href="the-build.html">The Build</a></li>
+        <li><a href="speaking.html">Speaking</a></li>
+      </ul>
+      <span class="footer-copy">&#169; 2026 Matt Simunec</span>
+    </div>
+  </footer>
+
+  <script>
+    const toggle = document.querySelector('.nav-toggle');
+    const links = document.querySelector('.nav-links');
+    toggle.addEventListener('click', () => {
+      const isOpen = links.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', isOpen);
+    });
+  </script>
+
+</body>
+</html>
