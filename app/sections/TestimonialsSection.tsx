@@ -35,7 +35,7 @@ const testimonials = [
     title: "Audio Mixing",
   },
   {
-    quote: "Stevan did a really great job for me. His English was perfect. He seems really smart, organized, and kind. He was responsible, communicated well, and I am happy with the end-product. I really recommend using him.",
+    quote: "Stevan did a really great job for me. His English was perfect. He seems really smart, organized, and kind. He was responsible, communicated well, and I am happy with the end-product. I really recommend working with him.",
     name: "Noah Elkrief",
     title: "Audio Optimization",
   },
