@@ -21,10 +21,12 @@ export function HomeSection() {
         loop
         muted
         playsInline
+        preload="auto"
         disablePictureInPicture
+        poster="/background-poster.webp"
         className="absolute top-0 left-0 w-full h-full object-cover origin-top scale-[1.45] -translate-y-[215px] opacity-80 md:opacity-100 md:translate-y-0 md:origin-center md:scale-[1.02] md:object-contain z-0"
       >
-        <source src="/background.mp4" type="video/mp4" />
+        <source src="/background.webm" type="video/webm" />
       </video>
 
       {/* Logo display */}
