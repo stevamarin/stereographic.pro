@@ -67,7 +67,7 @@ export function FooterSection() {
   }
 
   return (
-    <section id="contact" className="min-h-screen snap-start scroll-mt-[45px] bg-black relative overflow-hidden">
+    <section id="contact" className="min-h-screen scroll-mt-[45px] bg-black relative overflow-hidden">
       <div className="flex flex-col items-center justify-center min-h-screen px-4 sm:px-6 py-16 md:py-24">
         <LoadingWrapper delay={100}>
           {/* Logo */}
@@ -178,7 +178,7 @@ export function FooterSection() {
                 className="bg-white/5 border-white/10 text-white placeholder:text-gray-500 focus-visible:border-purple-500 focus-visible:ring-purple-500/20 font-sora resize-none min-h-[100px]"
               />
 
-              {/* Honeypot — hidden from real users, bots fill it in */}
+              {/* Honeypot - hidden from real users, bots fill it in */}
               <input
                 name="_hp"
                 type="text"

@@ -3,7 +3,7 @@ import Image from "next/image"
 
 export const metadata: Metadata = {
   title: "StereoGraphic Production | Links",
-  description: "Connect with StereoGraphic Production — portfolio, booking, social media, and more.",
+  description: "Connect with StereoGraphic Production - portfolio, booking, social media, and more.",
 }
 
 const links = [

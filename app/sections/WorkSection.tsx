@@ -258,6 +258,10 @@ const designProjects: Project[] = [
   },
 ]
 
+// Archived 2026-06-02: design work (Nikola Mijailović) hidden to keep the site
+// focused on audio production. Set to true to bring the Design Projects tab back.
+const SHOW_DESIGN = false
+
 // Project Modal Component
 function ProjectModal({ project }: { project: Project }) {
   const { requestMenuOpen } = useDialog()
@@ -414,10 +418,11 @@ export function WorkSection() {
   }
 
   return (
-    <section id="work" className="min-h-screen snap-start scroll-mt-[45px] bg-black overflow-y-auto pt-[25px] md:pt-[calc(3rem+40px)] pb-32">
+    <section id="work" className="min-h-screen scroll-mt-[45px] bg-black overflow-y-auto pt-[25px] md:pt-[calc(3rem+40px)] pb-32">
       <div className="px-4 sm:px-6 lg:px-8 xl:px-16 2xl:px-24">
         <div className="max-w-[1800px] mx-auto">
-          {/* Project Type Buttons */}
+          {/* Project Type Buttons - toggle hidden while design is archived (SHOW_DESIGN) */}
+          {SHOW_DESIGN && (
           <LoadingWrapper delay={100}>
             <div className="sticky top-[25px] z-[50] py-3 flex items-center justify-center gap-3 sm:gap-4 mb-[26px] md:mb-8">
               <Button
@@ -442,6 +447,7 @@ export function WorkSection() {
               </Button>
             </div>
           </LoadingWrapper>
+          )}
 
           {/* Hero Project */}
           <LoadingWrapper delay={200}>

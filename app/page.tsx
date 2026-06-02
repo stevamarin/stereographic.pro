@@ -50,8 +50,8 @@ export default function HomePage() {
       // Only trigger bounce when scrolling down and hitting bottom (not during navbar navigation)
       if (isAtBottom && scrollTop > lastScrollTop && !isNavigating) {
         setShouldBounce(true)
-        // Remove bounce class after animation completes
-        setTimeout(() => setShouldBounce(false), 400)
+        // Remove bounce class after animation completes (must match the 0.5s animation)
+        setTimeout(() => setShouldBounce(false), 500)
       }
 
       lastScrollTop = scrollTop

@@ -6,6 +6,9 @@ import { useEffect, useRef, useState, useCallback } from "react"
 import { LoadingWrapper } from "@/components/loading-wrapper"
 import { socialLinks } from "@/lib/config/social-links"
 
+// Archived 2026-06-02: Nikola Mijailović (design) hidden to keep the site focused
+// on audio production. Set to true to bring his About section back.
+const SHOW_NIKOLA = false
 
 const clientLogos = [
   "allermi.png",
@@ -73,6 +76,12 @@ export function AboutSection() {
     }, 3000)
   }
 
+  // Pause on trackpad/wheel scrolling too (wheel events don't fire mousedown).
+  const handleLogoWheel = () => {
+    handleLogoInteractionStart()
+    handleLogoInteractionEnd()
+  }
+
   useEffect(() => {
     const isMobile = window.matchMedia("(hover: none) or (pointer: coarse)").matches
     if (!isMobile || !photoRef.current) return
@@ -99,7 +108,7 @@ export function AboutSection() {
   }, [])
 
   return (
-    <section id="about" className="min-h-screen snap-start scroll-mt-[45px] bg-black overflow-y-auto pt-[31px] md:pt-[calc(4rem+15px)] pb-16">
+    <section id="about" className="min-h-screen scroll-mt-[45px] bg-black overflow-y-auto pt-[31px] md:pt-[calc(4rem+15px)] pb-16">
       <div className="px-4 sm:px-6 lg:px-8 xl:px-16 2xl:px-24">
         <div className="max-w-[1800px] mx-auto">
           {/* Stevan Section */}
@@ -311,7 +320,8 @@ export function AboutSection() {
             </div>
           </LoadingWrapper>
 
-          {/* Nikola Section */}
+          {/* Nikola Section - archived 2026-06-02 (see SHOW_NIKOLA flag at top of file) */}
+          {SHOW_NIKOLA && (
           <LoadingWrapper delay={300}>
             <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
               {/* Nikola Info - Left on desktop */}
@@ -458,6 +468,7 @@ export function AboutSection() {
               </div>
             </div>
           </LoadingWrapper>
+          )}
         </div>
       </div>
 
@@ -469,6 +480,7 @@ export function AboutSection() {
           ref={logoScrollRef}
           className="flex items-center overflow-x-auto cursor-grab active:cursor-grabbing"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none", WebkitOverflowScrolling: "touch" }}
+          onWheel={handleLogoWheel}
           onTouchStart={handleLogoInteractionStart}
           onTouchEnd={handleLogoInteractionEnd}
           onMouseDown={handleLogoInteractionStart}

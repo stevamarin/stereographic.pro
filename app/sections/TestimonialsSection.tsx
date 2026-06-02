@@ -116,8 +116,16 @@ export function TestimonialsSection() {
     }, 3000) // resume auto-scroll 3s after user stops
   }
 
+  // Trackpad / wheel scrolling fires `wheel`, not mousedown/touchstart - pause the
+  // auto-scroll on each wheel event and reset the resume timer so the user can
+  // scroll left/right smoothly without the animation fighting them.
+  const handleWheel = () => {
+    handleInteractionStart()
+    handleInteractionEnd()
+  }
+
   return (
-    <section className="snap-start bg-black py-20 md:py-28 overflow-hidden">
+    <section className="bg-black py-20 md:py-28 overflow-hidden">
       <div className="px-4 sm:px-6 lg:px-8 xl:px-16 2xl:px-24 mb-12">
         <div className="max-w-[1800px] mx-auto">
           <LoadingWrapper delay={100}>
@@ -144,6 +152,7 @@ export function TestimonialsSection() {
             ref={scrollRef}
             className="flex items-stretch overflow-x-auto scrollbar-hide cursor-grab active:cursor-grabbing"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none", WebkitOverflowScrolling: "touch" }}
+            onWheel={handleWheel}
             onTouchStart={handleInteractionStart}
             onTouchEnd={handleInteractionEnd}
             onMouseDown={handleInteractionStart}
