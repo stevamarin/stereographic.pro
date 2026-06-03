@@ -222,11 +222,6 @@ export function AboutSection() {
                   </a>
                 </div>
 
-                <p className="text-gray-300 leading-relaxed font-sora text-xl">
-                  Unlock the power of sound and elevate your projects to new heights. I specialize in audio
-                  post-production.
-                </p>
-
                 <div className="space-y-5">
                   <div className="flex items-center gap-3 group">
                     <div className="w-2 h-2 rounded-full bg-white transition-all duration-300 group-hover:bg-purple-400 group-hover:scale-125 group-hover:shadow-[0_0_8px_rgba(185,143,201,0.6)]"></div>

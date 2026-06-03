@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect, useRef } from "react"
 import { LoadingWrapper } from "@/components/loading-wrapper"
 
 const services = [
@@ -21,6 +22,7 @@ const services = [
     ),
     tags: ["Film", "Digital", "Gaming", "Music"],
     accent: "purple",
+    video: "1",
   },
   {
     title: "Sound Design",
@@ -32,6 +34,7 @@ const services = [
     ),
     tags: ["Film", "Commercials", "Games"],
     accent: "sky",
+    video: "2",
   },
   {
     title: "Dialogue Editing",
@@ -44,8 +47,9 @@ const services = [
         <line x1="8" y1="22" x2="16" y2="22" />
       </svg>
     ),
-    tags: ["Film", "Podcasts", "YouTube"],
+    tags: ["Film", "Commercials", "Podcasts", "Ai"],
     accent: "amber",
+    video: "3",
   },
   {
     title: "Original Score",
@@ -58,8 +62,9 @@ const services = [
         <circle cx="18" cy="16" r="3" />
       </svg>
     ),
-    tags: ["Film", "Ads", "Games"],
+    tags: ["Film", "Commercials", "Games"],
     accent: "rose",
+    video: "4",
   },
   {
     title: "Foley & SFX",
@@ -71,6 +76,7 @@ const services = [
     ),
     tags: ["Film", "Animation", "Commercials"],
     accent: "emerald",
+    video: "5",
   },
   {
     title: "Game Audio",
@@ -86,50 +92,73 @@ const services = [
     ),
     tags: ["Game Studios", "Interactive Media"],
     accent: "pink",
+    video: "6",
   },
 ]
 
 // Full class strings per accent (Tailwind needs literal names to compile them).
+// glow = colored wash sitting over the blurred video (top-left → out)
 const accents: Record<string, { icon: string; border: string; tag: string; glow: string }> = {
   purple: {
-    icon: "text-purple-400",
-    border: "hover:border-purple-500/30",
-    tag: "bg-purple-500/10 text-purple-300 border-purple-500/10",
-    glow: "from-purple-500/10",
+    icon: "text-purple-300",
+    border: "border-purple-500/15 hover:border-purple-400/40",
+    tag: "bg-purple-500/15 text-purple-200 border-purple-500/15",
+    glow: "from-purple-500/25 via-purple-500/5",
   },
   sky: {
-    icon: "text-sky-400",
-    border: "hover:border-sky-500/30",
-    tag: "bg-sky-500/10 text-sky-300 border-sky-500/10",
-    glow: "from-sky-500/10",
+    icon: "text-sky-300",
+    border: "border-sky-500/15 hover:border-sky-400/40",
+    tag: "bg-sky-500/15 text-sky-200 border-sky-500/15",
+    glow: "from-sky-500/25 via-sky-500/5",
   },
   emerald: {
-    icon: "text-emerald-400",
-    border: "hover:border-emerald-500/30",
-    tag: "bg-emerald-500/10 text-emerald-300 border-emerald-500/10",
-    glow: "from-emerald-500/10",
+    icon: "text-emerald-300",
+    border: "border-emerald-500/15 hover:border-emerald-400/40",
+    tag: "bg-emerald-500/15 text-emerald-200 border-emerald-500/15",
+    glow: "from-emerald-500/25 via-emerald-500/5",
   },
   amber: {
-    icon: "text-amber-400",
-    border: "hover:border-amber-500/30",
-    tag: "bg-amber-500/10 text-amber-300 border-amber-500/10",
-    glow: "from-amber-500/10",
+    icon: "text-amber-300",
+    border: "border-amber-500/15 hover:border-amber-400/40",
+    tag: "bg-amber-500/15 text-amber-200 border-amber-500/15",
+    glow: "from-amber-500/25 via-amber-500/5",
   },
   rose: {
-    icon: "text-rose-400",
-    border: "hover:border-rose-500/30",
-    tag: "bg-rose-500/10 text-rose-300 border-rose-500/10",
-    glow: "from-rose-500/10",
+    icon: "text-rose-300",
+    border: "border-rose-500/15 hover:border-rose-400/40",
+    tag: "bg-rose-500/15 text-rose-200 border-rose-500/15",
+    glow: "from-rose-500/25 via-rose-500/5",
   },
   pink: {
-    icon: "text-pink-400",
-    border: "hover:border-pink-500/30",
-    tag: "bg-pink-500/10 text-pink-300 border-pink-500/10",
-    glow: "from-pink-500/10",
+    icon: "text-pink-300",
+    border: "border-pink-500/15 hover:border-pink-400/40",
+    tag: "bg-pink-500/15 text-pink-200 border-pink-500/15",
+    glow: "from-pink-500/25 via-pink-500/5",
   },
 }
 
 export function ServicesSection() {
+  // Only play the card videos while the section is on screen — avoids 6 videos
+  // decoding (and their backdrop-blur layers compositing) when scrolled away.
+  const gridRef = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const grid = gridRef.current
+    if (!grid) return
+    const videos = Array.from(grid.querySelectorAll("video"))
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          videos.forEach((v) => v.play().catch(() => {}))
+        } else {
+          videos.forEach((v) => v.pause())
+        }
+      },
+      { threshold: 0.1 },
+    )
+    io.observe(grid)
+    return () => io.disconnect()
+  }, [])
+
   return (
     <section id="services" className="min-h-screen scroll-mt-[45px] bg-black py-20 md:py-28">
       <div className="px-4 sm:px-6 lg:px-8 xl:px-16 2xl:px-24">
@@ -145,19 +174,50 @@ export function ServicesSection() {
             </div>
           </LoadingWrapper>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {services.map((service, index) => {
               const accent = accents[service.accent] ?? accents.purple
               return (
               <LoadingWrapper key={service.title} delay={150 + index * 100} className="h-full">
-                <div className={`group relative h-full overflow-hidden p-6 sm:p-8 rounded-2xl border border-white/5 bg-white/[0.02] hover:bg-white/[0.05] ${accent.border} transition-all duration-500`}>
-                  {/* Huge sign behind the card - static, no hover transform */}
-                  <div className={`pointer-events-none absolute -bottom-12 -right-10 ${accent.icon} opacity-40 [&_svg]:w-56 [&_svg]:h-56`}>
-                    {service.icon}
-                  </div>
+                <div className={`group relative h-full overflow-hidden p-6 sm:p-8 rounded-2xl border bg-white/[0.02] ${accent.border} transition-all duration-500`}>
+                  {/* Looping ping-pong video behind the glass (forward+reverse baked in) */}
+                  <video
+                    className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-50"
+                    loop
+                    muted
+                    playsInline
+                    preload="none"
+                    poster={`/services/${service.video}.webp`}
+                    aria-hidden="true"
+                  >
+                    <source src={`/services/${service.video}.webm`} type="video/webm" />
+                    <source src={`/services/${service.video}.mp4`} type="video/mp4" />
+                  </video>
 
-                  {/* Tinted frosted glass over the sign */}
-                  <div className={`pointer-events-none absolute inset-0 backdrop-blur-xl bg-gradient-to-br ${accent.glow} to-transparent`} />
+                  {/* Frosted glass: blur is hard along the top & bottom edges and clears
+                      through the middle band so the video detail shows there */}
+                  <div
+                    className="pointer-events-none absolute inset-0 backdrop-blur-3xl"
+                    style={{
+                      WebkitMaskImage: "linear-gradient(to bottom, black 0%, transparent 8%, transparent 62%, black 90%, black 100%)",
+                      maskImage: "linear-gradient(to bottom, black 0%, transparent 8%, transparent 62%, black 90%, black 100%)",
+                    }}
+                  />
+
+                  {/* Same hard glass along the left & right edges */}
+                  <div
+                    className="pointer-events-none absolute inset-0 backdrop-blur-3xl"
+                    style={{
+                      WebkitMaskImage: "linear-gradient(to right, black 0%, transparent 8%, transparent 92%, black 100%)",
+                      maskImage: "linear-gradient(to right, black 0%, transparent 8%, transparent 92%, black 100%)",
+                    }}
+                  />
+
+                  {/* Even color tint over the glass */}
+                  <div className={`pointer-events-none absolute inset-0 bg-gradient-to-br ${accent.glow} to-transparent`} />
+
+                  {/* Flat dark overlay: keeps text readable without a visible gradient */}
+                  <div className="pointer-events-none absolute inset-0 bg-black/60" />
 
                   {/* Content */}
                   <div className="relative z-10 flex h-full flex-col">

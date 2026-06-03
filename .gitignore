@@ -24,4 +24,10 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+# local ffmpeg binaries (used to compress media; not part of the app)
+/.tools/
+
+# raw uncompressed source clips at repo root (compressed outputs live in public/services/)
+/[0-9]*.mp4
 next-env.d.ts
