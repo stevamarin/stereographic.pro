@@ -182,7 +182,7 @@ export function ServicesSection() {
                 <div className={`group relative h-full overflow-hidden p-6 sm:p-8 rounded-2xl border bg-white/[0.02] ${accent.border} transition-all duration-500`}>
                   {/* Looping ping-pong video behind the glass (forward+reverse baked in) */}
                   <video
-                    className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-50"
+                    className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-50 scale-105 blur-sm"
                     loop
                     muted
                     playsInline
