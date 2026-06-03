@@ -28,8 +28,10 @@ Add a new entry whenever something notable ships. Keep newest at the top.
 
 | Status | Date (Git push) | Date (Host push) | Change | Commit |
 |--------|-----------------|------------------|--------|--------|
-| ✅ | 2026-06-02 | _TBD_ | Archive Nikola Mijailović (design) - hide About bio + Work "Design Projects" tab via `SHOW_NIKOLA`/`SHOW_DESIGN` flags; site now focused on audio production. Code preserved for easy re-enable | _pending commit_ |
-| ✅ | 2026-06-02 | _TBD_ | Remove embedded client site folders (PeakActivity, Matija, Matija v2) from repo; backed up externally | _pending commit_ |
+| ✅ | 2026-06-03 | _TBD_ | Services cards: looping video backgrounds (compressed webm + mp4 fallback + webp posters, lazy-loaded via IntersectionObserver so they only play on screen) behind an edge-morphing frosted-glass mask with per-accent color tint + dark overlay; seamless loops (ping-pong for most cards, forward-only crossfade for card 4). Also standardize service tags (Ads→Commercials, Dialogue YouTube→Ai), remove the large background sign icons, and trim the generic line from Stevan's bio | `cd15c14` |
+| ✅ | 2026-06-02 | _TBD_ | Redesign Services cards (new copy, per-accent colors, large background icons, frosted glass); remove `snap-start` for free scrolling + soften bottom bounce (0.5s); pause testimonial + client-logo carousels on trackpad/wheel scroll | `7a714a3` |
+| ✅ | 2026-06-02 | _TBD_ | Archive Nikola Mijailović (design) - hide About bio + Work "Design Projects" tab via `SHOW_NIKOLA`/`SHOW_DESIGN` flags; site now focused on audio production. Code preserved for easy re-enable | `7a714a3` |
+| ✅ | 2026-06-02 | _TBD_ | Remove embedded client site folders (PeakActivity, Matija, Matija v2) from repo; backed up externally | `7a714a3` |
 | ✅ | 2026-04-25 | _TBD_ | Remove `/matt` and `/test-test` hidden routes | `6c7fe0a` |
 | ✅ | 2026-04-25 | _TBD_ | Switch landing background from MP4 → WebM with poster fallback | `1bd03ba` |
 | ✅ | 2026-03-24 | _TBD_ | Update Noah Elkrief testimonial wording | `d6a22b3` |
