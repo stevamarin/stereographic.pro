@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useState, useEffect, useCallback } from "react"
+import { useRef, useState, useEffect } from "react"
 import { LoadingWrapper } from "@/components/loading-wrapper"
 
 const testimonials = [
@@ -70,59 +70,25 @@ const testimonials = [
 const marqueeTestimonials = [...testimonials, ...testimonials]
 
 export function TestimonialsSection() {
-  const scrollRef = useRef<HTMLDivElement>(null)
-  const [isUserScrolling, setIsUserScrolling] = useState(false)
-  const resumeTimeoutRef = useRef<NodeJS.Timeout | null>(null)
-  const animationRef = useRef<number | null>(null)
-  const scrollPosRef = useRef(0)
-
-  const autoScroll = useCallback(() => {
-    if (isUserScrolling || !scrollRef.current) return
-
-    const el = scrollRef.current
-    scrollPosRef.current += 0.4 // speed: px per frame
-
-    // Loop: when we've scrolled past half (the duplicated set), reset
-    const halfWidth = el.scrollWidth / 2
-    if (scrollPosRef.current >= halfWidth) {
-      scrollPosRef.current -= halfWidth
-    }
-
-    el.scrollLeft = scrollPosRef.current
-    animationRef.current = requestAnimationFrame(autoScroll)
-  }, [isUserScrolling])
+  // CSS transform marquee (sub-pixel smooth, GPU-composited) — same approach
+  // as the client-logo carousel. Track holds two copies; -50% loops seamlessly.
+  const trackRef = useRef<HTMLDivElement>(null)
+  const [marqueeDuration, setMarqueeDuration] = useState(0)
+  const [marqueePaused, setMarqueePaused] = useState(false)
 
   useEffect(() => {
-    animationRef.current = requestAnimationFrame(autoScroll)
-    return () => {
-      if (animationRef.current) cancelAnimationFrame(animationRef.current)
-      if (resumeTimeoutRef.current) clearTimeout(resumeTimeoutRef.current)
+    const track = trackRef.current
+    if (!track) return
+    // Keep the previous ~24px/s speed: one set width / 24 = seconds per loop.
+    const measure = () => {
+      const oneSetWidth = track.scrollWidth / 2
+      if (oneSetWidth > 0) setMarqueeDuration(oneSetWidth / 24)
     }
-  }, [autoScroll])
-
-  const handleInteractionStart = () => {
-    setIsUserScrolling(true)
-    if (animationRef.current) cancelAnimationFrame(animationRef.current)
-    if (resumeTimeoutRef.current) clearTimeout(resumeTimeoutRef.current)
-  }
-
-  const handleInteractionEnd = () => {
-    if (resumeTimeoutRef.current) clearTimeout(resumeTimeoutRef.current)
-    resumeTimeoutRef.current = setTimeout(() => {
-      if (scrollRef.current) {
-        scrollPosRef.current = scrollRef.current.scrollLeft
-      }
-      setIsUserScrolling(false)
-    }, 3000) // resume auto-scroll 3s after user stops
-  }
-
-  // Trackpad / wheel scrolling fires `wheel`, not mousedown/touchstart - pause the
-  // auto-scroll on each wheel event and reset the resume timer so the user can
-  // scroll left/right smoothly without the animation fighting them.
-  const handleWheel = () => {
-    handleInteractionStart()
-    handleInteractionEnd()
-  }
+    measure()
+    const ro = new ResizeObserver(measure)
+    ro.observe(track)
+    return () => ro.disconnect()
+  }, [])
 
   return (
     <section className="bg-black py-20 md:py-28 overflow-hidden">
@@ -149,15 +115,15 @@ export function TestimonialsSection() {
           <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-24 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none" />
 
           <div
-            ref={scrollRef}
-            className="flex items-stretch overflow-x-auto scrollbar-hide cursor-grab active:cursor-grabbing"
-            style={{ scrollbarWidth: "none", msOverflowStyle: "none", WebkitOverflowScrolling: "touch" }}
-            onWheel={handleWheel}
-            onTouchStart={handleInteractionStart}
-            onTouchEnd={handleInteractionEnd}
-            onMouseDown={handleInteractionStart}
-            onMouseUp={handleInteractionEnd}
-            onMouseLeave={handleInteractionEnd}
+            ref={trackRef}
+            className="flex items-stretch w-max"
+            style={{
+              animation: marqueeDuration ? `logo-marquee ${marqueeDuration}s linear infinite` : undefined,
+              animationPlayState: marqueePaused ? "paused" : "running",
+              willChange: "transform",
+            }}
+            onMouseEnter={() => setMarqueePaused(true)}
+            onMouseLeave={() => setMarqueePaused(false)}
           >
             {marqueeTestimonials.map((testimonial, index) => (
               <div
