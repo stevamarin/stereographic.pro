@@ -9,7 +9,24 @@ export function HomeSection() {
 
   useEffect(() => {
     const video = videoRef.current
-    if (video) video.play().catch(() => {})
+    if (!video) return
+
+    // Normal case: autoplay works. iOS Low Power Mode blocks automatic
+    // playback, so this rejects — we then start on the first user gesture
+    // (user-initiated playback IS allowed, even in Low Power Mode).
+    video.play().catch(() => {})
+
+    const events = ["pointerdown", "touchstart", "keydown", "wheel", "scroll"]
+    const startOnGesture = () => {
+      video.play().then(cleanup).catch(() => {})
+    }
+    const cleanup = () =>
+      events.forEach((e) => window.removeEventListener(e, startOnGesture))
+
+    events.forEach((e) =>
+      window.addEventListener(e, startOnGesture, { passive: true }),
+    )
+    return cleanup
   }, [])
 
   return (
