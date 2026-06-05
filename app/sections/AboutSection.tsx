@@ -33,6 +33,26 @@ const clientLogos = [
   "yoveo.png",
 ]
 
+// Per-logo display height in the carousel (default applies when not listed).
+// Full literal class strings so Tailwind compiles them.
+const logoHeights: Record<string, string> = {
+  "logo_banini.png": "h-28 sm:h-36",
+  "Hitco_Logo.png": "h-24 sm:h-32",
+  "subaru.png": "h-28 sm:h-32",
+  "Vogue_Adria_logo.png": "h-24 sm:h-28",
+  "SnapMixDigital.png": "h-20 sm:h-24",
+  "StepMobile.png": "h-20 sm:h-24",
+  "roundbox-white.png": "h-12 sm:h-16",
+}
+const DEFAULT_LOGO_HEIGHT = "h-16 sm:h-20"
+
+// Bright/glossy logos that would blow out under the global 200% boost.
+const logoBrightness: Record<string, string> = {
+  "subaru.png": "brightness-125",
+  "the-sukkah-store.png": "brightness-125",
+}
+const DEFAULT_LOGO_BRIGHTNESS = "brightness-200"
+
 export function AboutSection() {
   const photoRef = useRef<HTMLDivElement>(null)
   const [mustacheVisible, setMustacheVisible] = useState(false)
@@ -495,7 +515,7 @@ export function AboutSection() {
                 height={100}
                 loading="lazy"
                 sizes="200px"
-                className={`w-auto opacity-70 hover:opacity-100 transition-opacity grayscale hover:grayscale-0 filter ${logo === "subaru.png" || logo === "the-sukkah-store.png" ? "brightness-125" : "brightness-200"} ${logo === "subaru.png" ? "h-28 sm:h-32" : logo === "Hitco_Logo.png" || logo === "logo_banini.png" ? "h-24 sm:h-32" : logo === "SnapMixDigital.png" || logo === "StepMobile.png" ? "h-20 sm:h-24" : "h-16 sm:h-20"}`}
+                className={`w-auto opacity-70 hover:opacity-100 transition-opacity grayscale hover:grayscale-0 filter ${logoBrightness[logo] ?? DEFAULT_LOGO_BRIGHTNESS} ${logoHeights[logo] ?? DEFAULT_LOGO_HEIGHT}`}
               />
             </div>
           ))}
