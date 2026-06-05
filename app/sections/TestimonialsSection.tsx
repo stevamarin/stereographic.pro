@@ -1,7 +1,7 @@
 "use client"
 
-import { useRef, useState, useEffect, useCallback } from "react"
 import { LoadingWrapper } from "@/components/loading-wrapper"
+import { useDragMarquee } from "@/hooks/use-drag-marquee"
 
 const testimonials = [
   {
@@ -70,67 +70,8 @@ const testimonials = [
 const marqueeTestimonials = [...testimonials, ...testimonials]
 
 export function TestimonialsSection() {
-  // Native scroll container (drag/swipe/wheel) with an rAF auto-scroll. Width is
-  // cached via ResizeObserver so the loop never reads scrollWidth per frame
-  // (that per-frame reflow was the old jank).
-  const scrollRef = useRef<HTMLDivElement>(null)
-  const [isUserScrolling, setIsUserScrolling] = useState(false)
-  const resumeTimeoutRef = useRef<NodeJS.Timeout | null>(null)
-  const animationRef = useRef<number | null>(null)
-  const scrollPosRef = useRef(0)
-  const halfWidthRef = useRef(0)
-
-  useEffect(() => {
-    const el = scrollRef.current
-    if (!el) return
-    const measure = () => {
-      halfWidthRef.current = el.scrollWidth / 2
-    }
-    measure()
-    const ro = new ResizeObserver(measure)
-    ro.observe(el)
-    return () => ro.disconnect()
-  }, [])
-
-  const autoScroll = useCallback(() => {
-    if (isUserScrolling || !scrollRef.current) return
-    const el = scrollRef.current
-    scrollPosRef.current += 0.4
-    const halfWidth = halfWidthRef.current
-    if (halfWidth > 0 && scrollPosRef.current >= halfWidth) {
-      scrollPosRef.current -= halfWidth
-    }
-    el.scrollLeft = scrollPosRef.current
-    animationRef.current = requestAnimationFrame(autoScroll)
-  }, [isUserScrolling])
-
-  useEffect(() => {
-    animationRef.current = requestAnimationFrame(autoScroll)
-    return () => {
-      if (animationRef.current) cancelAnimationFrame(animationRef.current)
-      if (resumeTimeoutRef.current) clearTimeout(resumeTimeoutRef.current)
-    }
-  }, [autoScroll])
-
-  const handleInteractionStart = () => {
-    setIsUserScrolling(true)
-    if (animationRef.current) cancelAnimationFrame(animationRef.current)
-    if (resumeTimeoutRef.current) clearTimeout(resumeTimeoutRef.current)
-  }
-
-  const handleInteractionEnd = () => {
-    if (resumeTimeoutRef.current) clearTimeout(resumeTimeoutRef.current)
-    resumeTimeoutRef.current = setTimeout(() => {
-      if (scrollRef.current) scrollPosRef.current = scrollRef.current.scrollLeft
-      setIsUserScrolling(false)
-    }, 3000)
-  }
-
-  // Trackpad/wheel fires `wheel`, not mousedown — pause and reset the resume timer.
-  const handleWheel = () => {
-    handleInteractionStart()
-    handleInteractionEnd()
-  }
+  // Smooth transform-based marquee (buttery auto-scroll on iOS) + draggable.
+  const marqueeRef = useDragMarquee(24)
 
   return (
     <section className="bg-black py-20 md:py-28 overflow-hidden">
@@ -157,15 +98,9 @@ export function TestimonialsSection() {
           <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-24 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none" />
 
           <div
-            ref={scrollRef}
-            className="flex items-stretch overflow-x-auto scrollbar-hide cursor-grab active:cursor-grabbing"
-            style={{ scrollbarWidth: "none", msOverflowStyle: "none", WebkitOverflowScrolling: "touch" }}
-            onWheel={handleWheel}
-            onTouchStart={handleInteractionStart}
-            onTouchEnd={handleInteractionEnd}
-            onMouseDown={handleInteractionStart}
-            onMouseUp={handleInteractionEnd}
-            onMouseLeave={handleInteractionEnd}
+            ref={marqueeRef}
+            className="flex items-stretch w-max touch-pan-y cursor-grab active:cursor-grabbing"
+            style={{ willChange: "transform" }}
           >
             {marqueeTestimonials.map((testimonial, index) => (
               <div
