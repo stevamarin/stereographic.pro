@@ -1,11 +1,12 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
 import { LoadingWrapper } from "@/components/loading-wrapper"
 
 export function HomeSection() {
   const videoRef = useRef<HTMLVideoElement>(null)
+  const [videoPlaying, setVideoPlaying] = useState(false)
 
   useEffect(() => {
     const video = videoRef.current
@@ -40,11 +41,22 @@ export function HomeSection() {
         playsInline
         preload="auto"
         disablePictureInPicture
-        poster="/background-poster.webp"
+        onPlaying={() => setVideoPlaying(true)}
         className="absolute top-0 left-0 w-full h-full object-cover origin-top scale-[1.45] -translate-y-[215px] opacity-80 md:opacity-100 md:translate-y-0 md:origin-center md:scale-[1.02] md:object-contain z-0"
       >
         <source src="/background.webm" type="video/webm" />
       </video>
+
+      {/* Poster overlay — covers the video (and iOS Safari's forced "play"
+          button in Low Power Mode) until the video actually starts playing,
+          then fades out. Matches the video's transforms so there's no jump. */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/background-poster.webp"
+        alt=""
+        aria-hidden="true"
+        className={`pointer-events-none absolute top-0 left-0 w-full h-full object-cover origin-top scale-[1.45] -translate-y-[215px] opacity-80 md:opacity-100 md:translate-y-0 md:origin-center md:scale-[1.02] md:object-contain z-0 transition-opacity duration-700 ${videoPlaying ? "!opacity-0" : ""}`}
+      />
 
       {/* Logo display */}
       <div className="absolute top-0 left-0 right-0 h-screen flex items-center justify-center">
