@@ -425,3 +425,14 @@ video::-webkit-media-controls-play-button {
   display: none !important;
   -webkit-appearance: none;
 }
+
+/* Client-logo marquee: GPU-composited transform for sub-pixel-smooth scroll.
+   The track holds two copies of the logos, so -50% loops seamlessly. */
+@keyframes logo-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}

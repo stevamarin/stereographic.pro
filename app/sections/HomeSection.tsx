@@ -30,7 +30,7 @@ export function HomeSection() {
   }, [])
 
   return (
-    <section id="home" className="h-screen snap-start flex items-center justify-center bg-black relative">
+    <section id="home" className="h-screen flex items-center justify-center bg-black relative">
       {/* Background Video */}
       <video
         ref={videoRef}
