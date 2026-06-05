@@ -13,6 +13,8 @@ const SHOW_NIKOLA = false
 const clientLogos = [
   "allermi_logo.png",
   "ASICS.png",
+  "Vogue_Adria_logo.png",
+  "yoveo.png",
   "carblip-2.png",
   "dme-video.png",
   "Hitco_Logo.png",
@@ -29,8 +31,6 @@ const clientLogos = [
   "subaru.png",
   "swisscom.png",
   "the-sukkah-store.png",
-  "Vogue_Adria_logo.png",
-  "yoveo.png",
 ]
 
 // Per-logo display height in the carousel (default applies when not listed).
