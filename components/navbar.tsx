@@ -236,7 +236,7 @@ export function Navbar({ onNavigationStart }: NavbarProps) {
       {/* Full Screen Mobile Menu Overlay */}
       <div
         className={`fixed inset-0 z-[105] md:hidden transition-all duration-700 ease-out ${
-          isOpen ? "opacity-100 visible" : "opacity-0 invisible"
+          isOpen ? "opacity-100 visible pointer-events-auto" : "opacity-0 invisible pointer-events-none"
         }`}
         onClick={closeMenu}
       >
