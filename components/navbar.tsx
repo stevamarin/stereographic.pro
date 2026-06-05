@@ -236,7 +236,7 @@ export function Navbar({ onNavigationStart }: NavbarProps) {
       {/* Full Screen Mobile Menu Overlay */}
       <div
         className={`fixed inset-0 z-[105] md:hidden transition-all duration-700 ease-out ${
-          isOpen ? "opacity-300 visible" : "opacity-0 invisible"
+          isOpen ? "opacity-100 visible" : "opacity-0 invisible"
         }`}
         onClick={closeMenu}
       >
@@ -248,8 +248,8 @@ export function Navbar({ onNavigationStart }: NavbarProps) {
 
         {/* Menu Content */}
         <div
-          className={`relative z-[55] h-full flex flex-col justify-center items-center transition-all duration-700 ease-out ${
-            isOpen ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
+          className={`relative z-[55] h-full flex flex-col justify-center items-center transition-opacity duration-500 ease-out ${
+            isOpen ? "opacity-100" : "opacity-0"
           }`}
         >
           {/* Logo */}
@@ -260,11 +260,11 @@ export function Navbar({ onNavigationStart }: NavbarProps) {
           {/* Navigation Links */}
           <nav className="flex flex-col items-center space-y-8">
             {[
-              { name: "Home", id: "home", delay: "delay-100" },
-              { name: "Work", id: "work", delay: "delay-200" },
-              { name: "Services", id: "services", delay: "delay-300" },
-              { name: "About", id: "about", delay: "delay-400" },
-              { name: "Let's Talk", id: "contact", delay: "delay-500" },
+              { name: "Home", id: "home" },
+              { name: "Work", id: "work" },
+              { name: "Services", id: "services" },
+              { name: "About", id: "about" },
+              { name: "Let's Talk", id: "contact" },
             ].map((item) => (
               <Button
                 key={item.name}
@@ -277,9 +277,7 @@ export function Navbar({ onNavigationStart }: NavbarProps) {
                     setIsOpen(false)
                   }, 320)
                 }}
-                className={`text-white hover:text-purple-300 text-2xl font-medium py-4 px-8 rounded-xl transition-all duration-300 relative overflow-hidden group ${
-                  isOpen ? `animate-in slide-in-from-bottom-4 ${item.delay}` : ""
-                } ${tappedButton === item.id ? "scale-[1.6] text-purple-300 drop-shadow-[0_0_24px_rgba(192,132,252,1)]" : "scale-100 hover:bg-purple-900/20"}`}
+                className={`text-white hover:text-purple-300 text-2xl font-medium py-4 px-8 rounded-xl transition-all duration-300 relative overflow-hidden group ${tappedButton === item.id ? "scale-[1.6] text-purple-300 drop-shadow-[0_0_24px_rgba(192,132,252,1)]" : "scale-100 hover:bg-purple-900/20"}`}
               >
                 <span className="relative z-10">{item.name}</span>
                 <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-purple-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -288,11 +286,7 @@ export function Navbar({ onNavigationStart }: NavbarProps) {
           </nav>
 
           {/* Contact Info */}
-          <div
-            className={`text-center mt-12 transition-all duration-500 ${
-              isOpen ? "animate-in slide-in-from-bottom-4 delay-600" : ""
-            }`}
-          >
+          <div className="text-center mt-12">
             <p className="text-gray-400 text-sm mb-2 font-sora">Get in touch</p>
             <a
               href="mailto:stevan@stereographic.pro"
