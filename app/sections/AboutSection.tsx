@@ -11,7 +11,8 @@ import { socialLinks } from "@/lib/config/social-links"
 const SHOW_NIKOLA = false
 
 const clientLogos = [
-  "allermi.png",
+  "allermi_logo.png",
+  "ASICS.png",
   "carblip-2.png",
   "dme-video.png",
   "Hitco_Logo.png",
@@ -26,7 +27,10 @@ const clientLogos = [
   "SnapMixDigital.png",
   "StepMobile.png",
   "subaru.png",
+  "swisscom.png",
   "the-sukkah-store.png",
+  "Vogue_Adria_logo.png",
+  "yoveo.png",
 ]
 
 export function AboutSection() {
@@ -491,7 +495,7 @@ export function AboutSection() {
                 height={100}
                 loading="lazy"
                 sizes="200px"
-                className={`w-auto opacity-70 hover:opacity-100 transition-opacity grayscale hover:grayscale-0 filter brightness-200 ${logo === "Hitco_Logo.png" || logo === "logo_banini.png" ? "h-24 sm:h-32" : logo === "SnapMixDigital.png" || logo === "StepMobile.png" || logo === "subaru.png" ? "h-20 sm:h-24" : "h-16 sm:h-20"}`}
+                className={`w-auto opacity-70 hover:opacity-100 transition-opacity grayscale hover:grayscale-0 filter ${logo === "subaru.png" || logo === "the-sukkah-store.png" ? "brightness-125" : "brightness-200"} ${logo === "subaru.png" ? "h-28 sm:h-32" : logo === "Hitco_Logo.png" || logo === "logo_banini.png" ? "h-24 sm:h-32" : logo === "SnapMixDigital.png" || logo === "StepMobile.png" ? "h-20 sm:h-24" : "h-16 sm:h-20"}`}
               />
             </div>
           ))}

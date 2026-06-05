@@ -28,6 +28,7 @@ yarn-error.log*
 # local ffmpeg binaries (used to compress media; not part of the app)
 /.tools/
 
-# raw uncompressed source clips at repo root (compressed outputs live in public/services/)
+# raw source media dropped at repo root (processed copies live under public/)
 /[0-9]*.mp4
+/*.png
 next-env.d.ts
