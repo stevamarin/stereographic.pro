@@ -64,7 +64,7 @@ export default function HomePage() {
   return (
     <DialogProvider>
       <Navbar onNavigationStart={startNavigation} />
-      <main className={`h-screen overflow-y-scroll overflow-x-hidden snap-y snap-proximity scroll-smooth ${shouldBounce ? 'animate-subtle-bounce' : ''}`}>
+      <main className={`h-screen overflow-y-scroll overflow-x-hidden snap-y snap-proximity ${shouldBounce ? 'animate-subtle-bounce' : ''}`}>
         <HomeSection />
         <WorkSection />
         <ServicesSection />
