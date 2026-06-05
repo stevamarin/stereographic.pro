@@ -36,9 +36,10 @@ const clientLogos = [
 // Per-logo display height in the carousel (default applies when not listed).
 // Full literal class strings so Tailwind compiles them.
 const logoHeights: Record<string, string> = {
+  "ASICS.png": "h-24 sm:h-28",
   "logo_banini.png": "h-28 sm:h-36",
   "Hitco_Logo.png": "h-24 sm:h-32",
-  "subaru.png": "h-28 sm:h-32",
+  "subaru.png": "h-24 sm:h-28",
   "Vogue_Adria_logo.png": "h-24 sm:h-28",
   "SnapMixDigital.png": "h-20 sm:h-24",
   "StepMobile.png": "h-20 sm:h-24",
