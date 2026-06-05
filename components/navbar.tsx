@@ -221,12 +221,12 @@ export function Navbar({ onNavigationStart }: NavbarProps) {
       >
         <div className="w-8 h-8 flex flex-col justify-center items-center gap-[9px]">
           <span
-            className={`block w-8 h-[3px] bg-current transition-all duration-300 ease-out ${
+            className={`block w-8 h-[3px] rounded-full bg-current transition-all duration-300 ease-out ${
               isOpen ? "rotate-45 translate-y-[6px]" : ""
             }`}
           />
           <span
-            className={`block w-8 h-[3px] bg-current transition-all duration-300 ease-out ${
+            className={`block w-8 h-[3px] rounded-full bg-current transition-all duration-300 ease-out ${
               isOpen ? "-rotate-45 -translate-y-[6px]" : ""
             }`}
           />
