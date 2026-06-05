@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState, useCallback } from "react"
 import { LoadingWrapper } from "@/components/loading-wrapper"
 import { socialLinks } from "@/lib/config/social-links"
 
@@ -57,25 +57,67 @@ export function AboutSection() {
   const photoRef = useRef<HTMLDivElement>(null)
   const [mustacheVisible, setMustacheVisible] = useState(false)
 
-  // Client logo carousel — CSS transform marquee (sub-pixel smooth, GPU-composited).
-  const logoTrackRef = useRef<HTMLDivElement>(null)
-  const [marqueeDuration, setMarqueeDuration] = useState(0)
-  const [marqueePaused, setMarqueePaused] = useState(false)
+  // Client logo carousel: native scroll container (so it can be dragged/swiped)
+  // with an rAF auto-scroll. Width is cached via ResizeObserver so the loop
+  // never reads scrollWidth per frame (that forced reflow was the old jank).
+  const logoScrollRef = useRef<HTMLDivElement>(null)
+  const [isLogoUserScrolling, setIsLogoUserScrolling] = useState(false)
+  const logoResumeRef = useRef<NodeJS.Timeout | null>(null)
+  const logoAnimRef = useRef<number | null>(null)
+  const logoPosRef = useRef(0)
+  const logoHalfWidthRef = useRef(0)
 
   useEffect(() => {
-    const track = logoTrackRef.current
-    if (!track) return
-    // Keep the previous ~24px/s speed: one logo-set width / 24 = seconds per loop.
-    // ResizeObserver re-measures as the lazy-loaded logos arrive and on resize.
+    const el = logoScrollRef.current
+    if (!el) return
     const measure = () => {
-      const oneSetWidth = track.scrollWidth / 2
-      if (oneSetWidth > 0) setMarqueeDuration(oneSetWidth / 24)
+      logoHalfWidthRef.current = el.scrollWidth / 2
     }
     measure()
     const ro = new ResizeObserver(measure)
-    ro.observe(track)
+    ro.observe(el)
     return () => ro.disconnect()
   }, [])
+
+  const autoScrollLogos = useCallback(() => {
+    if (isLogoUserScrolling || !logoScrollRef.current) return
+    const el = logoScrollRef.current
+    logoPosRef.current += 0.4
+    const halfWidth = logoHalfWidthRef.current
+    if (halfWidth > 0 && logoPosRef.current >= halfWidth) {
+      logoPosRef.current -= halfWidth
+    }
+    el.scrollLeft = logoPosRef.current
+    logoAnimRef.current = requestAnimationFrame(autoScrollLogos)
+  }, [isLogoUserScrolling])
+
+  useEffect(() => {
+    logoAnimRef.current = requestAnimationFrame(autoScrollLogos)
+    return () => {
+      if (logoAnimRef.current) cancelAnimationFrame(logoAnimRef.current)
+      if (logoResumeRef.current) clearTimeout(logoResumeRef.current)
+    }
+  }, [autoScrollLogos])
+
+  const handleLogoInteractionStart = () => {
+    setIsLogoUserScrolling(true)
+    if (logoAnimRef.current) cancelAnimationFrame(logoAnimRef.current)
+    if (logoResumeRef.current) clearTimeout(logoResumeRef.current)
+  }
+
+  const handleLogoInteractionEnd = () => {
+    if (logoResumeRef.current) clearTimeout(logoResumeRef.current)
+    logoResumeRef.current = setTimeout(() => {
+      if (logoScrollRef.current) logoPosRef.current = logoScrollRef.current.scrollLeft
+      setIsLogoUserScrolling(false)
+    }, 3000)
+  }
+
+  // Trackpad/wheel fires `wheel`, not mousedown — pause and reset the resume timer.
+  const handleLogoWheel = () => {
+    handleLogoInteractionStart()
+    handleLogoInteractionEnd()
+  }
 
   useEffect(() => {
     const isMobile = window.matchMedia("(hover: none) or (pointer: coarse)").matches
@@ -467,15 +509,15 @@ export function AboutSection() {
         <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-24 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none" />
         <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-24 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none" />
         <div
-          ref={logoTrackRef}
-          className="flex items-center w-max"
-          style={{
-            animation: marqueeDuration ? `logo-marquee ${marqueeDuration}s linear infinite` : undefined,
-            animationPlayState: marqueePaused ? "paused" : "running",
-            willChange: "transform",
-          }}
-          onMouseEnter={() => setMarqueePaused(true)}
-          onMouseLeave={() => setMarqueePaused(false)}
+          ref={logoScrollRef}
+          className="flex items-center overflow-x-auto scrollbar-hide cursor-grab active:cursor-grabbing"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none", WebkitOverflowScrolling: "touch" }}
+          onWheel={handleLogoWheel}
+          onTouchStart={handleLogoInteractionStart}
+          onTouchEnd={handleLogoInteractionEnd}
+          onMouseDown={handleLogoInteractionStart}
+          onMouseUp={handleLogoInteractionEnd}
+          onMouseLeave={handleLogoInteractionEnd}
         >
           {clientLogos.concat(clientLogos).map((logo, index) => (
             <div key={index} className="flex-shrink-0 mr-12 sm:mr-16">

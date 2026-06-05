@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useState, useEffect } from "react"
+import { useRef, useState, useEffect, useCallback } from "react"
 import { LoadingWrapper } from "@/components/loading-wrapper"
 
 const testimonials = [
@@ -70,25 +70,67 @@ const testimonials = [
 const marqueeTestimonials = [...testimonials, ...testimonials]
 
 export function TestimonialsSection() {
-  // CSS transform marquee (sub-pixel smooth, GPU-composited) — same approach
-  // as the client-logo carousel. Track holds two copies; -50% loops seamlessly.
-  const trackRef = useRef<HTMLDivElement>(null)
-  const [marqueeDuration, setMarqueeDuration] = useState(0)
-  const [marqueePaused, setMarqueePaused] = useState(false)
+  // Native scroll container (drag/swipe/wheel) with an rAF auto-scroll. Width is
+  // cached via ResizeObserver so the loop never reads scrollWidth per frame
+  // (that per-frame reflow was the old jank).
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const [isUserScrolling, setIsUserScrolling] = useState(false)
+  const resumeTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const animationRef = useRef<number | null>(null)
+  const scrollPosRef = useRef(0)
+  const halfWidthRef = useRef(0)
 
   useEffect(() => {
-    const track = trackRef.current
-    if (!track) return
-    // Keep the previous ~24px/s speed: one set width / 24 = seconds per loop.
+    const el = scrollRef.current
+    if (!el) return
     const measure = () => {
-      const oneSetWidth = track.scrollWidth / 2
-      if (oneSetWidth > 0) setMarqueeDuration(oneSetWidth / 24)
+      halfWidthRef.current = el.scrollWidth / 2
     }
     measure()
     const ro = new ResizeObserver(measure)
-    ro.observe(track)
+    ro.observe(el)
     return () => ro.disconnect()
   }, [])
+
+  const autoScroll = useCallback(() => {
+    if (isUserScrolling || !scrollRef.current) return
+    const el = scrollRef.current
+    scrollPosRef.current += 0.4
+    const halfWidth = halfWidthRef.current
+    if (halfWidth > 0 && scrollPosRef.current >= halfWidth) {
+      scrollPosRef.current -= halfWidth
+    }
+    el.scrollLeft = scrollPosRef.current
+    animationRef.current = requestAnimationFrame(autoScroll)
+  }, [isUserScrolling])
+
+  useEffect(() => {
+    animationRef.current = requestAnimationFrame(autoScroll)
+    return () => {
+      if (animationRef.current) cancelAnimationFrame(animationRef.current)
+      if (resumeTimeoutRef.current) clearTimeout(resumeTimeoutRef.current)
+    }
+  }, [autoScroll])
+
+  const handleInteractionStart = () => {
+    setIsUserScrolling(true)
+    if (animationRef.current) cancelAnimationFrame(animationRef.current)
+    if (resumeTimeoutRef.current) clearTimeout(resumeTimeoutRef.current)
+  }
+
+  const handleInteractionEnd = () => {
+    if (resumeTimeoutRef.current) clearTimeout(resumeTimeoutRef.current)
+    resumeTimeoutRef.current = setTimeout(() => {
+      if (scrollRef.current) scrollPosRef.current = scrollRef.current.scrollLeft
+      setIsUserScrolling(false)
+    }, 3000)
+  }
+
+  // Trackpad/wheel fires `wheel`, not mousedown — pause and reset the resume timer.
+  const handleWheel = () => {
+    handleInteractionStart()
+    handleInteractionEnd()
+  }
 
   return (
     <section className="bg-black py-20 md:py-28 overflow-hidden">
@@ -115,15 +157,15 @@ export function TestimonialsSection() {
           <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-24 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none" />
 
           <div
-            ref={trackRef}
-            className="flex items-stretch w-max"
-            style={{
-              animation: marqueeDuration ? `logo-marquee ${marqueeDuration}s linear infinite` : undefined,
-              animationPlayState: marqueePaused ? "paused" : "running",
-              willChange: "transform",
-            }}
-            onMouseEnter={() => setMarqueePaused(true)}
-            onMouseLeave={() => setMarqueePaused(false)}
+            ref={scrollRef}
+            className="flex items-stretch overflow-x-auto scrollbar-hide cursor-grab active:cursor-grabbing"
+            style={{ scrollbarWidth: "none", msOverflowStyle: "none", WebkitOverflowScrolling: "touch" }}
+            onWheel={handleWheel}
+            onTouchStart={handleInteractionStart}
+            onTouchEnd={handleInteractionEnd}
+            onMouseDown={handleInteractionStart}
+            onMouseUp={handleInteractionEnd}
+            onMouseLeave={handleInteractionEnd}
           >
             {marqueeTestimonials.map((testimonial, index) => (
               <div
