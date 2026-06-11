@@ -70,8 +70,14 @@ export function FooterSection() {
     <section id="contact" className="min-h-screen scroll-mt-[45px] bg-black relative overflow-hidden">
       <div className="flex flex-col items-center justify-center min-h-screen px-4 sm:px-6 py-16 md:py-24">
         <LoadingWrapper delay={100}>
-          {/* Logo */}
-          <a href="#home" className="flex justify-center w-full mb-8">
+          {/* Logo — scrolls to the hero without writing #home into the URL */}
+          <button
+            type="button"
+            onClick={() =>
+              document.getElementById("home")?.scrollIntoView({ behavior: "smooth" })
+            }
+            className="flex justify-center w-full mb-8 cursor-pointer"
+          >
             <Image
               src="/logos/main/Stereographic_PNG-06.png"
               alt="Stereographic Production"
@@ -79,7 +85,7 @@ export function FooterSection() {
               height={120}
               className="w-[55vw] sm:w-[45vw] md:w-[30vw] lg:w-[20vw] h-auto hover:scale-105 transition-transform duration-300"
             />
-          </a>
+          </button>
 
           {/* Title */}
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-white text-center mb-2 font-inter-tight">
