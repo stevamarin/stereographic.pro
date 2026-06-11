@@ -82,6 +82,12 @@
 }
 
 @theme inline {
+  /* Robin Hood-inspired warm palette: cream text on warm near-black.
+     Overriding the white/black tokens recolors every existing
+     text-white / bg-black / border-white utility across the site. */
+  --color-white: #fbf8e3;
+  --color-black: #0d0d0b;
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -129,10 +135,11 @@
     overflow-x: hidden;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    background-color: #000000 !important;
+    background-color: #0d0d0b !important;
+    color: #fbf8e3;
   }
   html {
-    background-color: #000000 !important;
+    background-color: #0d0d0b !important;
     overflow-x: hidden;
   }
   .dotted-overlay {

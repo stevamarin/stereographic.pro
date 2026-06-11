@@ -31,7 +31,7 @@ export function HomeSection() {
   }, [])
 
   return (
-    <section id="home" className="h-screen flex items-center justify-center bg-black relative">
+    <section id="home" className="h-screen flex items-center justify-center bg-black relative isolate">
       {/* Background Video */}
       <video
         ref={videoRef}
@@ -56,6 +56,17 @@ export function HomeSection() {
         alt=""
         aria-hidden="true"
         className={`pointer-events-none absolute top-0 left-0 w-full h-full object-cover origin-top scale-[1.45] -translate-y-[215px] opacity-80 md:opacity-100 md:translate-y-0 md:origin-center md:scale-[1.02] md:object-contain z-0 transition-opacity duration-700 ${videoPlaying ? "!opacity-0" : ""}`}
+      />
+
+      {/* Warm the video/poster's pure-black areas up to the site's warm
+          near-black so the hero matches the rest of the page. "lighten"
+          raises any pixel darker than #0d0d0b to #0d0d0b and leaves the
+          brighter video content untouched. Sits above the video (z-0) but
+          below the logo (z-10), and the section's `isolate` keeps the blend
+          contained to the hero. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 z-[1] bg-[#0d0d0b] mix-blend-lighten"
       />
 
       {/* Logo display */}
