@@ -49,9 +49,9 @@ export default function HomePage() {
 
       // Only trigger bounce when scrolling down and hitting bottom (not during navbar navigation)
       if (isAtBottom && scrollTop > lastScrollTop && !isNavigating) {
+        // Class is removed in onAnimationEnd, exactly when the animation
+        // finishes — a parallel timer can fire early and snap the last pixels.
         setShouldBounce(true)
-        // Remove bounce class after animation completes (must match the 0.5s animation)
-        setTimeout(() => setShouldBounce(false), 500)
       }
 
       lastScrollTop = scrollTop
@@ -67,6 +67,10 @@ export default function HomePage() {
       <main
         className={`h-screen overflow-y-scroll overflow-x-hidden ${shouldBounce ? 'animate-subtle-bounce' : ''}`}
         style={{ WebkitOverflowScrolling: "touch" }}
+        onAnimationEnd={(e) => {
+          // Child animations (e.g. the mustache draw) bubble up — only react to our own
+          if (e.animationName === "subtle-bounce") setShouldBounce(false)
+        }}
       >
         <HomeSection />
         <WorkSection />
