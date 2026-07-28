@@ -7,20 +7,20 @@ export function BackToTop() {
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
+    // The page scrolls inside <main>, not the window
+    const mainElement = document.querySelector("main")
+    if (!mainElement) return
+
     const toggleVisibility = () => {
-      if (window.pageYOffset > 300) {
-        setIsVisible(true)
-      } else {
-        setIsVisible(false)
-      }
+      setIsVisible(mainElement.scrollTop > 300)
     }
 
-    window.addEventListener("scroll", toggleVisibility)
-    return () => window.removeEventListener("scroll", toggleVisibility)
+    mainElement.addEventListener("scroll", toggleVisibility, { passive: true })
+    return () => mainElement.removeEventListener("scroll", toggleVisibility)
   }, [])
 
   const scrollToTop = () => {
-    window.scrollTo({
+    document.querySelector("main")?.scrollTo({
       top: 0,
       behavior: "smooth",
     })
@@ -29,8 +29,8 @@ export function BackToTop() {
   return (
     <Button
       onClick={scrollToTop}
-      className={`fixed bottom-8 right-8 z-50 w-14 h-14 rounded-full bg-black/20 backdrop-blur-2xl border border-white/10 hover:border-white/30 transition-all duration-500 ease-out hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/20 hover:bg-purple-900/20 ${
-        isVisible ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-8 scale-75 pointer-events-none"
+      className={`hidden md:inline-flex fixed bottom-8 right-8 z-50 w-14 h-14 rounded-full bg-black/20 backdrop-blur-2xl border border-white/10 hover:border-white/30 transition-all duration-500 ease-out hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/20 hover:bg-purple-900/20 ${
+        isVisible ? "visible opacity-100 translate-y-0 scale-100" : "invisible opacity-0 translate-y-8 scale-75 pointer-events-none"
       }`}
       size="icon"
     >

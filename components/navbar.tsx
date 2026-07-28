@@ -23,7 +23,6 @@ export function Navbar({ onNavigationStart }: NavbarProps) {
 
   // Intersection Observer for section detection
   useEffect(() => {
-    const sections = document.querySelectorAll("section[id]")
     const observerOptions = {
       threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
       rootMargin: "-20% 0px -35% 0px"
@@ -46,8 +45,27 @@ export function Navbar({ onNavigationStart }: NavbarProps) {
       observerOptions
     )
 
-    sections.forEach((section) => observer.observe(section))
-    return () => sections.forEach((section) => observer.unobserve(section))
+    // All sections except the hero are lazy-loaded and mount after the navbar,
+    // so keep observing as they appear instead of only querying once on mount.
+    const observed = new Set<Element>()
+    const observeSections = () => {
+      document.querySelectorAll("section[id]").forEach((section) => {
+        if (!observed.has(section)) {
+          observed.add(section)
+          observer.observe(section)
+        }
+      })
+    }
+    observeSections()
+
+    const mainElement = document.querySelector("main")
+    const mutationObserver = new MutationObserver(observeSections)
+    if (mainElement) mutationObserver.observe(mainElement, { childList: true })
+
+    return () => {
+      mutationObserver.disconnect()
+      observer.disconnect()
+    }
   }, [isNavigating])
 
   // Show/hide nav on scroll
