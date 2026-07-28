@@ -29,7 +29,7 @@ npm run start    # serve production build
 npm run lint     # next lint
 ```
 
-> Note: `next.config.mjs` sets `eslint.ignoreDuringBuilds` and `typescript.ignoreBuildErrors` to `true` - builds will NOT fail on lint/type errors. Run `npm run lint` and `tsc` manually to catch issues.
+> Note: `next.config.mjs` sets `typescript.ignoreBuildErrors` to `true` - builds will NOT fail on type errors. Run `tsc --noEmit` manually to catch issues. (`npm run lint` is currently broken: Next 16 removed the `next lint` command.)
 
 ## Architecture
 
