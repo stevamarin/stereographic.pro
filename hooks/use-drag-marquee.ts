@@ -52,7 +52,25 @@ export function useDragMarquee(pxPerSecond = 24) {
       }
       raf = requestAnimationFrame(tick)
     }
-    raf = requestAnimationFrame(tick)
+
+    // Only run the animation loop while the marquee is on screen — otherwise
+    // every marquee on the page keeps writing transforms (and compositing)
+    // on every frame for the whole visit.
+    const startLoop = () => {
+      if (raf) return
+      lastT = performance.now()
+      raf = requestAnimationFrame(tick)
+    }
+    const stopLoop = () => {
+      if (!raf) return
+      cancelAnimationFrame(raf)
+      raf = 0
+    }
+    const io = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) startLoop()
+      else stopLoop()
+    })
+    io.observe(el)
 
     const ro = new ResizeObserver(() => {
       half = el.scrollWidth / 2
@@ -115,7 +133,8 @@ export function useDragMarquee(pxPerSecond = 24) {
     el.addEventListener("mouseleave", onLeave)
 
     return () => {
-      cancelAnimationFrame(raf)
+      stopLoop()
+      io.disconnect()
       ro.disconnect()
       el.removeEventListener("pointerdown", onDown)
       el.removeEventListener("pointermove", onMove)

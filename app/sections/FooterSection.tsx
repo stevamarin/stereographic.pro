@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile"
@@ -18,6 +18,25 @@ export function FooterSection() {
   const [error, setError] = useState("")
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
   const turnstileRef = useRef<TurnstileInstance>(null)
+  const sectionRef = useRef<HTMLElement>(null)
+
+  // Turnstile pulls in ~340KB of Cloudflare scripts — only load it once the
+  // visitor actually approaches the contact form instead of on page load.
+  const [showTurnstile, setShowTurnstile] = useState(false)
+  useEffect(() => {
+    if (!TURNSTILE_SITE_KEY || !sectionRef.current) return
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShowTurnstile(true)
+          observer.disconnect()
+        }
+      },
+      { rootMargin: "800px" }
+    )
+    observer.observe(sectionRef.current)
+    return () => observer.disconnect()
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -67,7 +86,7 @@ export function FooterSection() {
   }
 
   return (
-    <section id="contact" className="min-h-screen scroll-mt-[45px] bg-black relative overflow-hidden">
+    <section ref={sectionRef} id="contact" className="min-h-screen scroll-mt-[45px] bg-black relative overflow-hidden">
       <div className="flex flex-col items-center justify-center min-h-screen px-4 sm:px-6 py-16 md:py-24">
         <LoadingWrapper delay={100}>
           {/* Logo — scrolls to the hero without writing #home into the URL */}
@@ -194,7 +213,7 @@ export function FooterSection() {
                 style={{ position: "absolute", left: "-9999px", opacity: 0, pointerEvents: "none" }}
               />
 
-              {TURNSTILE_SITE_KEY && (
+              {TURNSTILE_SITE_KEY && showTurnstile && (
                 <div className="flex justify-center">
                   <Turnstile
                     ref={turnstileRef}

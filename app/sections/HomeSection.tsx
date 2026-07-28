@@ -2,15 +2,19 @@
 
 import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
-import { LoadingWrapper } from "@/components/loading-wrapper"
 
 export function HomeSection() {
   const videoRef = useRef<HTMLVideoElement>(null)
+  const sectionRef = useRef<HTMLElement>(null)
   const [videoPlaying, setVideoPlaying] = useState(false)
 
   useEffect(() => {
     const video = videoRef.current
-    if (!video) return
+    const section = sectionRef.current
+    if (!video || !section) return
+
+    // Only decode the background video while the hero is actually on screen.
+    let heroVisible = true
 
     // Normal case: autoplay works. iOS Low Power Mode blocks automatic
     // playback, so this rejects — we then start on the first user gesture
@@ -19,6 +23,7 @@ export function HomeSection() {
 
     const events = ["pointerdown", "touchstart", "keydown", "wheel", "scroll"]
     const startOnGesture = () => {
+      if (!heroVisible) return
       video.play().then(cleanup).catch(() => {})
     }
     const cleanup = () =>
@@ -27,11 +32,28 @@ export function HomeSection() {
     events.forEach((e) =>
       window.addEventListener(e, startOnGesture, { passive: true }),
     )
-    return cleanup
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        heroVisible = entry.isIntersecting
+        if (heroVisible) {
+          video.play().catch(() => {})
+        } else {
+          video.pause()
+        }
+      },
+      { threshold: 0.05 },
+    )
+    observer.observe(section)
+
+    return () => {
+      cleanup()
+      observer.disconnect()
+    }
   }, [])
 
   return (
-    <section id="home" className="h-screen flex items-center justify-center bg-black relative isolate">
+    <section ref={sectionRef} id="home" className="h-screen flex items-center justify-center bg-black relative isolate overflow-hidden">
       {/* Background Video */}
       <video
         ref={videoRef}
@@ -69,15 +91,21 @@ export function HomeSection() {
         className="pointer-events-none absolute inset-0 z-[1] bg-[#0d0d0b] mix-blend-lighten"
       />
 
-      {/* Logo display */}
+      {/* Logo display — pure-CSS entrance (animate-fade-in-up) instead of
+          LoadingWrapper: the JS-driven opacity toggle kept the LCP element
+          invisible until React hydrated, tanking LCP on slow devices. */}
       <div className="absolute top-0 left-0 right-0 h-screen flex items-center justify-center">
-        <LoadingWrapper delay={100}>
+        <div
+          className="animate-fade-in-up"
+          style={{ animationDelay: "100ms", animationFillMode: "both", animationDuration: "700ms" }}
+        >
           <div className="relative z-10">
             <Image
               src="/logos/main/Stereographic_PNG-05.png"
               alt="Stereographic Production"
               width={8000}
               height={4000}
+              sizes="90vw"
               className="w-[90vmin]"
               style={{
                 opacity: 0.4,
@@ -86,7 +114,7 @@ export function HomeSection() {
               priority
             />
           </div>
-        </LoadingWrapper>
+        </div>
       </div>
     </section>
   )

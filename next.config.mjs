@@ -10,10 +10,15 @@ const securityHeaders = [
   },
 ]
 
+// Long cache for static media under public/ — these files change rarely.
+// NOTE: if you replace one of these files, rename it (or bump a suffix) so
+// returning visitors don't keep the old cached copy for up to 30 days.
+const mediaCacheHeader = {
+  key: "Cache-Control",
+  value: "public, max-age=2592000, stale-while-revalidate=86400",
+}
+
 const nextConfig = {
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -26,6 +31,12 @@ const nextConfig = {
         source: "/(.*)",
         headers: securityHeaders,
       },
+      { source: "/background.webm", headers: [mediaCacheHeader] },
+      { source: "/background-poster.webp", headers: [mediaCacheHeader] },
+      { source: "/services/:path*", headers: [mediaCacheHeader] },
+      { source: "/logos/:path*", headers: [mediaCacheHeader] },
+      { source: "/icons/:path*", headers: [mediaCacheHeader] },
+      { source: "/work-thumbnails/:path*", headers: [mediaCacheHeader] },
     ]
   },
 }
