@@ -24,6 +24,10 @@ const nextConfig = {
   },
   images: {
     formats: ["image/avif", "image/webp"],
+    // Next 16 only honours `quality` values listed here; anything else
+    // silently falls back to 75. 90 is used by the hero logo, whose smooth
+    // gradient bands at the default.
+    qualities: [75, 90],
   },
   async headers() {
     return [

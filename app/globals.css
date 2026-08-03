@@ -430,11 +430,22 @@
   }
 }
 
-/* Hide the iOS Safari "tap to play" overlay button that Safari draws over a
-   background video when autoplay is blocked (e.g. iPhone Low Power Mode).
-   All videos on this site are decorative/auto-played, so we never want it. */
+/* Hide the iOS "tap to play" overlay button drawn over a background video when
+   autoplay is blocked (e.g. iPhone Low Power Mode, or an in-app browser like
+   Instagram's). All videos on this site are decorative/auto-played, so we never
+   want any control UI. Belt-and-braces with the `invisible` class the hero puts
+   on its video until playback actually starts — WebKit renders these controls
+   in the video's shadow DOM, above any sibling overlay, and which pseudo-element
+   it uses varies by iOS version. */
+video::-webkit-media-controls,
+video::-webkit-media-controls-enclosure,
+video::-webkit-media-controls-panel,
+video::-webkit-media-controls-panel-container,
+video::-webkit-media-controls-overlay-play-button,
 video::-webkit-media-controls-start-playback-button,
 video::-webkit-media-controls-play-button {
   display: none !important;
   -webkit-appearance: none;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
