@@ -194,22 +194,19 @@ export function ServicesSection() {
                     <source src={`/services/${service.video}.mp4`} type="video/mp4" />
                   </video>
 
-                  {/* Frosted glass: blur is hard along the top & bottom edges and clears
-                      through the middle band so the video detail shows there */}
+                  {/* Frosted glass: ONE masked backdrop-blur layer covering all four
+                      edges (two mask gradients union by default), clear through the
+                      middle band so the video detail shows there. Previously this was
+                      two stacked backdrop-blur-3xl layers — 12 large live-blur
+                      surfaces across the grid — which dominated scroll jank in this
+                      section. One layer at 24px reads the same over the dark overlay. */}
                   <div
-                    className="pointer-events-none absolute inset-0 backdrop-blur-3xl"
+                    className="pointer-events-none absolute inset-0 backdrop-blur-xl"
                     style={{
-                      WebkitMaskImage: "linear-gradient(to bottom, black 0%, transparent 8%, transparent 62%, black 90%, black 100%)",
-                      maskImage: "linear-gradient(to bottom, black 0%, transparent 8%, transparent 62%, black 90%, black 100%)",
-                    }}
-                  />
-
-                  {/* Same hard glass along the left & right edges */}
-                  <div
-                    className="pointer-events-none absolute inset-0 backdrop-blur-3xl"
-                    style={{
-                      WebkitMaskImage: "linear-gradient(to right, black 0%, transparent 8%, transparent 92%, black 100%)",
-                      maskImage: "linear-gradient(to right, black 0%, transparent 8%, transparent 92%, black 100%)",
+                      WebkitMaskImage:
+                        "linear-gradient(to bottom, black 0%, transparent 8%, transparent 62%, black 90%, black 100%), linear-gradient(to right, black 0%, transparent 8%, transparent 92%, black 100%)",
+                      maskImage:
+                        "linear-gradient(to bottom, black 0%, transparent 8%, transparent 62%, black 90%, black 100%), linear-gradient(to right, black 0%, transparent 8%, transparent 92%, black 100%)",
                     }}
                   />
 
