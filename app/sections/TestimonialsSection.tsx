@@ -31,7 +31,7 @@ const testimonials = [
   },
   {
     quote: "Stevan is a superstar who is kind and talented. He was able to help me immediately, delivering above and beyond my expectations. I would gladly hire him again!",
-    name: "Jake Goble",
+    name: "Jake Globe",
     title: "Audio Mixing",
   },
   {
