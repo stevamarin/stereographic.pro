@@ -106,13 +106,11 @@ export function FooterSection() {
             />
           </button>
 
-          {/* Title */}
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-white text-center mb-2 font-inter-tight">
+          {/* Title. The standfirst that sat here carried the mb-8 gap before
+              the form, so that spacing moves onto the heading. */}
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-white text-center mb-8 font-inter-tight">
             Let&apos;s Talk
           </h2>
-          <p className="text-gray-400 text-center font-sora mb-8 text-base sm:text-lg">
-            Tell me about your project and I&apos;ll get back to you within 24 hours.
-          </p>
 
           {/* Form or Thank You */}
           {isSubmitted ? (

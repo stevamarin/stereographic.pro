@@ -11,6 +11,13 @@ import { useDragMarquee } from "@/hooks/use-drag-marquee"
 // on audio production. Set to true to bring his About section back.
 const SHOW_NIKOLA = false
 
+// Archived 2026-09-20: the doodle mustache was hand-positioned as a percentage
+// of the old portrait photo, and the replacement is a square crop, so it no
+// longer lands on the face. The SVG paths, the draw/undraw keyframes in
+// globals.css and the scroll-into-view trigger are all left intact. Set to
+// true to bring it back, but re-tune the top/left percentages below first.
+const SHOW_MUSTACHE = false
+
 const clientLogos = [
   "allermi_logo.png",
   "ASICS.png",
@@ -64,6 +71,7 @@ export function AboutSection() {
   const logoMarqueeRef = useDragMarquee(24)
 
   useEffect(() => {
+    if (!SHOW_MUSTACHE) return
     const isMobile = window.matchMedia("(hover: none) or (pointer: coarse)").matches
     if (!isMobile || !photoRef.current) return
 
@@ -97,17 +105,30 @@ export function AboutSection() {
             <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start mb-24 lg:mb-32">
               {/* Stevan Photo */}
               <div ref={photoRef} className={`relative group/photo${mustacheVisible ? ' mustache-active' : ''}`}>
-                <div className="aspect-square overflow-hidden rounded-2xl bg-gray-200 relative">
+                <div className="aspect-square overflow-hidden rounded-2xl bg-black relative">
+                  {/* Cleaner crop of the same shot (the earlier frame had a
+                      second person in the background). New filename rather than
+                      an in-place swap so returning visitors do not keep the old
+                      cached copy. The file is in colour; `grayscale` matches the
+                      black and white the previous photo had baked in, and keeps
+                      the original available if that ever changes.
+                      The source is 519px wide, so it is upscaled about 1.4x into
+                      the mobile frame and 2.4x into the desktop one at 2x DPI. A
+                      touch of blur hides the resulting JPEG grain, scaled per
+                      breakpoint because a fixed px blur bites harder on the
+                      smaller render. scale-[1.02] keeps the blurred edge outside
+                      the rounded clip so it cannot fringe the corners. */}
                   <Image
-                    src="/stevan.jpg"
+                    src="/stevan-2.jpg"
                     alt="Stevan Marinković"
-                    width={600}
-                    height={750}
+                    width={519}
+                    height={560}
                     loading="lazy"
                     sizes="(max-width: 1024px) 100vw, 50vw"
-                    className="w-full h-full object-cover relative z-0"
+                    className="w-full h-full object-cover grayscale blur-[0.4px] md:blur-[0.7px] scale-[1.02] relative z-0"
                   />
-                  {/* Doodle mustache overlay */}
+                  {/* Doodle mustache overlay - hidden while SHOW_MUSTACHE is off */}
+                  {SHOW_MUSTACHE && (
                   <div
                     className="absolute inset-0 z-10 pointer-events-none"
                     style={{ overflow: 'visible' }}
@@ -153,6 +174,7 @@ export function AboutSection() {
                       />
                     </svg>
                   </div>
+                  )}
                 </div>
               </div>
 
@@ -430,7 +452,7 @@ export function AboutSection() {
 
               {/* Nikola Photo - Right on desktop */}
               <div className="relative order-1 lg:order-2">
-                <div className="aspect-square overflow-hidden rounded-2xl bg-gray-200">
+                <div className="aspect-square overflow-hidden rounded-2xl bg-black">
                   <Image
                     src="/nikola.jpg"
                     alt="Nikola Mijailović"
