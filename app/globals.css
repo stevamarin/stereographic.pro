@@ -316,8 +316,8 @@
     box-shadow: 0 0 20px rgba(185, 143, 201, 0.3);
   }
   
-  /* Bounce when hitting bottom — springy overshoot like iOS rubber-banding:
-     quick kick up, then one smooth damped return with a soft landing. */
+  /* Bounce when hitting bottom: springy overshoot like iOS rubber-banding.
+     Quick kick up, then one smooth damped return with a soft landing. */
   @keyframes subtle-bounce {
     0% {
       transform: translateY(0);
@@ -434,7 +434,7 @@
    autoplay is blocked (e.g. iPhone Low Power Mode, or an in-app browser like
    Instagram's). All videos on this site are decorative/auto-played, so we never
    want any control UI. Belt-and-braces with the `invisible` class the hero puts
-   on its video until playback actually starts — WebKit renders these controls
+   on its video until playback actually starts. WebKit renders these controls
    in the video's shadow DOM, above any sibling overlay, and which pseudo-element
    it uses varies by iOS version. */
 video::-webkit-media-controls,

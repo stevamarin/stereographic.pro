@@ -20,7 +20,7 @@ export function FooterSection() {
   const turnstileRef = useRef<TurnstileInstance>(null)
   const sectionRef = useRef<HTMLElement>(null)
 
-  // Turnstile pulls in ~340KB of Cloudflare scripts — only load it once the
+  // Turnstile pulls in ~340KB of Cloudflare scripts, so only load it once the
   // visitor actually approaches the contact form instead of on page load.
   const [showTurnstile, setShowTurnstile] = useState(false)
   useEffect(() => {
@@ -74,11 +74,11 @@ export function FooterSection() {
         form.reset()
         setTurnstileToken(null)
       } else {
-        setError(data.error ?? "Something went wrong. Please try again or email us directly.")
+        setError(data.error ?? "Something went wrong. Please try again or email me directly.")
         turnstileRef.current?.reset()
       }
     } catch {
-      setError("Could not connect. Please try again or email us directly.")
+      setError("Could not connect. Please try again or email me directly.")
       turnstileRef.current?.reset()
     } finally {
       setIsSubmitting(false)
@@ -89,7 +89,7 @@ export function FooterSection() {
     <section ref={sectionRef} id="contact" className="min-h-screen scroll-mt-[45px] bg-black relative overflow-hidden">
       <div className="flex flex-col items-center justify-center min-h-screen px-4 sm:px-6 py-16 md:py-24">
         <LoadingWrapper delay={100}>
-          {/* Logo — scrolls to the hero without writing #home into the URL */}
+          {/* Logo: scrolls to the hero without writing #home into the URL */}
           <button
             type="button"
             onClick={() =>
@@ -111,7 +111,7 @@ export function FooterSection() {
             Let&apos;s Talk
           </h2>
           <p className="text-gray-400 text-center font-sora mb-8 text-base sm:text-lg">
-            Tell us about your project and we&apos;ll get back to you within 24 hours.
+            Tell me about your project and I&apos;ll get back to you within 24 hours.
           </p>
 
           {/* Form or Thank You */}
@@ -126,7 +126,7 @@ export function FooterSection() {
                 Message Sent!
               </h3>
               <p className="text-gray-400 font-sora">
-                Thanks for reaching out. We&apos;ll be in touch soon.
+                Thanks for reaching out. I&apos;ll be in touch soon.
               </p>
               <button
                 onClick={() => setIsSubmitted(false)}
@@ -197,7 +197,7 @@ export function FooterSection() {
 
               <Textarea
                 name="message"
-                placeholder="Tell us about your project..."
+                placeholder="Tell me about your project..."
                 required
                 rows={4}
                 className="bg-white/5 border-white/10 text-white placeholder:text-gray-500 focus-visible:border-purple-500 focus-visible:ring-purple-500/20 font-sora resize-none min-h-[100px]"

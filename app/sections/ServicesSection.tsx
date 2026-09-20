@@ -6,7 +6,7 @@ import { LoadingWrapper } from "@/components/loading-wrapper"
 const services = [
   {
     title: "Mixing & Mastering",
-    description: "EQ, compression, level balancing, and loudness mastering to spec, delivering mixes that translate cleanly across all platforms.",
+    description: "Balanced, EQ'd, and mastered to your delivery spec, so it holds up on a phone speaker and in a treated room.",
     icon: (
       <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <line x1="4" y1="21" x2="4" y2="14" />
@@ -26,19 +26,19 @@ const services = [
   },
   {
     title: "Sound Design",
-    description: "Custom effects, ambiences, textures, and sound design built to picture, delivering soundscapes that are detailed, believable, and made for each scene.",
+    description: "Effects, ambiences, and textures built to picture rather than dropped on top of it.",
     icon: (
       <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M2 13a2 2 0 0 0 2-2V7a2 2 0 0 1 4 0v13a2 2 0 0 0 4 0V4a2 2 0 0 1 4 0v13a2 2 0 0 0 4 0v-4a2 2 0 0 1 2-2" />
       </svg>
     ),
     tags: ["Film", "Commercials", "Games"],
-    accent: "sky",
+    accent: "purple",
     video: "2",
   },
   {
     title: "Dialogue Editing",
-    description: "Noise reduction, de-noising, de-essing, and level balancing across every line, delivering dialogue that's clean, consistent, and easy to understand.",
+    description: "Salvage work, mostly. iZotope RX on the location noise you couldn't avoid, de-essing, then levels matched line to line.",
     icon: (
       <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <rect x="9" y="2" width="6" height="11" rx="3" />
@@ -48,12 +48,12 @@ const services = [
       </svg>
     ),
     tags: ["Film", "Commercials", "Podcasts", "Ai"],
-    accent: "amber",
+    accent: "purple",
     video: "3",
   },
   {
     title: "Original Score",
-    description: "Composition, arrangement, orchestration, and production scored to your cut, delivering original music that fits the mood, pacing, and tone of every scene.",
+    description: "Composed to your cut, not licensed and stretched to fit it. Theme, arrangement, orchestration, final mix.",
     icon: (
       <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M9 18V5l12-2v13" />
@@ -63,24 +63,24 @@ const services = [
       </svg>
     ),
     tags: ["Film", "Commercials", "Games"],
-    accent: "rose",
+    accent: "purple",
     video: "4",
   },
   {
     title: "Foley & SFX",
-    description: "Footsteps, cloth, props, and impacts performed and recorded to picture, delivering foley that gives every scene depth, weight, and realism.",
+    description: "Performed and recorded in sync: footsteps, cloth, props, impacts. The layer nobody notices until it's missing.",
     icon: (
       <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z" />
       </svg>
     ),
     tags: ["Film", "Animation", "Commercials"],
-    accent: "emerald",
+    accent: "purple",
     video: "5",
   },
   {
     title: "Game Audio",
-    description: "Wwise and Unity implementation, adaptive music, spatial audio, and dynamic SFX, delivering interactive sound that responds to every player action.",
+    description: "Wwise and Unity implementation, adaptive music, spatial audio. Sound that responds to the player instead of looping at them.",
     icon: (
       <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M21 17a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2Z" />
@@ -91,13 +91,31 @@ const services = [
       </svg>
     ),
     tags: ["Game Studios", "Interactive Media"],
-    accent: "pink",
+    accent: "purple",
     video: "6",
   },
 ]
 
+// Hidden 2026-09-20: the per-service icons are kept in the `services` array
+// above (and still compile) but are not rendered on the cards. Set to true to
+// bring them back.
+const SHOW_SERVICE_ICONS = false
+
+// Hidden 2026-09-20: the `tags` arrays stay on each service above, but the
+// pills are not rendered: they were generic ("Film", "Digital", "Gaming")
+// and told a client nothing the description doesn't. Set to true to restore.
+const SHOW_SERVICE_TAGS = false
+
+// Hidden 2026-09-20: the cards now carry their title alone. The copy stays
+// on each service above so it can be reused (or switched back on) later.
+const SHOW_SERVICE_DESCRIPTIONS = false
+
 // Full class strings per accent (Tailwind needs literal names to compile them).
-// glow = colored wash sitting over the blurred video (top-left → out)
+// 2026-09-20: every card now uses `purple` (the brand accent, #b98fc9). The
+// other five entries are kept so a card can be re-tinted by changing its
+// `accent` field. A different hue per card read as decoration, not brand.
+// `glow` is currently unrendered: the per-card colored wash was the rainbow's
+// other half, and dropping it also lets the video underneath actually show.
 const accents: Record<string, { icon: string; border: string; tag: string; glow: string }> = {
   purple: {
     icon: "text-purple-300",
@@ -138,7 +156,7 @@ const accents: Record<string, { icon: string; border: string; tag: string; glow:
 }
 
 export function ServicesSection() {
-  // Only play the card videos while the section is on screen — avoids 6 videos
+  // Only play the card videos while the section is on screen. Avoids 6 videos
   // decoding (and their backdrop-blur layers compositing) when scrolled away.
   const gridRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
@@ -166,10 +184,10 @@ export function ServicesSection() {
           <LoadingWrapper delay={100}>
             <div className="text-center mb-16">
               <h2 className="text-4xl sm:text-5xl md:text-6xl font-semibold text-white font-inter-tight mb-4">
-                What We Do
+                What I Do
               </h2>
               <p className="text-gray-400 font-sora text-lg sm:text-xl max-w-2xl mx-auto">
-                Full-service audio post-production for content creators, filmmakers, and game studios.
+                Complete Audio Post Production
               </p>
             </div>
           </LoadingWrapper>
@@ -178,8 +196,8 @@ export function ServicesSection() {
             {services.map((service, index) => {
               const accent = accents[service.accent] ?? accents.purple
               return (
-              <LoadingWrapper key={service.title} delay={150 + index * 100} className="h-full">
-                <div className={`group relative h-full overflow-hidden p-6 sm:p-8 rounded-2xl border bg-white/[0.02] ${accent.border} transition-all duration-500`}>
+              <LoadingWrapper key={service.title} delay={150 + index * 50} className="h-full">
+                <div className={`group relative h-full min-h-[158px] md:min-h-[188px] overflow-hidden p-6 sm:p-8 rounded-2xl border bg-white/[0.02] ${accent.border} transition-colors duration-200`}>
                   {/* Looping ping-pong video behind the glass (forward+reverse baked in) */}
                   <video
                     className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-50 scale-105 blur-sm"
@@ -197,8 +215,8 @@ export function ServicesSection() {
                   {/* Frosted glass: ONE masked backdrop-blur layer covering all four
                       edges (two mask gradients union by default), clear through the
                       middle band so the video detail shows there. Previously this was
-                      two stacked backdrop-blur-3xl layers — 12 large live-blur
-                      surfaces across the grid — which dominated scroll jank in this
+                      two stacked backdrop-blur-3xl layers (12 large live-blur
+                      surfaces across the grid), which dominated scroll jank in this
                       section. One layer at 24px reads the same over the dark overlay. */}
                   <div
                     className="pointer-events-none absolute inset-0 backdrop-blur-xl"
@@ -210,40 +228,43 @@ export function ServicesSection() {
                     }}
                   />
 
-                  {/* Even color tint over the glass */}
-                  <div className={`pointer-events-none absolute inset-0 bg-gradient-to-br ${accent.glow} to-transparent`} />
-
                   {/* Flat dark overlay: keeps text readable without a visible gradient */}
                   <div className="pointer-events-none absolute inset-0 bg-black/60" />
 
                   {/* Content */}
-                  <div className="relative z-10 flex h-full flex-col">
-                    {/* Icon (foreground) */}
-                    <div className={`${accent.icon} mb-5 w-fit origin-left group-hover:scale-150 transition-transform duration-300`}>
-                      {service.icon}
-                    </div>
+                  <div className="relative z-10 flex h-full flex-col items-center justify-center text-center">
+                    {/* Icon (foreground) - hidden while SHOW_SERVICE_ICONS is off */}
+                    {SHOW_SERVICE_ICONS && (
+                      <div className={`${accent.icon} mb-5 w-fit origin-left group-hover:scale-150 transition-transform duration-300`}>
+                        {service.icon}
+                      </div>
+                    )}
 
                     {/* Title */}
-                    <h3 className="text-xl sm:text-2xl font-semibold text-white font-inter-tight mb-3">
+                    <h3 className="text-4xl sm:text-5xl font-bold leading-[1.05] text-balance text-white font-inter-tight">
                       {service.title}
                     </h3>
 
-                    {/* Description */}
-                    <p className="text-gray-400 font-sora text-sm sm:text-base leading-relaxed mb-5">
-                      {service.description}
-                    </p>
+                    {/* Description - hidden while SHOW_SERVICE_DESCRIPTIONS is off */}
+                    {SHOW_SERVICE_DESCRIPTIONS && (
+                      <p className="mt-3 text-gray-400 font-sora text-sm sm:text-base leading-relaxed">
+                        {service.description}
+                      </p>
+                    )}
 
-                    {/* Tags */}
-                    <div className="flex flex-wrap gap-2 mt-auto">
-                      {service.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          className={`text-xs font-sora px-3 py-1 rounded-full border ${accent.tag}`}
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
+                    {/* Tags - hidden while SHOW_SERVICE_TAGS is off */}
+                    {SHOW_SERVICE_TAGS && (
+                      <div className="flex flex-wrap gap-2 mt-auto pt-5">
+                        {service.tags.map((tag) => (
+                          <span
+                            key={tag}
+                            className={`text-xs font-sora px-3 py-1 rounded-full border ${accent.tag}`}
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
               </LoadingWrapper>

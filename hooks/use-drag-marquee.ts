@@ -53,7 +53,7 @@ export function useDragMarquee(pxPerSecond = 24) {
       raf = requestAnimationFrame(tick)
     }
 
-    // Only run the animation loop while the marquee is on screen — otherwise
+    // Only run the animation loop while the marquee is on screen. Otherwise
     // every marquee on the page keeps writing transforms (and compositing)
     // on every frame for the whole visit.
     const startLoop = () => {
@@ -97,7 +97,7 @@ export function useDragMarquee(pxPerSecond = 24) {
             el.setPointerCapture(e.pointerId)
           } catch {}
         } else {
-          pending = false // vertical gesture — let the page scroll
+          pending = false // vertical gesture, let the page scroll
           return
         }
       }

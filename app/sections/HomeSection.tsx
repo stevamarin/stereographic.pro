@@ -9,24 +9,40 @@ export function HomeSection() {
   const [videoPlaying, setVideoPlaying] = useState(false)
   const [videoUnavailable, setVideoUnavailable] = useState(false)
 
+  // Desktop only. The hero video is decorative, and on a phone it cost the
+  // visitor bandwidth and battery for a background the logo sits on top of
+  // anyway. Gating the mount (rather than hiding it with CSS) is what actually
+  // stops the download: a display:none <video> is still fetched. Starts false
+  // so the server render and the first client render agree, then the effect
+  // below mounts it on wider screens. 768px is Tailwind's `md` breakpoint.
+  const [showVideo, setShowVideo] = useState(false)
+
   useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)")
+    const sync = () => setShowVideo(mq.matches)
+    sync()
+    mq.addEventListener("change", sync)
+    return () => mq.removeEventListener("change", sync)
+  }, [])
+
+  useEffect(() => {
+    if (!showVideo) return
     const video = videoRef.current
     const section = sectionRef.current
     if (!video || !section) return
 
     const markUnavailable = () => setVideoUnavailable(true)
 
-    // The <video> is server-rendered, so a failed load can fire `error` before
-    // React hydrates and attaches onError — check the element's state directly
-    // as well as listening from here on.
+    // A failed load can fire `error` before this effect attaches its listener,
+    // so check the element's state directly as well as listening from here on.
     if (video.error || video.networkState === HTMLMediaElement.NETWORK_NO_SOURCE) {
       markUnavailable()
       return
     }
     video.addEventListener("error", markUnavailable)
 
-    // If the browser refuses to autoplay — iOS Low Power Mode, strict autoplay
-    // settings, an in-app browser like Instagram's — we deliberately do NOT try
+    // If the browser refuses to autoplay (iOS Low Power Mode, strict autoplay
+    // settings, an in-app browser like Instagram's), we deliberately do NOT try
     // to start it on the first tap/scroll. The hero just stays in its clean
     // static state (logo over the site's near-black), and the <video> unmounts
     // so iOS has nothing to draw a "play" button on. Low Power Mode is the
@@ -49,16 +65,16 @@ export function HomeSection() {
       video.removeEventListener("error", markUnavailable)
       observer.disconnect()
     }
-  }, [])
+  }, [showVideo])
 
   return (
     <section ref={sectionRef} id="home" className="h-screen flex items-center justify-center bg-black relative isolate overflow-hidden">
-      {/* Background video. Absent entirely until it is actually playing there
-          is nothing here but the section's near-black and the logo below —
-          which is the intended fallback look, so no poster image is needed.
-          It fades in once playback starts, and unmounts if playback is refused
-          or the file fails to load. */}
-      {!videoUnavailable && (
+      {/* Background video, desktop only (see showVideo above). Absent entirely
+          until it is actually playing there is nothing here but the section's
+          near-black and the logo below, which is the intended fallback look, so
+          no poster image is needed. It fades in once playback starts, and
+          unmounts if playback is refused or the file fails to load. */}
+      {showVideo && !videoUnavailable && (
         <video
           ref={videoRef}
           autoPlay
@@ -69,8 +85,8 @@ export function HomeSection() {
           disablePictureInPicture
           onPlaying={() => setVideoPlaying(true)}
           onError={() => setVideoUnavailable(true)}
-          className={`absolute top-0 left-0 w-full h-full object-cover origin-top scale-[1.45] -translate-y-[215px] md:translate-y-0 md:origin-center md:scale-[1.02] md:object-contain z-0 transition-opacity duration-700 ${
-            videoPlaying ? "opacity-80 md:opacity-100" : "opacity-0 invisible"
+          className={`absolute top-0 left-0 w-full h-full object-contain origin-center scale-[1.02] z-0 transition-opacity duration-700 ${
+            videoPlaying ? "opacity-100" : "opacity-0 invisible"
           }`}
         >
           <source src="/background.webm" type="video/webm" />
@@ -83,12 +99,24 @@ export function HomeSection() {
           brighter video content untouched. Sits above the video (z-0) but
           below the logo (z-10), and the section's `isolate` keeps the blend
           contained to the hero. */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 z-[1] bg-[#0d0d0b] mix-blend-lighten"
-      />
+      {showVideo && (
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 z-[1] bg-[#0d0d0b] mix-blend-lighten"
+        />
+      )}
 
-      {/* Logo display — pure-CSS entrance (animate-fade-in-up) instead of
+      {/* Softens the join where the video meets the Work section, for the wide
+          screens on which object-contain still reaches the bottom edge. Sits
+          above the video and the lighten layer (z-[1]) but below the logo. */}
+      {showVideo && (
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-28 bg-gradient-to-t from-[#0d0d0b] via-[#0d0d0b]/70 to-transparent"
+        />
+      )}
+
+      {/* Logo display uses a pure-CSS entrance (animate-fade-in-up) rather than
           LoadingWrapper: the JS-driven opacity toggle kept the LCP element
           invisible until React hydrated, tanking LCP on slow devices. */}
       <div className="absolute top-0 left-0 right-0 h-screen flex items-center justify-center">
@@ -99,7 +127,7 @@ export function HomeSection() {
           <div className="relative z-10">
             {/* Intrinsic size is the file's real 2924x2924 (was declared
                 8000x4000, a 2:1 lie about a square image). `sizes` mirrors the
-                w-[90vmin] box — vmin is vw in portrait, vh in landscape — so
+                w-[90vmin] box (vmin is vw in portrait, vh in landscape), so
                 phones get a correctly-sized rendition and desktop stops
                 over-fetching. q90 because the artwork is one big smooth
                 gradient, which bands badly at the default q75. The 0.4px blur

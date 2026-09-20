@@ -260,7 +260,7 @@ export function Navbar({ onNavigationStart }: NavbarProps) {
       >
         {/* Background Overlay */}
         <div
-          className="absolute inset-0 bg-black/85 transition-all duration-700 ease-out"
+          className="absolute inset-0 bg-black/95 transition-all duration-700 ease-out"
           onClick={closeMenu}
         />
 

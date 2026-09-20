@@ -18,7 +18,7 @@ const sora = Sora({
 })
 
 export const metadata: Metadata = {
-  title: "StereoGraphic Production | Sound Design & Audio Post-Production",
+  title: "StereoGraphic Production",
   description:
     "Professional sound design, mixing, mastering, and audio post-production for content creators, filmmakers, and game studios. Based in Belgrade, working worldwide.",
   keywords: [

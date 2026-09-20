@@ -1,17 +1,17 @@
-# Client Tracking Setup Guide — StereoGraphic Production
+# Client Tracking Setup Guide: StereoGraphic Production
 
 ## 1. Formspree Setup (Contact Form Backend)
 
 Your website contact form submits to Formspree. Here's how to set it up:
 
 1. Go to [formspree.io](https://formspree.io) and create a free account
-2. Create a new form — you'll get a form ID like `xpzvqkdl`
+2. Create a new form, and you'll get a form ID like `xpzvqkdl`
 3. Open `app/sections/FooterSection.tsx` and replace `YOUR_FORM_ID` with your actual ID:
    ```
    https://formspree.io/f/YOUR_FORM_ID  →  https://formspree.io/f/xpzvqkdl
    ```
 4. Enable email notifications in Formspree dashboard (Settings → Notifications)
-5. Free tier: 50 submissions/month — more than enough to start
+5. Free tier: 50 submissions/month, more than enough to start
 
 ## 2. Google Sheets Lead Tracker
 
@@ -52,7 +52,7 @@ When a new form submission comes in:
 
 **Initial Reply (send within 2 hours):**
 ```
-Subject: Re: Your [Project Type] project — StereoGraphic
+Subject: Re: Your [Project Type] project | StereoGraphic
 
 Hi [Name],
 
@@ -63,7 +63,7 @@ A few quick questions to help me put together an accurate quote:
 - Do you have reference tracks or examples of the sound/style you're going for?
 - How many minutes of final audio are we looking at?
 
-Happy to jump on a quick call if that's easier — just let me know what works.
+Happy to jump on a quick call if that's easier, just let me know what works.
 
 Best,
 Stevan
@@ -72,7 +72,7 @@ StereoGraphic Production
 
 **Follow-up (Day 3, no reply):**
 ```
-Subject: Quick follow-up — StereoGraphic
+Subject: Quick follow-up | StereoGraphic
 
 Hi [Name],
 

@@ -10,7 +10,7 @@ const securityHeaders = [
   },
 ]
 
-// Long cache for static media under public/ — these files change rarely.
+// Long cache for static media under public/. These files change rarely.
 // NOTE: if you replace one of these files, rename it (or bump a suffix) so
 // returning visitors don't keep the old cached copy for up to 30 days.
 const mediaCacheHeader = {
