@@ -69,6 +69,15 @@ export function HomeSection() {
 
   return (
     <section ref={sectionRef} id="home" className="h-screen flex items-center justify-center bg-black relative isolate overflow-hidden">
+      {/* The page's h1. The hero is a logo image with no text, so without this
+          the only h1 on the page was "Stevan Marinkovic" down in About, and
+          nothing above the fold told a crawler what the business does. Kept
+          screen-reader only so the visual design is unchanged; it still counts
+          as the main heading, and Google will often prefer it over the short
+          <title> when building the search result. */}
+      <h1 className="sr-only">
+        StereoGraphic Production: Sound Design and Audio Post-Production
+      </h1>
       {/* Background video, desktop only (see showVideo above). Absent entirely
           until it is actually playing there is nothing here but the section's
           near-black and the logo below, which is the intended fallback look, so

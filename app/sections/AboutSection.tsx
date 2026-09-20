@@ -181,9 +181,11 @@ export function AboutSection() {
               {/* Stevan Info */}
               <div className="space-y-8 lg:pt-8">
                 <div>
-                  <h1 className="text-5xl text-white sm:text-6xl lg:text-7xl font-semibold mb-4 font-inter-tight">
+                  {/* h2, not h1: the page's h1 now lives in the hero. This is
+                      a section heading, and it matches the archived Nikola block. */}
+                  <h2 className="text-5xl text-white sm:text-6xl lg:text-7xl font-semibold mb-4 font-inter-tight">
                     Stevan Marinković
-                  </h1>
+                  </h2>
                   <p className="text-gray-400 text-2xl font-sora">Audio Engineer</p>
                 </div>
 
