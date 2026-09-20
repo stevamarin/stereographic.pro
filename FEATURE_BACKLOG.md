@@ -24,10 +24,16 @@ Add a new entry whenever something notable ships. Keep newest at the top.
 
 ## Released versions
 
-### v1.x - Maintenance & polish (Mar-Jun 2026)
+### v1.x - Maintenance & polish (Mar-Sep 2026)
 
 | Status | Date (Git push) | Date (Host push) | Change | Commit |
 |--------|-----------------|------------------|--------|--------|
+| ✅ | 2026-09-20 | _TBD_ | Services redesign: cards carry the title alone, big (36px mobile / 48px desktop), bold and centred, all six locked to one size (158px / 188px). Section standfirst cut to "Complete Audio Post Production". One purple accent across every card instead of six hues, and the per-card colour wash layer dropped. Icons, tag pills and descriptions stay in the data but are switched off behind `SHOW_SERVICE_ICONS` / `SHOW_SERVICE_TAGS` / `SHOW_SERVICE_DESCRIPTIONS` | `c68b7fe` |
+| ✅ | 2026-09-20 | _TBD_ | Hero: no background video on phones at all. Gating the mount (rather than hiding it with CSS, which still downloads) keeps the 285KB webm and its decode off mobile entirely; the lighten and bottom-fade overlays mount with it. Adds a bottom fade so the video stops ending in a hard horizontal line against Work | `c68b7fe` |
+| ✅ | 2026-09-20 | _TBD_ | Favicon: transparent white PNG at 512px, cropped to the artwork and centred exactly, replacing the SVG and its black rounded plate. `app/icon.svg` removed so browsers cannot prefer it over the PNG | `c68b7fe` |
+| ✅ | 2026-09-20 | _TBD_ | Copy: browser tab title shortened to "StereoGraphic Production" (OpenGraph and Twitter keep the descriptive version for share cards); site now speaks in the first person singular rather than "we"; Services descriptions rewritten off the repeated "X, Y, Z, delivering ..." template | `c68b7fe` |
+| ✅ | 2026-09-20 | _TBD_ | Mobile menu overlay darkened from 85% to 95% so the page recedes behind it | `c68b7fe` |
+| ✅ | 2026-09-20 | _TBD_ | Removed every em dash from source, comments and docs, per house style | `c68b7fe` |
 | ✅ | 2026-08-03 | _TBD_ | Hero fallback + logo quality: when autoplay is refused (iOS Low Power Mode, in-app browsers) or the video fails to load, the `<video>` unmounts entirely and the hero rests on its clean static state (logo over near-black), with no play button, and it no longer starts on first tap/scroll. Poster image dropped (the white-on-transparent logo at 40% opacity already *is* that look). Logo: real 2924² intrinsic size, orientation-aware `sizes`, `quality=90` (+ `images.qualities`, which Next 16 requires), and the 0.4px blur is desktop-only, since it read as out-of-focus at mobile size | `3edbd60` |
 | ✅ | 2026-08-03 | _TBD_ | Services cards: merge the two stacked `backdrop-blur-3xl` layers into one masked layer at 24px (12 live-blur surfaces → 6). Same frosted look; scrolling the section at 6× CPU throttle goes 8.0 → 24.8 fps, p95 frame time 200 → 67ms | `b7ee5b6` |
 | ✅ | 2026-07-28 | _TBD_ | Performance round: pause hero video + marquee rAF loops off-screen; CSS-driven hero logo entrance (mobile LCP 4.9s→1.1s); defer Turnstile (~340KB) until footer nears view; GA → lazyOnload; responsive `sizes` on hero logo; 30-day cache headers for static media; drop unsupported `eslint` key from next.config | `56ae465` |
