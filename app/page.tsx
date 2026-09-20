@@ -7,11 +7,15 @@ import { Navbar } from "@/components/navbar"
 import { BackToTop } from "@/components/back-to-top"
 import { DialogProvider } from "@/contexts/dialog-context"
 
-const WorkSection = dynamic(() => import("./sections/WorkSection").then(mod => ({ default: mod.WorkSection })), { ssr: false })
-const ServicesSection = dynamic(() => import("./sections/ServicesSection").then(mod => ({ default: mod.ServicesSection })), { ssr: false })
-const TestimonialsSection = dynamic(() => import("./sections/TestimonialsSection").then(mod => ({ default: mod.TestimonialsSection })), { ssr: false })
-const AboutSection = dynamic(() => import("./sections/AboutSection").then(mod => ({ default: mod.AboutSection })), { ssr: false })
-const FooterSection = dynamic(() => import("./sections/FooterSection").then(mod => ({ default: mod.FooterSection })), { ssr: false })
+// Sections are code-split but still server-rendered. They previously passed
+// `ssr: false`, which left the served HTML with 144 characters of visible text
+// (nav links and an email), so crawlers saw an empty page. Every browser API
+// these use is inside useEffect, so rendering them on the server is safe.
+const WorkSection = dynamic(() => import("./sections/WorkSection").then(mod => ({ default: mod.WorkSection })))
+const ServicesSection = dynamic(() => import("./sections/ServicesSection").then(mod => ({ default: mod.ServicesSection })))
+const TestimonialsSection = dynamic(() => import("./sections/TestimonialsSection").then(mod => ({ default: mod.TestimonialsSection })))
+const AboutSection = dynamic(() => import("./sections/AboutSection").then(mod => ({ default: mod.AboutSection })))
+const FooterSection = dynamic(() => import("./sections/FooterSection").then(mod => ({ default: mod.FooterSection })))
 
 export default function HomePage() {
   const [shouldBounce, setShouldBounce] = useState(false)
