@@ -1,9 +1,9 @@
 import type React from "react"
 import type { Metadata } from "next"
-import Script from "next/script"
 import { Inter_Tight } from "next/font/google"
 import { Sora } from "next/font/google"
 import "./globals.css"
+import { CookieConsent } from "@/components/cookie-consent"
 
 const interTight = Inter_Tight({
   subsets: ["latin"],
@@ -137,18 +137,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={`bg-black ${interTight.variable} ${sora.variable}`}>
       <head>
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-CH33KS8XBF"
-          strategy="lazyOnload"
-        />
-        <Script id="google-analytics" strategy="lazyOnload">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-CH33KS8XBF');
-          `}
-        </Script>
+        {/* Google Analytics is no longer loaded here. It now lives inside
+            <CookieConsent /> and is only rendered once a visitor has opted in,
+            so gtag.js is never requested and no analytics cookie is set until
+            then. JSON-LD stays: it is static markup and sets nothing. */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -156,6 +148,7 @@ export default function RootLayout({
       </head>
       <body className={`${interTight.className} antialiased`}>
         {children}
+        <CookieConsent />
       </body>
     </html>
   )

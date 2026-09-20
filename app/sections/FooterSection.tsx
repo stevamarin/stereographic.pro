@@ -6,6 +6,7 @@ import Link from "next/link"
 import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile"
 import { LoadingWrapper } from "@/components/loading-wrapper"
 import { socialLinks } from "@/lib/config/social-links"
+import { CookieSettingsLink } from "@/components/cookie-consent"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 
@@ -235,6 +236,19 @@ export function FooterSection() {
               >
                 {isSubmitting ? "Sending..." : "Send Message"}
               </button>
+
+              {/* Tells people where their details go before they hand them over,
+                  which is the point of a notice rather than a buried policy. */}
+              <p className="text-gray-600 font-sora text-xs text-center leading-relaxed">
+                Your details are used only to reply to you. See the{" "}
+                <Link
+                  href="/privacy"
+                  className="text-gray-500 hover:text-purple-400 underline underline-offset-2 transition-colors"
+                >
+                  privacy policy
+                </Link>
+                .
+              </p>
             </form>
           )}
 
@@ -288,10 +302,15 @@ export function FooterSection() {
         </LoadingWrapper>
       </div>
 
-      {/* Copyright - pinned to bottom */}
-      <p className="absolute bottom-6 left-0 right-0 text-gray-600 text-[10px] sm:text-sm font-sora text-center">
-        © 2026 Stereographic Production. All rights reserved.
-      </p>
+      {/* Copyright + policy links - pinned to bottom */}
+      <div className="absolute bottom-6 left-0 right-0 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 px-4 text-gray-600 text-[10px] sm:text-sm font-sora text-center">
+        <span>© 2026 Stereographic Production. All rights reserved.</span>
+        <Link href="/privacy" className="hover:text-purple-400 transition-colors">
+          Privacy
+        </Link>
+        {/* Withdrawing consent has to be as easy as giving it. */}
+        <CookieSettingsLink className="hover:text-purple-400 transition-colors" />
+      </div>
     </section>
   )
 }
