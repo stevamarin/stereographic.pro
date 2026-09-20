@@ -53,6 +53,12 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://stereographic.pro",
   },
+  // Proves ownership of the site to Google Search Console. Not a secret: it
+  // is public in the page source by design, and only confirms control of
+  // this domain. Removing it can un-verify the property, so leave it in place.
+  verification: {
+    google: "jYVM1DrMMh7C1hIGXXguOi1NWSkEW6l4YRLQS4qj18w",
+  },
 }
 
 const jsonLd = {
